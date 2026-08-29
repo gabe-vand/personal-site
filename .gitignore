@@ -1,0 +1,11 @@
+# secrets — never commit these
+*.key
+*.secret
+secrets/
+.env
+credentials.json
+
+# runtime
+*.log
+caddy/data/
+caddy/config/

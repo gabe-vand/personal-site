@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- EDIT: title shows in the browser tab and in Google results -->
+<title>Gabe Vandevere</title>
+<meta name="description" content="Personal site of Gabe Vandevere.">
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css">
+
+<!-- Social preview (what shows when the link is pasted into iMessage/Discord/etc.) -->
+<meta property="og:title" content="Gabe Vandevere">
+<meta property="og:description" content="Personal site of Gabe Vandevere.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://gabevandevere.com/">
+</head>
+
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <!-- EDIT: your name -->
+  <a class="wordmark" href="/">Gabe Vandevere</a>
+  <nav>
+    <a href="/projects.html">Projects</a>
+    <!-- EDIT: add more pages here as you make them, e.g. <a href="/writing.html">Writing</a> -->
+    <a href="mailto:gabe@gabevandevere.com">Email</a>
+  </nav>
+</header>
+
+<main id="main">
+
+  <!-- ============================================================
+       INTRO
+       EDIT: this is the first thing anyone reads. Two or three
+       sentences is plenty. Delete the rest of the page if you want.
+       ============================================================ -->
+  <section class="intro">
+    <h1>Gabe Vandevere</h1>
+    <p class="lede">
+      Placeholder intro &mdash; replace this. One or two sentences on who you are
+      and what you work on. Keep it short; the links below do the rest.
+    </p>
+
+    <ul class="links">
+      <!-- EDIT: delete the ones you don't use, add the ones you do -->
+      <li><a href="mailto:gabe@gabevandevere.com">gabe@gabevandevere.com</a></li>
+      <li><a href="https://github.com/" rel="me">GitHub</a></li>
+      <li><a href="https://www.linkedin.com/" rel="me">LinkedIn</a></li>
+    </ul>
+  </section>
+
+  <!-- ============================================================
+       NOW
+       EDIT: a short "what I'm currently doing" list. Easy to keep
+       fresh, and it's the section people actually read.
+       ============================================================ -->
+  <section>
+    <h2>Now</h2>
+    <ul class="prose-list">
+      <li>Placeholder &mdash; something you're building.</li>
+      <li>Placeholder &mdash; something you're learning.</li>
+      <li>Placeholder &mdash; something you're reading.</li>
+    </ul>
+    <p class="meta">Last updated <time datetime="2026-08-29">August 2026</time>.</p>
+  </section>
+
+  <!-- ============================================================
+       ASK (disabled)
+       This is the placeholder for the local-LLM feature. It stays
+       hidden until you wire up the backend proxy. See README.md.
+       Un-hide by deleting the `hidden` attribute below.
+       ============================================================ -->
+  <section id="ask" hidden>
+    <h2>Ask</h2>
+    <p class="meta">Answered by a model running on a Jetson in my apartment. Be patient with it.</p>
+    <form id="ask-form" autocomplete="off">
+      <label class="visually-hidden" for="ask-input">Your question</label>
+      <input id="ask-input" name="q" type="text" placeholder="Ask me something&hellip;" maxlength="500" required>
+      <button type="submit">Ask</button>
+    </form>
+    <output id="ask-output" class="ask-output" aria-live="polite"></output>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>&copy; <span id="year">2026</span> Gabe Vandevere &middot; served from a Jetson Orin Nano in Pennsylvania</p>
+</footer>
+
+<script src="/main.js"></script>
+</body>
+</html>
