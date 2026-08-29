@@ -85,6 +85,32 @@
     <output id="ask-output" class="ask-output" aria-live="polite"></output>
   </section>
 
+
+  <!-- ============================================================
+       CONTACT
+       This form has NO backend. On submit, main.js builds a
+       mailto: link and hands it to your mail app, pre-filled.
+       That means it works on a purely static site and can never
+       leak or lose a message on a server.
+       The plain address below it is the fallback for anyone whose
+       browser has no mail client wired up.
+       ============================================================ -->
+  <section id="contact">
+    <h2>Email me</h2>
+    <form id="contact-form">
+      <label class="visually-hidden" for="contact-subject">Subject</label>
+      <input id="contact-subject" name="subject" type="text" placeholder="Subject" maxlength="120">
+
+      <label class="visually-hidden" for="contact-body">Message</label>
+      <textarea id="contact-body" name="body" rows="4" placeholder="Say something&hellip;" maxlength="2000" required></textarea>
+
+      <button type="submit">Open in my email app</button>
+    </form>
+    <p class="meta">
+      Or just write to <a href="mailto:gabe@gabevandevere.com">gabe@gabevandevere.com</a>.
+    </p>
+  </section>
+
 </main>
 
 <footer class="site-footer">

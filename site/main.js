@@ -62,3 +62,34 @@ document.querySelectorAll("#year").forEach(function (el) {
     }
   });
 })();
+
+/* ============================================================
+   Contact form.
+
+   No backend, by design. We build a mailto: URL and hand it to
+   whatever mail app the visitor has. Nothing is transmitted to
+   this server, so there is nothing here to secure, rate limit,
+   or accidentally spill.
+
+   EDIT: change the address here AND in the fallback link in
+   index.html if you ever switch inboxes.
+   ============================================================ */
+(function () {
+  var form = document.getElementById("contact-form");
+  if (!form) return;
+
+  var ADDRESS = "gabe@gabevandevere.com";
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    var subject = form.elements.subject.value.trim() || "Hello";
+    var body = form.elements.body.value.trim();
+    if (!body) return;
+
+    window.location.href =
+      "mailto:" + ADDRESS +
+      "?subject=" + encodeURIComponent(subject) +
+      "&body=" + encodeURIComponent(body);
+  });
+})();

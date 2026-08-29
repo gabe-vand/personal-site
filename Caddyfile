@@ -59,7 +59,13 @@
 	# browser could reach. Route through a small proxy that holds the
 	# key, rate-limits, and caps token counts.
 	#
-	# handle /api/* {
+	# Use handle_path, NOT handle: handle_path strips the matched
+	# prefix, handle does not. With plain `handle`, a request for
+	# /api/llm/v1/chat/completions arrives at the backend still
+	# carrying /api/llm and 404s in a way that looks like the model
+	# is broken rather than the routing.
+	#
+	# handle_path /api/* {
 	# 	reverse_proxy 127.0.0.1:8002
 	# }
 

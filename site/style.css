@@ -214,3 +214,29 @@ p + p { margin-top: 1rem; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+/* ---------- contact form ---------- */
+#contact-form { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 1rem; }
+#contact-form input,
+#contact-form textarea,
+#contact-form button {
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--fg);
+}
+#contact-form textarea { resize: vertical; min-height: 6rem; line-height: 1.5; }
+#contact-form input:focus-visible,
+#contact-form textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+#contact-form button {
+  cursor: pointer;
+  align-self: flex-start;
+  background: var(--fg);
+  color: var(--bg);
+  border-color: var(--fg);
+  font-weight: 500;
+}
+#contact-form button:hover { opacity: 0.85; }
