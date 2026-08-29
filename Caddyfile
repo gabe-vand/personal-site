@@ -1,0 +1,109 @@
+# ============================================================
+#  Caddyfile for gabevandevere.com
+#  Docs: https://caddyserver.com/docs/caddyfile
+#
+#  Right now this listens on :8081 (plain HTTP) because something
+#  else terminates TLS in front of it. To let Caddy own TLS itself,
+#  see the commented block at the bottom.
+#
+#  Ports on this machine:
+#    8080  llama.cpp (oracle-llm.service)  -- do not touch
+#    8000  reserved                        -- do not touch
+#    8081  this server
+# ============================================================
+{
+	# Admin API on a unix socket, not a TCP port: nothing on the network
+	# can reach it, but `caddy reload` still works for zero-downtime
+	# config changes. File permissions are the access control.
+	admin unix//home/gabevandevere/.local/share/caddy/admin.sock
+	# TLS is handled upstream; don't try to get certificates.
+	auto_https off
+}
+
+:8081 {
+	root * /home/gabevandevere/gabevandevere.com/site
+
+	encode zstd gzip
+
+	# --- security headers -------------------------------------
+	header {
+		# Don't let other sites frame this one.
+		X-Frame-Options "SAMEORIGIN"
+		# Don't guess content types.
+		X-Content-Type-Options "nosniff"
+		# Don't leak full URLs to sites you link to.
+		Referrer-Policy "strict-origin-when-cross-origin"
+		# Turn off browser APIs the site never uses.
+		Permissions-Policy "geolocation=(), microphone=(), camera=(), interest-cohort=()"
+		# Everything loads from this origin only. If you ever add an
+		# embed (YouTube, a font CDN), you must widen this or it breaks.
+		Content-Security-Policy "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self'"
+		# Don't advertise the server software.
+		-Server
+	}
+
+	# --- caching ----------------------------------------------
+	# HTML: always revalidate, so edits show up immediately.
+	@html path *.html /
+	header @html Cache-Control "no-cache"
+
+	# Static assets: cache for an hour. Bump this once the site settles.
+	@assets path *.css *.js *.svg *.png *.jpg *.woff2
+	header @assets Cache-Control "public, max-age=3600"
+
+	# --- LLM proxy (OFF until the backend exists) --------------
+	# The site's "Ask" box posts to /api/ask. Uncomment this once you
+	# have the proxy running. Do NOT point this straight at :8080 --
+	# that would put an unauthenticated, unmetered LLM on the public
+	# internet and the API key would have to live somewhere the
+	# browser could reach. Route through a small proxy that holds the
+	# key, rate-limits, and caps token counts.
+	#
+	# handle /api/* {
+	# 	reverse_proxy 127.0.0.1:8002
+	# }
+
+	# --- static files -----------------------------------------
+	file_server
+
+	# --- pretty 404 -------------------------------------------
+	handle_errors {
+		# handle_errors runs as its own route, so it does NOT inherit the
+		# `header` block above. Repeat the important bits here or error
+		# pages ship without the security headers.
+		header {
+			X-Frame-Options "SAMEORIGIN"
+			X-Content-Type-Options "nosniff"
+			Referrer-Policy "strict-origin-when-cross-origin"
+			Content-Security-Policy "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self'"
+			-Server
+		}
+		@404 expression {err.status_code} == 404
+		handle @404 {
+			rewrite * /404.html
+			file_server
+		}
+		respond "{err.status_code} {err.status_text}"
+	}
+
+	log {
+		output file /home/gabevandevere/gabevandevere.com/access.log {
+			roll_size 10MiB
+			roll_keep 3
+		}
+		format console
+	}
+}
+
+# ============================================================
+#  ALTERNATIVE: let Caddy terminate TLS itself.
+#  Only works if inbound :80 and :443 reach this machine
+#  (router port-forwarding). Replace the ":8081 {" block above
+#  with this, then Caddy gets a Let's Encrypt cert automatically.
+#
+#  gabevandevere.com, www.gabevandevere.com {
+#  	root * /home/gabevandevere/gabevandevere.com/site
+#  	encode zstd gzip
+#  	file_server
+#  }
+# ============================================================
