@@ -2,9 +2,10 @@
 #  Caddyfile for gabevandevere.com
 #  Docs: https://caddyserver.com/docs/caddyfile
 #
-#  Right now this listens on :8081 (plain HTTP) because something
-#  else terminates TLS in front of it. To let Caddy own TLS itself,
-#  see the commented block at the bottom.
+#  Listens on 127.0.0.1:8081 (plain HTTP). Cloudflare terminates TLS
+#  at its edge and cloudflared carries traffic here over an outbound-only
+#  tunnel, so this port is not reachable from any network -- not even
+#  the LAN. To let Caddy own TLS itself, see the block at the bottom.
 #
 #  Ports on this machine:
 #    8080  llama.cpp (oracle-llm.service)  -- do not touch
@@ -21,6 +22,13 @@
 }
 
 :8081 {
+	# Bind to loopback only. NOTE: writing the site address as
+	# `127.0.0.1:8081` does NOT do this -- Caddy reads the host part as a
+	# Host-header matcher, still listens on all interfaces, and then 400s
+	# every request whose Host doesn't literally equal 127.0.0.1.
+	# `bind` is the directive that controls the listening interface.
+	bind 127.0.0.1
+
 	root * /home/gabevandevere/gabevandevere.com/site
 
 	encode zstd gzip
