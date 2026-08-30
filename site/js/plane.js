@@ -52,9 +52,10 @@ export function flyPlane(from, startDeg = -20) {
     const guide = el('path', { d: route(box.left + box.width / 2, box.top + box.height / 2, vw, vh, startDeg), fill: 'none', stroke: 'none' });
     const plane = el('g', { class: 'plane' });
     plane.append(
-        el('path', { class: 'plane-wing', d: 'M 0 0 L -84 -40 L -52 -5 Z' }),
-        el('path', { class: 'plane-wing plane-wing-low', d: 'M 0 0 L -84 40 L -52 5 Z' }),
-        el('path', { class: 'plane-keel', d: 'M 0 0 L -52 -5 L -62 13 L -52 5 Z' }),
+        // Origin is the plane's centre (nose at +46, tail at -38) so it sits exactly on the folded dart at launch.
+        el('path', { class: 'plane-wing', d: 'M 46 0 L -38 -40 L -6 -5 Z' }),
+        el('path', { class: 'plane-wing plane-wing-low', d: 'M 46 0 L -38 40 L -6 5 Z' }),
+        el('path', { class: 'plane-keel', d: 'M 46 0 L -6 -5 L -16 13 L -6 5 Z' }),
     );
     const total = guide.getTotalLength();
     let heading = (startDeg * Math.PI) / 180;
