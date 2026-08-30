@@ -50,7 +50,7 @@ def login(h, _path):
         return
     body = h.read_json() or {}
     email, password, code = (str(body.get(k) or '')[:200] for k in ('email', 'password', 'code'))
-    token, err = admin_auth.login(email, password, code, h.client_ip(), h.ua())
+    token, err = admin_auth.login(email, password, code, h.client_ip(), h.ua(), h.location())
     if err:
         return h.send_json(401, {'error': err}, NO_STORE)
     h.send_json(200, {'ok': True}, {**NO_STORE, 'Set-Cookie': admin_auth.cookie(token)})

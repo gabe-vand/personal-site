@@ -1,5 +1,5 @@
-import { api } from './api.js?v=3fba1559';
-import { el, table, when, num, tag, section, kv, dur, ago } from './ui.js?v=3fba1559';
+import { api } from './api.js?v=81a64e85';
+import { el, table, when, num, tag, section, kv, dur, ago } from './ui.js?v=81a64e85';
 
 export async function conversations({ days }) {
     const d = await api(`/conversations?days=${days}`);
@@ -8,7 +8,7 @@ export async function conversations({ days }) {
         { label: 'exchanges', render: (r) => num(r.turns) },
         { label: 'first question', key: 'first_q', wrap: true },
         { label: 'visitor', render: (r) => (r.vid ? el('a', { href: `#visitor/${r.vid}`, text: r.vid.slice(0, 8) }) : tag('anonymous')) },
-        { label: 'from', render: (r) => `${r.country || '?'} · ${r.ip || '?'}` },
+        { label: 'from', render: (r) => `${r.loc || r.country || '?'} · ${r.ip || '?'}` },
         { label: 'device', key: 'device' },
         { label: 'emailed', render: (r) => (r.notified_ts ? tag('yes', 'ok') : tag('pending')) },
     ];
@@ -27,7 +27,7 @@ export async function conversation({ arg }) {
         el('h2', { text: `Conversation #${c.id}` }),
         kv([
             ['started', `${when(c.start_ts)} (${ago(c.start_ts)})`], ['last message', when(c.last_ts)], ['exchanges', num(c.turns)],
-            ['from', `${c.country || '?'} · ${c.ip || '?'}`], ['device', c.device],
+            ['from', `${c.loc || c.country || '?'} · ${c.ip || '?'}`], ['device', c.device],
             ['visitor', c.vid ? el('a', { href: `#visitor/${c.vid}`, text: `${c.vid.slice(0, 8)} · ${c.visitor ? `${c.visitor.sessions} visit(s) since ${when(c.visitor.first_ts)}` : ''}` }) : 'anonymous (beacon off)'],
             ['this visit', s ? `${dur(s.seconds)} on page · sections ${s.sections || '—'} · referrer ${s.referrer || 'direct'}` : '—'],
             ['emailed you', c.notified_ts ? when(c.notified_ts) : 'not yet (waits 5 min of quiet)'],

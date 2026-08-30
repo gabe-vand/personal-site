@@ -17,7 +17,7 @@ def _s(v, n=200):
     return v[:n] if isinstance(v, str) else ''
 
 
-def record(payload, ip: str, country: str, ua: str):
+def record(payload, ip: str, country: str, ua: str, loc: str = ''):
     """Returns True if the beacon was accepted. Never raises on bad input."""
     if not isinstance(payload, dict):
         return False
@@ -29,13 +29,13 @@ def record(payload, ip: str, country: str, ua: str):
     ts = db.now()
     detail = _s(payload.get('detail'), 300)
     if not db.one('SELECT vid FROM visitors WHERE vid=?', (vid,)):
-        db.x('INSERT INTO visitors (vid, first_ts, last_ts, ip, country, ua) VALUES (?,?,?,?,?,?)', (vid, ts, ts, ip, country, ua[:300]))
+        db.x('INSERT INTO visitors (vid, first_ts, last_ts, ip, country, ua, loc) VALUES (?,?,?,?,?,?,?)', (vid, ts, ts, ip, country, ua[:300], loc))
     if not db.one('SELECT sid FROM sessions WHERE sid=?', (sid,)):
         w = payload.get('width')
-        db.x('INSERT INTO sessions (sid, vid, start_ts, last_ts, ip, country, ua, referrer, width) VALUES (?,?,?,?,?,?,?,?,?)',
-             (sid, vid, ts, ts, ip, country, ua[:300], _s(payload.get('ref'), 300), int(w) if isinstance(w, (int, float)) else None))
+        db.x('INSERT INTO sessions (sid, vid, start_ts, last_ts, ip, country, ua, referrer, width, loc) VALUES (?,?,?,?,?,?,?,?,?,?)',
+             (sid, vid, ts, ts, ip, country, ua[:300], _s(payload.get('ref'), 300), int(w) if isinstance(w, (int, float)) else None, loc))
         db.x('UPDATE visitors SET sessions = sessions + 1 WHERE vid=?', (vid,))
-    db.x('UPDATE visitors SET last_ts=?, ip=?, country=? WHERE vid=?', (ts, ip, country, vid))
+    db.x('UPDATE visitors SET last_ts=?, ip=?, country=?, loc=? WHERE vid=?', (ts, ip, country, loc or '', vid))
     db.x('UPDATE sessions SET last_ts=? WHERE sid=?', (ts, sid))
     if kind == 'view':
         db.x('UPDATE visitors SET views = views + 1 WHERE vid=?', (vid,))

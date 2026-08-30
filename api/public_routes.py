@@ -22,7 +22,7 @@ def health(h, _path):
 
 def beacon(h, _path):
     payload = h.read_json(config.BEACON_MAX_BYTES)
-    ok = track.record(payload, h.client_ip(), h.country(), h.ua())
+    ok = track.record(payload, h.client_ip(), h.country(), h.ua(), h.location())
     h.send_json(200 if ok else 400, {'ok': ok})
 
 
@@ -47,7 +47,7 @@ def chat_route(h, _path):
     except (ValueError, AttributeError):
         return h.send_json(400, {'error': 'Bad request or message too long.'})
     ids = {k: (payload.get(k) if isinstance(payload.get(k), str) else '')[:32] for k in ('vid', 'sid')}
-    meta = {**ids, 'ip': h.client_ip(), 'country': h.country(), 'ua': h.ua()}
+    meta = {**ids, 'ip': h.client_ip(), 'country': h.country(), 'ua': h.ua(), 'loc': h.location()}
     wait = limits.take_token(h.client_ip())
     if wait > 0:
         return h.send_json(429, {'error': f'You have asked a lot in a short time. Try again in {int(wait) + 1} seconds.'})

@@ -39,8 +39,8 @@ def totp_required() -> bool:
     return _secret().get('TOTP_ENABLED', '0') == '1'
 
 
-def audit(ip: str, ua: str, action: str, detail: str = ''):
-    db.x('INSERT INTO audit (ts, ip, ua, action, detail) VALUES (?,?,?,?,?)', (db.now(), ip, (ua or '')[:300], action, detail[:300]))
+def audit(ip: str, ua: str, action: str, detail: str = '', loc: str = ''):
+    db.x('INSERT INTO audit (ts, ip, ua, action, detail, loc) VALUES (?,?,?,?,?,?)', (db.now(), ip, (ua or '')[:300], action, detail[:300], loc))
 
 
 def locked(ip: str) -> bool:
@@ -50,7 +50,7 @@ def locked(ip: str) -> bool:
     return mine >= config.ADMIN_LOGIN_MAX or everyone >= config.ADMIN_LOGIN_GLOBAL_MAX
 
 
-def login(email: str, password: str, code: str, ip: str, ua: str):
+def login(email: str, password: str, code: str, ip: str, ua: str, loc: str = ''):
     """Returns (token, None) on success or (None, error). Always takes >= 0.5 s on failure."""
     started = time.monotonic()
     sec = _secret()
@@ -68,12 +68,12 @@ def login(email: str, password: str, code: str, ip: str, ua: str):
         now = time.time()
         ok = any(hmac.compare_digest(_totp(sec['TOTP_SECRET'], now + d), (code or '').strip()) for d in (-30, 0, 30))
     if not ok:
-        audit(ip, ua, 'login_fail', email[:100])
+        audit(ip, ua, 'login_fail', email[:100], loc)
         time.sleep(max(0, 0.5 - (time.monotonic() - started)))
         return None, 'Wrong email, password or code.' if not locked(ip) else 'Too many attempts. Try again in 15 minutes.'
     token = secrets.token_urlsafe(32)
     db.x('INSERT INTO admin_sessions (token_hash, created_ts, last_ts, ip, ua) VALUES (?,?,?,?,?)', (_th(token), db.now(), db.now(), ip, (ua or '')[:300]))
-    audit(ip, ua, 'login_ok')
+    audit(ip, ua, 'login_ok', '', loc)
     return token, None
 
 

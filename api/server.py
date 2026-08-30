@@ -16,6 +16,11 @@ import convo
 import logs_ingest
 import public_routes
 
+def fmt_location(city, region, country):
+    parts = [p.strip()[:60] for p in (city, region, country) if p and p.strip()]
+    return ', '.join(parts)
+
+
 JSON_HEADERS = {'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store'}
 ROUTES = public_routes.ROUTES + admin_api.ROUTES
 
@@ -35,6 +40,10 @@ class Handler(BaseHTTPRequestHandler):
 
     def country(self):
         return (self.headers.get('CF-IPCountry') or '')[:2]
+
+    def location(self):
+        """'City, Region, CC' from Cloudflare's visitor-location headers (managed transform); falls back to the country."""
+        return fmt_location(self.headers.get('CF-IPCity'), self.headers.get('CF-Region-Code') or self.headers.get('CF-Region'), self.country())
 
     def ua(self):
         return (self.headers.get('User-Agent') or '')[:300]

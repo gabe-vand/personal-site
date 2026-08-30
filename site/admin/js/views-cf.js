@@ -1,5 +1,5 @@
-import { api } from './api.js?v=3fba1559';
-import { el, table, when, num, bytes, section, stat, bars } from './ui.js?v=3fba1559';
+import { api } from './api.js?v=81a64e85';
+import { el, table, when, num, bytes, section, stat, bars } from './ui.js?v=81a64e85';
 
 export async function cloudflare({ days }) {
     const d = await api(`/cloudflare?days=${days || 90}`);
@@ -37,7 +37,7 @@ export async function cloudflare({ days }) {
 export async function audit() {
     const d = await api('/audit');
     const cols = [
-        { label: 'when', render: (r) => when(r.ts) }, { label: 'action', key: 'action' }, { label: 'ip', key: 'ip' }, { label: 'detail', key: 'detail' }, { label: 'user agent', key: 'ua' },
+        { label: 'when', render: (r) => when(r.ts) }, { label: 'action', key: 'action' }, { label: 'from', render: (r) => `${r.loc || '?'} · ${r.ip}` }, { label: 'detail', key: 'detail' }, { label: 'user agent', key: 'ua' },
     ];
     return el('div', { class: 'view' }, [
         el('h2', { text: 'Audit' }),

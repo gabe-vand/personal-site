@@ -66,7 +66,7 @@ def ai(days: int) -> dict:
     s = _since(days)
     per_bot = db.q('SELECT klass, bot, COUNT(*) AS hits, MIN(ts) AS first_ts, MAX(ts) AS last_ts, COUNT(DISTINCT path) AS paths '
                    'FROM requests WHERE ts>? AND klass!=? GROUP BY klass, bot ORDER BY hits DESC', (s, 'human'))
-    recent = db.q('SELECT ts, ip, country, method, path, status, klass, bot, ua FROM requests WHERE ts>? AND klass!=? ORDER BY ts DESC LIMIT 300', (s, 'human'))
+    recent = db.q('SELECT ts, ip, country, loc, method, path, status, klass, bot, ua FROM requests WHERE ts>? AND klass!=? ORDER BY ts DESC LIMIT 300', (s, 'human'))
     paths = db.q('SELECT path, COUNT(*) AS n FROM requests WHERE ts>? AND klass=? GROUP BY path ORDER BY n DESC LIMIT 30', (s, 'ai'))
     daily: dict[str, dict] = {}
     for r in db.q('SELECT ts, klass FROM requests WHERE ts>? AND klass!=?', (s, 'human')):

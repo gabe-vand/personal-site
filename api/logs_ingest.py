@@ -42,7 +42,8 @@ def _parse(line: str):
     ua = hv('User-Agent')
     klass, bot = bots.classify(ua)
     ip = hv('Cf-Connecting-Ip') or req.get('client_ip') or req.get('remote_ip') or ''
-    return (rec.get('ts') or _stamp(line) or time.time(), ip, hv('Cf-Ipcountry'), req.get('method') or '', path[:300], int(rec.get('status') or 0), ua[:300], hv('Referer')[:300], klass, bot)
+    loc = ', '.join(p for p in (hv('Cf-Ipcity'), hv('Cf-Region-Code') or hv('Cf-Region'), hv('Cf-Ipcountry')) if p)
+    return (rec.get('ts') or _stamp(line) or time.time(), ip, hv('Cf-Ipcountry'), req.get('method') or '', path[:300], int(rec.get('status') or 0), ua[:300], hv('Referer')[:300], klass, bot, loc)
 
 
 def ingest_once() -> int:
@@ -64,7 +65,7 @@ def ingest_once() -> int:
             if parsed:
                 rows.append(parsed)
     for r in rows:
-        db.x('INSERT INTO requests (ts, ip, country, method, path, status, ua, referrer, klass, bot) VALUES (?,?,?,?,?,?,?,?,?,?)', r)
+        db.x('INSERT INTO requests (ts, ip, country, method, path, status, ua, referrer, klass, bot, loc) VALUES (?,?,?,?,?,?,?,?,?,?,?)', r)
     db.x('INSERT INTO ingest (name, inode, offset) VALUES (?,?,?) ON CONFLICT(name) DO UPDATE SET inode=excluded.inode, offset=excluded.offset', ('access', st.st_ino, offset))
     return len(rows)
 

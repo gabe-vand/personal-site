@@ -20,8 +20,8 @@ def record_turn(meta: dict, question: str, answer: str, timings: dict):
         cid = row['id']
         db.x('UPDATE conversations SET last_ts=?, turns=turns+1 WHERE id=?', (ts, cid))
     else:
-        cid = db.x('INSERT INTO conversations (vid, sid, start_ts, last_ts, ip, country, ua, turns) VALUES (?,?,?,?,?,?,?,1)',
-                   (vid, sid, ts, ts, meta.get('ip', ''), meta.get('country', ''), (meta.get('ua') or '')[:300]))
+        cid = db.x('INSERT INTO conversations (vid, sid, start_ts, last_ts, ip, country, ua, turns, loc) VALUES (?,?,?,?,?,?,?,1,?)',
+                   (vid, sid, ts, ts, meta.get('ip', ''), meta.get('country', ''), (meta.get('ua') or '')[:300], meta.get('loc', '')))
     db.x('INSERT INTO messages (conv_id, ts, role, content) VALUES (?,?,?,?)', (cid, ts, 'user', question))
     db.x('INSERT INTO messages (conv_id, ts, role, content, tokens, tps, ms) VALUES (?,?,?,?,?,?,?)',
          (cid, ts, 'assistant', answer, timings.get('predicted_n'), timings.get('predicted_per_second'), timings.get('ms')))
@@ -43,7 +43,7 @@ def _notify(c: dict):
     when = time.strftime('%Y-%m-%d %H:%M', time.localtime(c['start_ts']))
     info = [
         f"When: {when} ({c['turns']} exchange{'s' if c['turns'] != 1 else ''})",
-        f"From: {c['country'] or '?'} · {c['ip'] or '?'} · {bots.describe(c['ua'])}",
+        f"From: {c.get('loc') or c['country'] or '?'} · {c['ip'] or '?'} · {bots.describe(c['ua'])}",
     ]
     if vis:
         info.append(f"Visitor: seen {vis['sessions']} session(s) since {time.strftime('%Y-%m-%d', time.localtime(vis['first_ts']))}")

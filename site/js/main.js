@@ -1,14 +1,14 @@
 // Entry point. Every feature is its own module and guards its own DOM, so deleting a
 // section from src/page/ never breaks the rest of the page.
-import { initTelemetry } from './telemetry.js?v=3fba1559';
-import { initContour } from './contour.js?v=3fba1559';
-import { initTopo } from './topo.js?v=3fba1559';
-import { initTicker } from './ticker.js?v=3fba1559';
-import { initChat } from './chat.js?v=3fba1559';
-import { initChalk } from './chalk.js?v=3fba1559';
-import { initReveal, initKonami } from './reveal.js?v=3fba1559';
-import { initContact } from './contact.js?v=3fba1559';
-import { initTrack } from './track.js?v=3fba1559';
+import { initTelemetry } from './telemetry.js?v=81a64e85';
+import { initContour } from './contour.js?v=81a64e85';
+import { initTopo } from './topo.js?v=81a64e85';
+import { initTicker } from './ticker.js?v=81a64e85';
+import { initChat } from './chat.js?v=81a64e85';
+import { initChalk } from './chalk.js?v=81a64e85';
+import { initReveal, initKonami } from './reveal.js?v=81a64e85';
+import { initContact } from './contact.js?v=81a64e85';
+import { initTrack } from './track.js?v=81a64e85';
 
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 document.documentElement.classList.add('has-js');

@@ -1,5 +1,5 @@
-import { api } from './api.js?v=3fba1559';
-import { el, table, when, dur, num, tag, section, kv, bars, ago } from './ui.js?v=3fba1559';
+import { api } from './api.js?v=81a64e85';
+import { el, table, when, dur, num, tag, section, kv, bars, ago } from './ui.js?v=81a64e85';
 
 const go = (hash) => { location.hash = hash; };
 
@@ -9,7 +9,7 @@ export async function humans({ days }) {
         { label: 'when', render: (r) => when(r.start_ts) },
         { label: 'visitor', render: (r) => el('a', { href: `#visitor/${r.vid}`, text: r.vid.slice(0, 8) }) },
         { label: 'visit #', render: (r) => `${r.visits || 1}` },
-        { label: 'from', render: (r) => `${r.country || '?'} · ${r.ip || '?'}` },
+        { label: 'from', render: (r) => `${r.loc || r.country || '?'} · ${r.ip || '?'}` },
         { label: 'device', render: (r) => `${r.device}${r.width ? ` · ${r.width}px` : ''}` },
         { label: 'time', render: (r) => dur(r.seconds) },
         { label: 'sections', render: (r) => r.sections || '—' },
@@ -49,7 +49,7 @@ export async function visitor({ arg }) {
         el('h2', { text: `Visitor ${arg.slice(0, 8)}` }),
         kv([
             ['first seen', `${when(v.first_ts)} (${ago(v.first_ts)})`], ['last seen', `${when(v.last_ts)} (${ago(v.last_ts)})`],
-            ['visits', num(v.sessions)], ['page views', num(v.views)], ['from', `${v.country || '?'} · ${v.ip || '?'}`], ['device', v.device], ['user agent', v.ua],
+            ['visits', num(v.sessions)], ['page views', num(v.views)], ['from', `${v.loc || v.country || '?'} · ${v.ip || '?'}`], ['device', v.device], ['user agent', v.ua],
         ]),
         v.conversations.length ? section('Conversations', el('ul', { class: 'mono' }, v.conversations.map((c) => el('li', {}, [
             el('a', { href: `#conversation/${c.id}`, text: `${when(c.start_ts)} · ${c.turns} exchange${c.turns === 1 ? '' : 's'}` }),

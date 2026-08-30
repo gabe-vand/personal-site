@@ -1,5 +1,5 @@
-import { api } from './api.js?v=3fba1559';
-import { el, table, when, num, tag, section, bars, ago } from './ui.js?v=3fba1559';
+import { api } from './api.js?v=81a64e85';
+import { el, table, when, num, tag, section, bars, ago } from './ui.js?v=81a64e85';
 
 const KLASS = { ai: 'AI crawler', search: 'search engine', preview: 'link preview', tool: 'tool / scanner' };
 
@@ -18,7 +18,7 @@ export async function ai({ days }) {
         { label: 'who', render: (r) => el('span', {}, [tag(KLASS[r.klass] || r.klass, r.klass), ' ', r.bot || '']) },
         { label: 'path', key: 'path' },
         { label: 'status', key: 'status' },
-        { label: 'from', render: (r) => `${r.country || '?'} · ${r.ip}` },
+        { label: 'from', render: (r) => `${r.loc || r.country || '?'} · ${r.ip}` },
         { label: 'user agent', key: 'ua' },
     ];
     const daily = d.daily.map((x) => [x.day.slice(5), (x.ai || 0)]);

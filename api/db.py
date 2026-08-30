@@ -67,6 +67,9 @@ def init():
     os.makedirs(os.path.dirname(config.DB_PATH), exist_ok=True)
     fresh = not os.path.exists(config.DB_PATH)
     conn().executescript(SCHEMA)
+    for table in ('visitors', 'sessions', 'conversations', 'requests', 'audit', 'emails'):
+        if not any(c['name'] == 'loc' for c in q(f'PRAGMA table_info({table})')):
+            x(f'ALTER TABLE {table} ADD COLUMN loc TEXT DEFAULT \'\'')
     if fresh:
         os.chmod(config.DB_PATH, 0o600)
 
