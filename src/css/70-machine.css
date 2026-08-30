@@ -1,9 +1,9 @@
 /* 01 / machine: chat with the on-device model beside live board telemetry. Blue is the machine's color. */
 .machine-intro { max-width: var(--measure); color: var(--chalk-dim); font-size: 1.08rem; margin: 0 0 3rem; }
-.machine-grid { display: grid; grid-template-columns: minmax(0, 3fr) minmax(16rem, 2fr); gap: 1.6rem; align-items: start; }
+.machine-grid { display: grid; grid-template-columns: minmax(0, 3fr) minmax(16rem, 2fr); gap: 1.6rem; align-items: stretch; }
 
-.chat { display: flex; flex-direction: column; gap: 1rem; min-height: 26rem; padding: 1.25rem; border: 1px solid var(--stone-3); border-radius: 14px; background: var(--stone-2); }
-.chat-log { flex: 1; overflow-y: auto; max-height: 26rem; display: flex; flex-direction: column; gap: 1rem; scroll-behavior: smooth; padding-right: 0.25rem; }
+.chat { display: flex; flex-direction: column; gap: 1rem; min-height: 0; padding: 1.25rem; border: 1px solid var(--stone-3); border-radius: 14px; background: var(--stone-2); }
+.chat-log { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 1rem; scroll-behavior: smooth; padding-right: 0.25rem; }
 .msg p { margin: 0; max-width: none; white-space: pre-wrap; overflow-wrap: anywhere; }
 .msg-user { align-self: flex-end; max-width: 85%; background: var(--stone-3); padding: 0.6rem 0.95rem; border-radius: 14px 14px 3px 14px; }
 .msg-bot { align-self: flex-start; max-width: 94%; padding-left: 1rem; border-left: 2px solid var(--ice); }
@@ -35,7 +35,7 @@
 .meter-fill { display: block; height: 100%; width: 0; background: var(--ice); transition: width 0.7s var(--ease-out); }
 
 
-@media (max-width: 900px) { .machine-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 900px) { .machine-grid { grid-template-columns: minmax(0, 1fr); } .chat { min-height: 24rem; } .chat-log { max-height: 24rem; } }
 @media (prefers-reduced-motion: reduce) {
     .msg-bot.is-streaming p::after { animation: none; }
 }

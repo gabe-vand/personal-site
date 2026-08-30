@@ -15,13 +15,13 @@
 <link rel="preload" href="/fonts/instrument-serif-normal-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/instrument-serif-italic-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/instrument-sans-normal-400-700.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/style.css?v=efe4755f">
+<link rel="stylesheet" href="/style.css?v=1f5bd0fe">
 <meta property="og:title" content="Gabe Vandevere">
 <meta property="og:description" content="Writes code. Runs a language model on a board the size of a paperback, and that board is serving this page.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://gabevandevere.com/">
 <meta property="og:image" content="https://gabevandevere.com/favicon-512.png">
-<script type="module" src="/js/main.js?v=efe4755f"></script>
+<script type="module" src="/js/main.js?v=1f5bd0fe"></script>
 </head>
 <body>
 <a class="skip" href="#machine">Skip to content</a>
@@ -88,7 +88,7 @@
     <h2 class="pitch-title">Talk to the machine.<span class="pitch-sub">It lives on my desk. It is serving you this page.</span></h2>
   </header>
 
-  <p class="machine-intro">Most &ldquo;AI on a website&rdquo; is a request to somebody else&rsquo;s datacenter. This is a nine-billion-parameter model running on the GPU of the Jetson under my desk &mdash; the same board that just sent you this HTML. When it answers, watch the power draw jump.</p>
+  <p class="machine-intro">Ask it anything about me &mdash; where I&rsquo;ve worked, what I&rsquo;ve built, what I work with, how to reach me. It knows. And nothing you type leaves this desk: the model answering you is running on the GPU of the small Jetson board that just served you this page, not in somebody else&rsquo;s datacenter. When it answers, watch the power draw jump.</p>
 
   <div class="machine-grid">
     <div class="chat" id="chat">
@@ -110,7 +110,7 @@
     </div>
 
     <aside class="telemetry" id="telemetry" aria-label="Live board telemetry">
-      <p class="tele-head mono"><span class="live-dot" id="tele-dot" aria-hidden="true"></span><span id="tele-host">orin</span><span class="tele-state" id="tele-state">connecting&hellip;</span></p>
+      <p class="tele-head mono"><span class="live-dot" id="tele-dot" aria-hidden="true"></span><span id="tele-host">orin &middot; on my desk</span><span class="tele-state" id="tele-state">connecting&hellip;</span></p>
       <dl class="tele-rows">
         <div class="tele-row"><dt>board</dt><dd id="t-board">&mdash;</dd></div>
         <div class="tele-row"><dt>model</dt><dd id="t-model">&mdash;</dd></div>

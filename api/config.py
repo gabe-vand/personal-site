@@ -35,7 +35,7 @@ GLOBAL_PER_DAY = 600
 # Telemetry
 TELEMETRY_CACHE_S = 2.0
 MODEL_INFO_CACHE_S = 600.0
-HOSTNAME = 'orin'
+HOSTNAME = 'orin · on my desk'   # label in the panel, not the real hostname
 BOARD = 'NVIDIA Jetson Orin Nano Super (8 GB)'
 
 # Contact form (api/mail.py). Zoho SMTP with the site's own mailbox; secret file is
