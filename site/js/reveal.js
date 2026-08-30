@@ -2,7 +2,7 @@
 // Konami code, which flips the page into MAXN_SUPER mode.
 import { burst } from './chalk.js';
 
-const REVEAL = '.pitch-head, .machine-intro, .chat, .telemetry, .pipeline, .contact-form, .contact-alt';
+const REVEAL = '.pitch-head, .machine-intro, .chat, .telemetry, .contact-form, .contact-alt';
 const CODE = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
 
 export function initReveal(reduced) {

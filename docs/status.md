@@ -16,7 +16,6 @@ Last updated: 2026-08-29 (evening: page reduced to machine + contact).
 | Ticker with live uptime / GPU temp / watts / token count | `20-hero.html`, `js/ticker.js` | done |
 | Machine: streaming chat with the on-device model | `60-machine.html`, `js/chat.js`, `api/` | done; each exchange is logged (truncated) to `journalctl --user -u site-api` for review |
 | Machine: live telemetry panel with power sparkline | `js/telemetry.js`, `api/telemetry.py` | done |
-| Machine: request pipeline diagram with in-flight packet | `60-machine.html` | done |
 | Top out: chalk burst on reaching the contact section | `js/chalk.js` | done |
 | Contact: mailto form to gabe@gabevandevere.com | `70-contact.html`, `js/contact.js` | done |
 | Easter egg: Konami code → MAXN_SUPER theme | `js/reveal.js`, `00-tokens.css` | done |

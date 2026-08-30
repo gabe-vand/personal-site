@@ -236,26 +236,10 @@ p { margin: 0 0 1.1em; max-width: var(--measure); }
 .meter-fill { display: block; height: 100%; width: 0; background: var(--ice); transition: width 0.7s var(--ease-out); }
 .tele-note { color: var(--chalk-faint); margin: 1rem 0 0; }
 
-/* The path a question takes. A packet shuttles back and forth while the model works. */
-.pipeline { position: relative; list-style: none; margin: 2rem 0 0; padding: 1.2rem 0 0; display: flex; align-items: stretch; gap: 0.6rem; overflow-x: auto; font-family: var(--mono); font-size: 0.72rem; }
-.node { position: relative; flex: 1; min-width: 6.5rem; text-align: center; padding: 0.6rem 0.4rem; border: 1px solid var(--stone-4); border-radius: 8px; color: var(--chalk-dim); background: var(--stone); transition: border-color 0.3s, color 0.3s; }
-.node small { display: block; font-size: 0.62rem; color: var(--chalk-faint); margin-top: 0.15rem; }
-.node + .node::before { content: ''; position: absolute; left: -0.65rem; top: 50%; width: 0.6rem; border-top: 1px dashed var(--stone-4); }
-.packet { position: absolute; top: calc(50% + 0.6rem); left: 0; width: 9px; height: 9px; margin-top: -4px; border-radius: 50%; background: var(--ice); box-shadow: 0 0 14px var(--ice); opacity: 0; }
-.pipeline.is-busy .packet { opacity: 1; animation: travel 1.5s ease-in-out infinite alternate; }
-.pipeline.is-busy .node:last-child { border-color: var(--ice); color: var(--chalk); }
-@keyframes travel { from { left: 0; } to { left: calc(100% - 9px); } }
 
 @media (max-width: 900px) { .machine-grid { grid-template-columns: minmax(0, 1fr); } }
-@media (max-width: 760px) {
-    .pipeline { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: visible; }
-    .node { min-width: 0; }
-    .node + .node::before, .packet { display: none; }
-    .pipeline.is-busy .node { border-color: var(--ice); }
-}
 @media (prefers-reduced-motion: reduce) {
     .msg-bot.is-streaming p::after { animation: none; }
-    .pipeline.is-busy .packet { animation: none; left: calc(100% - 9px); }
 }
 /* 02 / send it: the mailto form, links, footer. */
 .contact-form { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.8rem; max-width: 40rem; }

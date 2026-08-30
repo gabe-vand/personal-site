@@ -25,8 +25,6 @@ export function onTelemetry(fn) {
 export function setGenerating(flag) {
     generating = flag;
     if (!flag && lastData) lastData.busy = false;
-    const pipeline = $('pipeline');
-    if (pipeline) pipeline.classList.toggle('is-busy', flag);
     paintState(lastData);
 }
 
