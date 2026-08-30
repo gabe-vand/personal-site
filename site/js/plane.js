@@ -27,7 +27,7 @@ function route(sx, sy, vw, vh, deg) {
 }
 
 // Breeze across the direction of travel: two slow swells (periods ~1100 px and ~560 px).
-const swell = (len) => 26 * Math.sin(len * 0.0057 + 0.6) + 11 * Math.sin(len * 0.0112 + 2.1);
+const swell = (len) => 26 * Math.sin(len * 0.0057) + 11 * Math.sin(len * 0.0112); // zero at launch so it starts exactly on the dart
 // Progress: accelerates gently out of the button's hop (so the handoff has no velocity jump),
 // then a long ease-out with a faint surge/glide rhythm, like a plane catching air.
 const progress = (u) => {
