@@ -14,7 +14,6 @@ import urllib.request
 
 import config
 import limits
-import persona
 
 _lock = threading.Lock()
 _cache = {'ts': 0.0, 'data': None}
@@ -153,21 +152,6 @@ def model_info():
     except Exception:
         pass
     return _model['data']
-
-
-def live_line():
-    """One sentence of current state, appended to the system prompt so the model can answer 'how hot are you'."""
-    t, p, up = temps(), power(), uptime_s()
-    tokens = (llm_metrics() or {}).get('tokens_generated')
-    parts = []
-    if t.get('gpu') is not None:
-        parts.append(f"GPU at {t['gpu']:.0f} C")
-    if p.get('total') is not None:
-        parts.append(f"drawing {p['total']:.1f} W")
-    parts.append(f"up {up // 3600} h {(up % 3600) // 60} min")
-    if tokens is not None:
-        parts.append(f"{tokens:,} tokens generated since the model server started")
-    return persona.LIVE_PREFIX + ', '.join(parts) + '.'
 
 
 def snapshot():

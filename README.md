@@ -89,10 +89,10 @@ Caddy forwards `/api/*` to `api/server.py` and strips the prefix.
   memory, uptime, llama.cpp token counters, model info. Cached 2 s.
 - `POST /api/chat` — `{"messages":[{"role":"user","content":"..."}]}` → server-sent
   events (`status`, `token`…, `done` with real tokens/s). The system prompt from
-  `persona.py` plus a live line ("GPU 48 C, drawing 5 W…") is added server-side.
+  `persona.py` is added server-side; it is about Gabe, not the hardware (the panel shows that).
 
 **The API key for llama.cpp lives in `/etc/oracle-llm/api-key` and never leaves the
-proxy.** The proxy also caps output at 220 tokens, keeps 6 messages of history, allows
+proxy.** The proxy also caps output at 260 tokens, keeps 6 messages of history, allows
 6 questions per visitor then 1/minute, 40 site-wide per 10 minutes, 600 a day, and lets
 two people queue behind the single model slot. All numbers are in `api/config.py`.
 

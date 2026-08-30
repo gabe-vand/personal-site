@@ -13,7 +13,7 @@ LISTEN_PORT = 8002
 
 # Generation
 MODEL_ALIAS = 'oracle-local'
-MAX_TOKENS = 220            # ~10 tok/s on this board, so ~20 s worst case
+MAX_TOKENS = 260            # ~10 tok/s on this board, so ~26 s worst case
 TEMPERATURE = 0.7
 MAX_MESSAGE_CHARS = 500     # per message, either role
 MAX_HISTORY = 6             # messages kept from the client (system prompt is added here)

@@ -45,7 +45,7 @@ def _request(history):
         'stream': True,
         'max_tokens': config.MAX_TOKENS,
         'temperature': config.TEMPERATURE,
-        'messages': [{'role': 'system', 'content': persona.SYSTEM_PROMPT + '\n\n' + telemetry.live_line()}] + history,
+        'messages': [{'role': 'system', 'content': persona.SYSTEM_PROMPT}] + history,
     }).encode('utf-8')
     headers = {'Authorization': 'Bearer ' + telemetry.api_key(), 'Content-Type': 'application/json'}
     return urllib.request.Request(config.UPSTREAM + '/v1/chat/completions', data=body, method='POST', headers=headers)
