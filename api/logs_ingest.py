@@ -2,8 +2,10 @@
 the file offset (and inode, for log rotation) so each line is read once. This is how bot and
 AI-crawler traffic becomes visible: crawlers never run the beacon, but every request they make
 lands in this log with its User-Agent and the CF-IPCountry header Cloudflare adds."""
+import calendar
 import json
 import os
+import re
 import threading
 import time
 
@@ -12,6 +14,15 @@ import config
 import db
 
 SKIP_PREFIX = ('/api/beacon',)
+_STAMP = re.compile(r'^(\d{4})/(\d{2})/(\d{2}) (\d{2}):(\d{2}):(\d{2})(?:\.(\d+))?')  # console-format prefix, UTC
+
+
+def _stamp(line: str) -> float | None:
+    m = _STAMP.match(line)
+    if not m:
+        return None
+    y, mo, d, h, mi, sec = (int(x) for x in m.groups()[:6])
+    return calendar.timegm((y, mo, d, h, mi, sec, 0, 0, 0)) + (float('0.' + m.group(7)) if m.group(7) else 0.0)
 
 
 def _parse(line: str):
@@ -31,7 +42,7 @@ def _parse(line: str):
     ua = hv('User-Agent')
     klass, bot = bots.classify(ua)
     ip = hv('Cf-Connecting-Ip') or req.get('client_ip') or req.get('remote_ip') or ''
-    return (rec.get('ts') or time.time(), ip, hv('Cf-Ipcountry'), req.get('method') or '', path[:300], int(rec.get('status') or 0), ua[:300], hv('Referer')[:300], klass, bot)
+    return (rec.get('ts') or _stamp(line) or time.time(), ip, hv('Cf-Ipcountry'), req.get('method') or '', path[:300], int(rec.get('status') or 0), ua[:300], hv('Referer')[:300], klass, bot)
 
 
 def ingest_once() -> int:
