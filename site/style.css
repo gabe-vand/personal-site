@@ -255,3 +255,7 @@ p { margin: 0 0 1.1em; max-width: var(--measure); }
 
 @media (min-width: 761px) { .site-footer { padding-right: calc(var(--gutter) + var(--rail)); } }
 @media (max-width: 760px) { .site-footer { padding-bottom: 6rem; } }
+
+/* The chat and the contact form sit close together: halve the seam between them. */
+.machine { padding-bottom: clamp(2rem, 4vh, 3.5rem); }
+.contact { padding-top: clamp(2rem, 4vh, 3.5rem); }
