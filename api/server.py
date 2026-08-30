@@ -4,6 +4,7 @@
 Routes (Caddy strips the /api prefix before they get here):
     GET  /status   telemetry JSON for the "machine" panel on the page
     POST /chat     {"messages":[{"role":"user","content":"..."}]}  ->  SSE stream
+    POST /contact  {"subject","body","from"?}  ->  email to Gabe via api/mail.py
     GET  /health   liveness
 
 Run:  python3 server.py      (in production: the site-api systemd user unit)
@@ -16,6 +17,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import chat
 import config
 import limits
+import mail
 import telemetry
 
 JSON_HEADERS = {'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store'}
@@ -50,19 +52,28 @@ class Handler(BaseHTTPRequestHandler):
             return self.send_json(200, {'ok': True})
         self.send_json(404, {'error': 'not found'})
 
-    def do_POST(self):
-        if self.path != '/chat':
-            return self.send_json(404, {'error': 'not found'})
+    def read_json(self):
         try:
             length = int(self.headers.get('Content-Length', '0'))
         except ValueError:
             length = 0
         if length <= 0 or length > config.MAX_BODY_BYTES:
-            return self.send_json(413, {'error': 'Message too long.'})
+            return None
         try:
-            history = chat.clean_history(json.loads(self.rfile.read(length)).get('messages'))
+            return json.loads(self.rfile.read(length))
+        except ValueError:
+            return None
+
+    def do_POST(self):
+        if self.path == '/contact':
+            return self.do_contact()
+        if self.path != '/chat':
+            return self.send_json(404, {'error': 'not found'})
+        payload = self.read_json()
+        try:
+            history = chat.clean_history(payload.get('messages'))
         except (ValueError, AttributeError):
-            return self.send_json(400, {'error': 'Bad request.'})
+            return self.send_json(400, {'error': 'Bad request or message too long.'})
         wait = limits.take_token(self.client_ip())
         if wait > 0:
             return self.send_json(429, {'error': f'You have asked a lot in a short time. Try again in {int(wait) + 1} seconds.'})
@@ -74,6 +85,17 @@ class Handler(BaseHTTPRequestHandler):
             self.stream_answer(history)
         finally:
             limits.leave_queue()
+
+    def do_contact(self):
+        clean, err = mail.validate(self.read_json())
+        if err:
+            return self.send_json(400, {'error': err})
+        if not limits.contact_allow(self.client_ip()):
+            return self.send_json(429, {'error': 'That is enough messages for now. Email me directly instead.'})
+        err = mail.send(clean, self.client_ip())
+        if err:
+            return self.send_json(502, {'error': err})
+        self.send_json(200, {'ok': True})
 
     def stream_answer(self, history):
         self.send_response(200)

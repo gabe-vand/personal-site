@@ -37,3 +37,15 @@ TELEMETRY_CACHE_S = 2.0
 MODEL_INFO_CACHE_S = 600.0
 HOSTNAME = 'orin'
 BOARD = 'NVIDIA Jetson Orin Nano Super (8 GB)'
+
+# Contact form (api/mail.py). Zoho SMTP with the site's own mailbox; secret file is
+# KEY=VALUE lines (SMTP_USER, SMTP_PASS), owned root:oracle-llm 640 like the LLM key.
+SMTP_HOST = 'smtp.zoho.com'
+SMTP_PORT = 465
+SMTP_TIMEOUT_S = 20
+SMTP_SECRET_PATH = '/etc/site-api/smtp'
+CONTACT_TO = 'gabe@gabevandevere.com'
+CONTACT_MAX_SUBJECT = 120
+CONTACT_MAX_BODY = 2000
+CONTACT_PER_IP_PER_HOUR = 3
+CONTACT_PER_DAY = 40

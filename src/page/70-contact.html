@@ -13,9 +13,13 @@
   <form id="contact-form" class="contact-form">
     <label class="visually-hidden" for="contact-subject">Subject</label>
     <input id="contact-subject" name="subject" type="text" placeholder="Subject" maxlength="120">
+    <label class="visually-hidden" for="contact-from">Your email (optional, so I can reply)</label>
+    <input id="contact-from" name="from" type="email" placeholder="Your email (optional, so I can reply)" maxlength="254" autocomplete="email">
     <label class="visually-hidden" for="contact-body">Message</label>
     <textarea id="contact-body" name="body" rows="5" placeholder="Say something&hellip;" maxlength="2000" required></textarea>
-    <button type="submit" class="btn btn-big">Open in my email app &rarr;</button>
+    <input class="hp" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <button type="submit" class="btn btn-big">Send it &rarr;</button>
+    <p id="contact-note" class="contact-note mono" role="status" hidden></p>
   </form>
 
   <p class="contact-alt">Or the plain way: <a href="mailto:gabe@gabevandevere.com">gabe@gabevandevere.com</a> &middot; <a href="https://www.linkedin.com/in/gabe-vandevere-96aa1628b/" rel="me noopener" target="_blank">LinkedIn</a></p>

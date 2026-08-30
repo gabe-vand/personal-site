@@ -48,7 +48,7 @@ That's it. `deploy.sh` rebuilds, validates and reloads Caddy, restarts the API o
 | Suggested questions for the model | `src/page/60-machine.html` (the `.chip` buttons) |
 | Bring back a retired section (climb, lift, build) | move it from `src/archive/` back into `src/page/`, `src/css/`, `site/js/` (and re-add the nav hold + `main.js` import) |
 | What the model knows / how it talks | `api/persona.py` |
-| Email address, LinkedIn link | `site/js/contact.js` **and** the links in `src/page/70-contact.html` |
+| Email address, LinkedIn link | `api/config.py` (CONTACT_TO), `site/js/contact.js`, links in `src/page/70-contact.html`, `api/persona.py` |
 | Colors, fonts | `src/css/00-tokens.css` |
 | Ticker items | `src/page/20-hero.html` (the `.ticker-track` list) |
 
@@ -87,6 +87,8 @@ Caddy forwards `/api/*` to `api/server.py` and strips the prefix.
 
 - `GET /api/status` — board telemetry: temperatures, INA3221 power rails, GPU load,
   memory, uptime, llama.cpp token counters, model info. Cached 2 s.
+- `POST /api/contact` — `{"subject","body","from"?}` → emails Gabe via Zoho SMTP (`api/mail.py`);
+  creds in `/etc/site-api/smtp`; 3 per IP per hour, 40 per day.
 - `POST /api/chat` — `{"messages":[{"role":"user","content":"..."}]}` → server-sent
   events (`status`, `token`…, `done` with real tokens/s). The system prompt from
   `persona.py` is added server-side; it is about Gabe, not the hardware (the panel shows that).

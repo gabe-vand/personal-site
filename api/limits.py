@@ -89,3 +89,25 @@ def slot_busy() -> bool:
         _slot.release()
         return False
     return True
+
+
+# Contact form: a small fixed window per IP plus a daily global cap. Sends are rare and
+# each one costs an SMTP round trip, so this is deliberately tight.
+_contact_lock = threading.Lock()
+_contact_ip: dict[str, list[float]] = {}
+_contact_day: list[float] = []
+
+
+def contact_allow(ip: str) -> bool:
+    now = time.monotonic()
+    with _contact_lock:
+        for key in [k for k, v in _contact_ip.items() if not v or v[-1] < now - 3600]:
+            del _contact_ip[key]
+        _contact_day[:] = [t for t in _contact_day if t > now - 86400]
+        recent = [t for t in _contact_ip.get(ip, []) if t > now - 3600]
+        if len(recent) >= config.CONTACT_PER_IP_PER_HOUR or len(_contact_day) >= config.CONTACT_PER_DAY:
+            return False
+        recent.append(now)
+        _contact_ip[ip] = recent
+        _contact_day.append(now)
+        return True

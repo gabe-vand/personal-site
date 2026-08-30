@@ -1,16 +1,35 @@
-// Contact form. No backend, by design: build a mailto: URL and hand it to the visitor's mail
-// app. Nothing is sent to this server, so there is nothing to secure or lose.
-// EDIT: change ADDRESS here AND in the fallback link in src/page/70-contact.html.
+// Contact form. POSTs to /api/contact; the board emails Gabe through its own mailbox
+// (api/mail.py). The "website" field is a honeypot: hidden from people, filled by bots.
 const ADDRESS = 'gabe@gabevandevere.com';
 
 export function initContact() {
     const form = document.getElementById('contact-form');
     if (!form) return;
-    form.addEventListener('submit', (e) => {
+    const button = form.querySelector('button[type=submit]');
+    const note = document.getElementById('contact-note');
+    const say = (text, ok) => {
+        note.textContent = text;
+        note.classList.toggle('is-ok', !!ok);
+        note.hidden = false;
+    };
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const subject = form.elements.subject.value.trim() || 'Hello from your website';
         const body = form.elements.body.value.trim();
         if (!body) return;
-        window.location.href = `mailto:${ADDRESS}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        const payload = { subject: form.elements.subject.value.trim(), body, from: form.elements.from.value.trim(), website: form.elements.website.value };
+        button.disabled = true;
+        button.textContent = 'Sending…';
+        try {
+            const res = await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(data.error || 'Sending failed.');
+            say('Sent. It landed in my inbox — I’ll write back.', true);
+            form.reset();
+            button.textContent = 'Sent ✓';
+        } catch (err) {
+            say(`${err.message} (${ADDRESS})`, false);
+            button.disabled = false;
+            button.textContent = 'Try again →';
+        }
     });
 }

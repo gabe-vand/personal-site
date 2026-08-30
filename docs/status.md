@@ -41,6 +41,7 @@ nav hold in `10-nav.html` plus the import in `main.js`.
 
 ## Deferred
 
-- Email: Cloudflare Email Routing for `gabe@gabevandevere.com` → hotmail, then delete the
-  Porkbun MX/SPF records and switch the site's address. See `docs/deploy-research.md`.
+- Contact form sending: code is live (`POST /api/contact` → `api/mail.py` → Zoho SMTP), but
+  it sends only once `/etc/site-api/smtp` exists (SMTP_USER + SMTP_PASS = Zoho app password).
+  Until then the form shows "Mail is not set up on this board yet" with the address.
 - Cloudflare cache purge on deploy (images are edge-cached for a day).
