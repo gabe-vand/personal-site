@@ -278,7 +278,7 @@ p { margin: 0 0 1.1em; max-width: var(--measure); }
 .send-btn { position: relative; background: var(--chalk); color: var(--stone); border-color: var(--chalk); overflow: visible; transition: opacity 0.35s, transform 0.35s var(--ease-out); }
 .send-btn:hover { background: var(--chalk); color: var(--stone); }
 .send-btn .send-label { position: relative; z-index: 2; opacity: var(--text-opacity, 1); }
-.send-btn.is-folding { background: transparent; border-color: transparent; }
+.send-btn.is-folding, .send-btn.is-folding:disabled { background: transparent; border-color: transparent; opacity: 1; }
 .send-btn.is-away { opacity: 0; transform: translateY(-8px); }
 .send-btn.is-away .send-plane { display: none; }
 .send-btn.is-folding .send-plane { display: block; }
