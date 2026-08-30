@@ -1,7 +1,7 @@
 // The ticker strip under the hero. Duplicates its items once so the CSS animation can loop
 // seamlessly, and fills the live slots (uptime, temperature, watts, tokens) from telemetry.
-import { onTelemetry } from './telemetry.js?v=3e700201';
-import { fmtUptime, fmtInt, fmtNum } from './format.js?v=3e700201';
+import { onTelemetry } from './telemetry.js?v=7b0ee7fb';
+import { fmtUptime, fmtInt, fmtNum } from './format.js?v=7b0ee7fb';
 
 export function initTicker(reduced) {
     const track = document.getElementById('ticker-track');

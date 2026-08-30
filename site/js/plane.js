@@ -36,9 +36,11 @@ const swell = (len) => {
 // Progress: accelerates gently out of the button's hop (so the handoff has no velocity jump),
 // then a long ease-out with a faint surge/glide rhythm, like a plane catching air.
 const progress = (u) => {
-    const base = u < 0.22 ? 0.3 * (u / 0.22) * (u / 0.22) : 0.3 + 0.7 * (1 - Math.pow(1 - (u - 0.22) / 0.78, 1.5));
-    return Math.min(1, base + 0.015 * Math.sin(u * Math.PI * 3));
+    const base = u < 0.18 ? 0.26 * (u / 0.18) * (u / 0.18) : 0.26 + 0.74 * (1 - Math.pow(1 - (u - 0.18) / 0.82, 1.5));
+    const surge = Math.max(0, Math.min(1, (u - 0.3) / 0.2)); // no wobble until it is well away from the button
+    return Math.min(1, base + surge * 0.015 * Math.sin(u * Math.PI * 3));
 };
+const smooth = (x) => { const t = Math.max(0, Math.min(1, x)); return t * t * (3 - 2 * t); };
 
 /** Fly from the centre of `from` (an element) heading `startDeg` (screen degrees, negative = up). */
 export function flyPlane(from, startDeg = -20) {
@@ -68,8 +70,9 @@ export function flyPlane(from, startDeg = -20) {
         const w = swell(len);
         return { x: p.x - (dy / n) * w, y: p.y + (dx / n) * w };
     }
-    // Size over the flight: starts at the folded dart's size, swells toward the viewer through the loop, settles as it exits.
-    const size = (u) => 0.72 + 0.48 * Math.sin(Math.min(1, u * 1.25) * Math.PI) * (1 - 0.3 * u) + 0.2 * u;
+    // Size over the flight: the folded dart's size, held while it leaves the button, then swelling
+    // toward the viewer through the loop and settling as it exits.
+    const size = (u) => 0.72 + 0.5 * smooth((u - 0.14) / 0.42) - 0.3 * smooth((u - 0.68) / 0.32);
     function place(len, u) {
         const a = pointAt(len);
         const b = pointAt(Math.min(total, len + 4));

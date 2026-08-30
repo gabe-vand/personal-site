@@ -24,8 +24,8 @@ const STEPS = [
         to: { 'left-wing-third-x': 20, 'left-wing-third-y': 90, 'left-wing-second-y': 90, 'left-body-third-y': 90, 'right-wing-third-x': 80, 'right-wing-third-y': 90, 'right-body-third-y': 90, 'right-wing-second-y': 90 },
     },
     { ms: 250, set: { shade: 3 }, to: { rotate: 50, 'left-wing-third-y': 95, 'left-wing-third-x': 27, 'right-body-third-x': 45, 'right-wing-second-x': 45, 'right-wing-third-x': 60, 'right-wing-third-y': 83 } },
-    { ms: 200, to: { rotate: 60, 'plane-x': -8, 'plane-y': 14 } },
-    { ms: 180, to: { rotate: 45, 'plane-x': 30, 'plane-y': -60 } },
+    { ms: 220, to: { rotate: 58, 'plane-x': -6, 'plane-y': 10 } },
+    { ms: 160, to: { rotate: 45, 'plane-x': 0, 'plane-y': 0 } }, // settles, at rest: the flight does the throw
 ];
 
 const ease = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
