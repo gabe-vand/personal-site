@@ -30,7 +30,7 @@ const swell = (len) => 26 * Math.sin(len * 0.0057 + 0.6) + 11 * Math.sin(len * 0
 // Progress: an ease-out with a gentle surge/glide rhythm layered on, like a plane catching air.
 const progress = (u) => Math.min(1, 1 - Math.pow(1 - u, 1.55) + 0.02 * Math.sin(u * Math.PI * 3));
 
-export function flyPlane(from) {
+export function flyPlane(from, startDeg = null) {
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const box = from.getBoundingClientRect();
     const vw = window.innerWidth;
@@ -47,7 +47,7 @@ export function flyPlane(from) {
     const total = guide.getTotalLength();
     let sampled = 0;
     let d = '';
-    let heading = null;
+    let heading = startDeg === null ? null : (startDeg * Math.PI) / 180;
     let bank = 0;
     let start;
 
