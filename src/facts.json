@@ -1,0 +1,31 @@
+{
+  "name": "Gabe Vandevere",
+  "url": "https://gabevandevere.com/",
+  "email": "gabe@gabevandevere.com",
+  "linkedin": "https://www.linkedin.com/in/gabe-vandevere-96aa1628b/",
+  "location": { "locality": "Wayne", "region": "PA", "country": "US", "area": "Philadelphia area" },
+  "title": "Computer science student and AI product builder",
+  "summary": "Gabe Vandevere is a senior computer science student at the University of Delaware (expected spring 2027, GPA 3.87, Dean's List every semester) based in Wayne, Pennsylvania, in the Philadelphia area. He is a QA and Operations Intern at The RxAssistant, where he builds and tests AI-powered solutions for pharmaceutical clients, and previously a Research and Development Intern at Westpepper Capital, where he built machine-learning backtesting pipelines and real-time crypto market-data systems. His website is served from a Jetson Orin Nano on his desk, which also runs the language model visitors can talk to.",
+  "education": { "degree": "Bachelor of Science in Computer Science", "school": "University of Delaware", "school_url": "https://www.udel.edu/", "expected": "2027", "gpa": "3.87" },
+  "roles": [
+    { "title": "QA and Operations Intern", "org": "The RxAssistant", "where": "remote", "from": "2026-05", "to": null,
+      "summary": "Develops and deploys AI-powered solutions for pharmaceutical clients across more than ten brands: client-facing conversational-AI prototypes and production demos, ambient listening and workflow automation, conversational AI over regulated product, access, affordability and patient-support content. Assists QA and UAT for client releases (authored and executed 100+ test cases, validated AI responses, supported deployments from staging through production). Contributes to product infrastructure including React Native setup and AWS Bedrock integration." },
+    { "title": "Research and Development Intern", "org": "Westpepper Capital", "where": "Radnor, Pennsylvania", "from": "2025-06", "to": "2026-02",
+      "summary": "Built an end-to-end machine-learning modeling and backtesting pipeline over earnings, guidance and analyst-estimate data (15 model variants, up to 57% next-day direction accuracy in historical tests). Designed and deployed real-time crypto order-book tracking in Java on AWS EC2 via the Kraken API across 200+ markets. Developed trading strategies, one promoted to production. Built a Python analytics pipeline and dashboard (P&L and volume aggregation, Matplotlib) used daily." }
+  ],
+  "projects": [
+    { "name": "Automated short-form video pipeline", "summary": "Python pipeline that scrapes scripts, generates video with audio and subtitles (whisper, MoviePy, pydub, ffmpeg) and uploads via the YouTube Data API, fully eliminating manual content creation." },
+    { "name": "gabevandevere.com", "summary": "This site: hand-written HTML, CSS and JavaScript, served from an NVIDIA Jetson Orin Nano at home behind a Cloudflare Tunnel, with a Python proxy in front of a locally running open language model (llama.cpp) that visitors can chat with." }
+  ],
+  "skills": ["Python", "Java", "C", "C++", "JavaScript", "React", "React Native", "AWS EC2", "AWS Bedrock", "Linux", "Cloudflare", "Caddy", "llama.cpp", "systemd", "Postgres", "Excel and VBA", "conversational AI and LLM products", "QA and UAT", "quantitative research and backtesting", "real-time market data", "data pipelines and automation"],
+  "personal": "Boulderer (climbs V9, training for V10) and weightlifter.",
+  "faq": [
+    { "q": "Who is Gabe Vandevere?", "a": "A senior computer science student at the University of Delaware (expected spring 2027) from Wayne, Pennsylvania, who builds AI products. He is a QA and Operations Intern at The RxAssistant and was previously an R&D Intern at Westpepper Capital." },
+    { "q": "Where does Gabe Vandevere work?", "a": "At The RxAssistant (remote) as a QA and Operations Intern since May 2026, building and testing AI-powered solutions for pharmaceutical clients. Before that he was a Research and Development Intern at Westpepper Capital in Radnor, Pennsylvania (June–August 2025 and December 2025–February 2026)." },
+    { "q": "What is Gabe Vandevere's technical stack?", "a": "Python, Java, C, C++ and JavaScript; React and React Native; AWS (EC2, Bedrock), Linux, Cloudflare, Caddy, llama.cpp and systemd; Postgres, Excel and VBA. Domains: conversational AI and LLM products, QA and UAT, quantitative research and backtesting, real-time market data, and automation pipelines." },
+    { "q": "What has Gabe Vandevere built?", "a": "A machine-learning backtesting pipeline (15 model variants, up to 57% next-day direction accuracy), real-time crypto order-book tracking across 200+ markets in Java on AWS EC2, a daily-use trading analytics dashboard in Python, an automated short-form video pipeline, and this website, which runs on a Jetson Orin Nano on his desk together with the language model visitors can talk to." },
+    { "q": "Where did Gabe Vandevere go to school?", "a": "The University of Delaware in Newark, Delaware, for a Bachelor of Science in Computer Science, expected spring 2027, with a 3.87 GPA and Dean's List every semester." },
+    { "q": "How can I contact Gabe Vandevere?", "a": "Email gabe@gabevandevere.com, use the form on gabevandevere.com, or connect on LinkedIn at linkedin.com/in/gabe-vandevere-96aa1628b." },
+    { "q": "Is the AI on gabevandevere.com really running locally?", "a": "Yes. The site and the chat are served from an NVIDIA Jetson Orin Nano on Gabe's desk in Wayne, PA, running an open language model with llama.cpp; nothing is sent to a cloud AI service." }
+  ]
+}

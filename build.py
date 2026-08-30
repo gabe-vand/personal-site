@@ -15,6 +15,8 @@ from pathlib import Path
 import hashlib
 import re
 import sys
+
+import build_facts
 import time
 
 ROOT = Path(__file__).resolve().parent
@@ -71,7 +73,10 @@ def main() -> int:
     js_text = ''.join(IMPORT_V.sub(r"\1\2\3", p.read_text(encoding='utf-8')) for p in js_files)
     version = short_hash(css + js_text)
     stamp_imports(js_files, version)
-    html = html.replace('{{BUILD_DATE}}', time.strftime('%Y-%m-%d')).replace('{{V}}', version)
+    date = time.strftime('%Y-%m-%d')
+    facts = build_facts.load()
+    html = html.replace('{{BUILD_DATE}}', date).replace('{{V}}', version).replace('{{JSONLD}}', build_facts.jsonld(facts))
+    (SITE / 'llms.txt').write_text(build_facts.llms_txt(facts, date), encoding='utf-8')
     first, _, rest = html.partition('\n')
     if first.lower().startswith('<!doctype'):
         html = first + '\n' + HTML_BANNER + rest  # keep the doctype as the very first line
