@@ -1,7 +1,7 @@
 // Polls /api/status and paints the machine panel, the hero status line, the power sparkline,
 // and anything that subscribed with onTelemetry (the ticker). Polls every 2.5 s while the
 // panel is near the viewport, every 15 s otherwise, never while the tab is hidden.
-import { fmtUptime, fmtInt, fmtNum } from './format.js?v=dfc225fb';
+import { fmtUptime, fmtInt, fmtNum } from './format.js?v=a7d108e6';
 
 const listeners = new Set();
 const power = [];

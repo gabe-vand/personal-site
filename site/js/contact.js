@@ -1,6 +1,6 @@
 // Contact form. POSTs to /api/contact; the board emails Gabe through its own mailbox
 // (api/mail.py). The "website" field is a honeypot: hidden from people, filled by bots.
-import { flyPlane } from './plane.js?v=dfc225fb';
+import { flyPlane } from './plane.js?v=a7d108e6';
 
 const ADDRESS = 'gabe@gabevandevere.com';
 
