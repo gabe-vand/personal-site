@@ -76,14 +76,6 @@
 		-Server
 	}
 
-	# --- admin UI: never indexed, never cached ------------------
-	@admin path /admin /admin/*
-	header @admin {
-		X-Robots-Tag "noindex, nofollow"
-		Cache-Control "no-store"
-	}
-	redir /admin /admin/ 301
-
 	# --- caching ----------------------------------------------
 	# HTML: always revalidate, so edits show up immediately.
 	@html path *.html /
@@ -98,6 +90,13 @@
 	header @images Cache-Control "public, max-age=86400"
 	@fonts path *.woff2
 	header @fonts Cache-Control "public, max-age=31536000, immutable"
+	# Admin UI: never indexed, never cached (after the rules above so no-store wins for its css/js).
+	@admin path /admin /admin/*
+	header @admin {
+		X-Robots-Tag "noindex, nofollow"
+		Cache-Control "no-store"
+	}
+	redir /admin /admin/ 301
 	# Go's mime table does not know .webmanifest.
 	@manifest path /site.webmanifest
 	header @manifest Content-Type "application/manifest+json"

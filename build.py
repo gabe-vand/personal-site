@@ -69,10 +69,13 @@ def main() -> int:
     if not pages or not css_parts:
         print('refusing to build: src/page or src/css is empty, which would blank the live site')
         return 1
-    js_files = sorted((SITE / 'js').glob('*.js'))
+    js_files = sorted((SITE / 'js').glob('*.js')) + sorted((SITE / 'admin' / 'js').glob('*.js'))
+    admin_css = (SITE / 'admin' / 'admin.css').read_text(encoding='utf-8')
     js_text = ''.join(IMPORT_V.sub(r"\1\2\3", p.read_text(encoding='utf-8')) for p in js_files)
-    version = short_hash(css + js_text)
+    version = short_hash(css + js_text + admin_css)
     stamp_imports(js_files, version)
+    admin_html = (SRC / 'admin' / 'index.html').read_text(encoding='utf-8').replace('{{V}}', version)
+    (SITE / 'admin' / 'index.html').write_text(admin_html, encoding='utf-8')
     date = time.strftime('%Y-%m-%d')
     facts = build_facts.load()
     html = html.replace('{{BUILD_DATE}}', date).replace('{{V}}', version).replace('{{JSONLD}}', build_facts.jsonld(facts))

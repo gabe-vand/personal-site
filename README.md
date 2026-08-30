@@ -87,6 +87,15 @@ Three `systemctl --user` units (no `sudo` needed; lingering is enabled so they s
 
 Caddy forwards `/api/*` to `api/server.py` and strips the prefix.
 
+**Admin** lives at `/admin/` (static SPA in `site/admin/`, API under `/api/admin/*`). One account;
+credentials are an scrypt hash in `~/.config/site-api/admin` (0600). To reset the password:
+`cd api && python3 -c "import admin_auth; print(admin_auth.make_secret_file('gabe@gabevandevere.com', 'NEW-PASSWORD'))"`
+(prints a fresh otpauth URI; set `TOTP_ENABLED=1` in that file to require an authenticator code).
+Data is SQLite at `~/.local/state/site-api/site.db`: visitors/sessions/events from the beacon,
+`requests` from the access log (bot classification in `api/bots.py`), `conversations`/`messages`,
+`emails`, `admin_sessions`, `audit`. Cloudflare edge stats appear once `~/.config/site-api/cf-token-read`
+holds a token with Zone → Analytics: Read.
+
 - `GET /api/status` — board telemetry: temperatures, INA3221 power rails, GPU load,
   memory, uptime, llama.cpp token counters, model info. Cached 2 s.
 - `POST /api/contact` — `{"subject","body","from"?}` → emails Gabe via Zoho SMTP (`api/mail.py`);
