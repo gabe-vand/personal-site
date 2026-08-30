@@ -33,7 +33,7 @@
   <svg viewBox="0 0 100 100" width="34" height="34" aria-hidden="true"><g transform="translate(-3,0)"><path d="M 60 28.6 A 28 28 0 1 0 63.4 68 L 63.4 50 L 48 50" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/><rect class="mark-cursor" x="76" y="54" width="22" height="30" fill="currentColor"/></g></svg>
 </a>
 
-<!-- Navigation is a route topo: one hold per section, a chalk line that fills as you climb.
+<!-- Navigation is a route topo: one hold per section, a chalk line that fills as you scroll.
      js/topo.js draws the line and moves the "you are here" marker. Plain anchor links underneath,
      so it works with no JavaScript at all. -->
 <nav class="topo" aria-label="Sections">
@@ -57,7 +57,7 @@
     <p class="hero-kicker mono"><span class="live-dot" id="hero-dot" aria-hidden="true"></span><span id="hero-status">served live from a Jetson Orin Nano in Wayne, PA</span></p>
     <h1 class="hero-name"><span class="hero-line">Gabe</span><span class="hero-line">Vandevere</span></h1>
     <p class="hero-lede">Writes code. Builds AI products by day. Keeps a nine-billion-parameter model on a board the size of a paperback &mdash; and that board is the one serving you <em>this page</em>.</p>
-    <p class="hero-cue mono"><a href="#climb"><span class="cue-arrow" aria-hidden="true">&darr;</span> meet the machine</a></p>
+    <p class="hero-cue mono"><a href="#machine"><span class="cue-arrow" aria-hidden="true">&darr;</span> meet the machine</a></p>
   </div>
   <p class="hero-coord mono" aria-hidden="true">40.04&deg; N &middot; 75.39&deg; W &middot; elev. desk</p>
 </section>
@@ -88,7 +88,7 @@
     <h2 class="pitch-title">Talk to the machine.<span class="pitch-sub">It lives on my desk. It is serving you this page.</span></h2>
   </header>
 
-  <p class="machine-intro">Most &ldquo;AI on a website&rdquo; is a request to somebody else&rsquo;s datacenter. This is a nine-billion-parameter model running on the GPU of the Jetson under my desk &mdash; the same board that just sent you this HTML. When it answers, watch the power draw on the right climb.</p>
+  <p class="machine-intro">Most &ldquo;AI on a website&rdquo; is a request to somebody else&rsquo;s datacenter. This is a nine-billion-parameter model running on the GPU of the Jetson under my desk &mdash; the same board that just sent you this HTML. When it answers, watch the power draw jump.</p>
 
   <div class="machine-grid">
     <div class="chat" id="chat">
