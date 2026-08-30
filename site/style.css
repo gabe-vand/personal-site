@@ -166,9 +166,9 @@ p { margin: 0 0 1.1em; max-width: var(--measure); }
     .topo-progress { transition: none; }
 }
 /* 00 / base: the opener and the ticker beneath it. */
-.hero { min-height: 100svh; display: grid; align-content: center; padding-top: 7rem; padding-bottom: 5rem; overflow: hidden; }
+.hero { min-height: 100svh; display: grid; align-content: center; max-width: none; padding: 4rem var(--gutter) 4rem; overflow: hidden; }
 .hero-canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
-.hero-inner { position: relative; z-index: 1; max-width: 64rem; }
+.hero-inner { position: relative; z-index: 1; width: 100%; max-width: 84rem; margin: 0 auto; padding: 0 var(--gutter); box-sizing: border-box; }
 .hero-kicker { display: flex; align-items: center; gap: 0.7rem; color: var(--chalk-dim); margin: 0 0 2.2rem; }
 .hero-name { font-family: var(--serif); font-weight: 400; font-size: clamp(4.6rem, 19vw, 13.5rem); line-height: 0.86; letter-spacing: -0.03em; margin: 0 0 2.2rem; }
 .hero-line { display: block; }
@@ -180,7 +180,7 @@ p { margin: 0 0 1.1em; max-width: var(--measure); }
 .hero-cue a:hover { color: var(--chalk); }
 .cue-arrow { display: inline-block; animation: bob 2.2s ease-in-out infinite; }
 @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
-.hero-coord { position: absolute; left: var(--gutter); bottom: 1.4rem; z-index: 1; color: var(--chalk-faint); margin: 0; }
+.hero-coord { position: absolute; left: calc(var(--gutter) * 2); bottom: 1.4rem; z-index: 1; color: var(--chalk-faint); margin: 0; }
 
 /* Ticker: two copies of the list slide left forever (js/ticker.js makes the copy). */
 .ticker { border-top: 1px solid var(--stone-3); border-bottom: 1px solid var(--stone-3); overflow: hidden; padding: 0.75rem 0; background: var(--stone); }
@@ -192,7 +192,8 @@ p { margin: 0 0 1.1em; max-width: var(--measure); }
 .ticker:hover .ticker-track { animation-play-state: paused; }
 
 @media (max-width: 760px) {
-    .hero { padding-top: 5.5rem; }
+    .hero { padding-top: 3.5rem; }
+    .hero-inner { padding: 0; }
     .hero-coord { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
