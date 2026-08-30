@@ -4,11 +4,13 @@ Credentials come from the file at config.SMTP_SECRET_PATH (KEY=VALUE lines: SMTP
 SMTP_PASS), read on every send so a rotated password needs no restart. If the file is
 missing the endpoint reports "mail not configured" and nothing is sent.
 """
+import imaplib
 import re
 import smtplib
+import threading
 import time
 from email.message import EmailMessage
-from email.utils import formataddr
+from email.utils import formataddr, make_msgid
 
 import config
 import db
@@ -59,10 +61,12 @@ def send_mail(to: str, subject: str, body: str, reply_to: str = '', kind: str = 
         if reply_to:
             msg['Reply-To'] = reply_to
         msg.set_content(body)
+        msg['Message-ID'] = make_msgid(domain='gabevandevere.com')
         try:
             with smtplib.SMTP_SSL(config.SMTP_HOST, config.SMTP_PORT, timeout=config.SMTP_TIMEOUT_S) as smtp:
                 smtp.login(user, password)
                 smtp.send_message(msg)
+            threading.Thread(target=_tidy_sent, args=(user, password, msg['Message-ID']), daemon=True).start()
         except (smtplib.SMTPException, OSError) as exc:
             print(f'mail FAILED {type(exc).__name__}: {exc}', flush=True)
             err = 'Sending failed on my end. Email me directly instead.'
@@ -71,6 +75,29 @@ def send_mail(to: str, subject: str, body: str, reply_to: str = '', kind: str = 
     if err is None:
         print(f'mail sent kind={kind} to={to} subj={subject[:60]!r}', flush=True)
     return err
+
+
+def _tidy_sent(user: str, password: str, msgid: str):
+    """Zoho keeps a Sent copy of every SMTP submission; since these mails go from Gabe's address to
+    Gabe's address, that copy shows up as a duplicate in his client. Delete it (the emails table
+    keeps the record). Retries for a few seconds because Zoho files the copy shortly after acceptance."""
+    for _ in range(4):
+        time.sleep(4)
+        try:
+            with imaplib.IMAP4_SSL(config.IMAP_HOST, 993) as imap:
+                imap.login(user, password)
+                imap.select('Sent')
+                typ, data = imap.search(None, 'HEADER', 'Message-ID', msgid)
+                ids = data[0].split() if typ == 'OK' else []
+                if not ids:
+                    continue
+                for i in ids:
+                    imap.store(i, '+FLAGS', '\\Deleted')
+                imap.expunge()
+                return
+        except (imaplib.IMAP4.error, OSError) as exc:
+            print(f'sent-copy tidy failed: {type(exc).__name__}: {exc}', flush=True)
+            return
 
 
 def send(clean: dict, ip: str, vid: str = '') -> str | None:

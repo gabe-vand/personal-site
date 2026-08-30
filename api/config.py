@@ -45,6 +45,7 @@ BOARD = 'NVIDIA Jetson Orin Nano Super (8 GB)'
 # Contact form (api/mail.py). Zoho SMTP with the site's own mailbox; secret file is
 # KEY=VALUE lines (SMTP_USER, SMTP_PASS), mode 600 in ~/.config/site-api.
 SMTP_HOST = 'smtp.zoho.com'
+IMAP_HOST = 'imap.zoho.com'   # used only to delete the Sent copy of the board's own mails
 SMTP_PORT = 465
 SMTP_TIMEOUT_S = 20
 SMTP_SECRET_PATH = '/home/gabevandevere/.config/site-api/smtp'
