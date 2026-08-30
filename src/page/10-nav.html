@@ -1,0 +1,21 @@
+<!-- The mark: a G with a block cursor (from the icon kit). Click it to return to the top. -->
+<a class="mark" href="#base" aria-label="Gabe Vandevere, back to the top">
+  <svg viewBox="0 0 100 100" width="34" height="34" aria-hidden="true"><g transform="translate(-3,0)"><path d="M 60 28.6 A 28 28 0 1 0 63.4 68 L 63.4 50 L 48 50" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/><rect class="mark-cursor" x="76" y="54" width="22" height="30" fill="currentColor"/></g></svg>
+</a>
+
+<!-- Navigation is a route topo: one hold per section, a chalk line that fills as you climb.
+     js/topo.js draws the line and moves the "you are here" marker. Plain anchor links underneath,
+     so it works with no JavaScript at all. -->
+<nav class="topo" aria-label="Sections">
+  <svg class="topo-line" aria-hidden="true"><path class="topo-track" d=""/><path class="topo-progress" d=""/></svg>
+  <ol class="topo-holds">
+    <li><a class="hold" href="#base"><span class="hold-dot"></span><span class="hold-label"><b>00</b>Base</span></a></li>
+    <li><a class="hold" href="#climb"><span class="hold-dot"></span><span class="hold-label"><b>01</b>Climb</span></a></li>
+    <li><a class="hold" href="#lift"><span class="hold-dot"></span><span class="hold-label"><b>02</b>Lift</span></a></li>
+    <li><a class="hold" href="#code"><span class="hold-dot"></span><span class="hold-label"><b>03</b>Build</span></a></li>
+    <li><a class="hold" href="#machine"><span class="hold-dot"></span><span class="hold-label"><b>04</b>Machine</span></a></li>
+    <li><a class="hold" href="#contact"><span class="hold-dot"></span><span class="hold-label"><b>05</b>Top out</span></a></li>
+  </ol>
+</nav>
+
+<main id="main">

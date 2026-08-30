@@ -1,0 +1,53 @@
+<!-- ============================================================
+     03 / BUILD. Four project cards (tilt toward the pointer, js/tilt.js).
+     EDIT: swap the card text, images (site/img/project-N.svg) and links.
+     ============================================================ -->
+<section class="pitch code" id="code">
+  <header class="pitch-head">
+    <p class="pitch-tag mono">03 / build</p>
+    <h2 class="pitch-title">Things I build.<span class="pitch-sub">Mostly for fun. Sometimes for money.</span></h2>
+  </header>
+
+  <p class="code-intro">By day I build and test AI products for pharmaceutical clients at The RxAssistant. Before that, R&amp;D at a quant shop: earnings models, order books, strategies that survived contact with production. Computer science at the University of Delaware, class of 2027. Everything below happened at night.</p>
+
+  <ul class="cards" id="cards">
+    <li class="card">
+      <a class="card-link" href="#code"> <!-- EDIT: link to the repo -->
+        <span class="card-index mono">01</span>
+        <img class="card-img" src="/img/project-1.svg" alt="" width="800" height="500" loading="lazy">
+        <h3 class="card-title">Short-form video, end to end</h3>
+        <p class="card-text">A Python pipeline that scrapes a script, voices it, subtitles it with whisper, cuts it with MoviePy and ffmpeg, and uploads it through the YouTube Data API while I sleep.</p>
+        <p class="card-tags mono">python &middot; whisper &middot; ffmpeg</p>
+      </a>
+    </li>
+    <li class="card">
+      <a class="card-link" href="#code"> <!-- EDIT -->
+        <span class="card-index mono">02</span>
+        <img class="card-img" src="/img/project-2.svg" alt="" width="800" height="500" loading="lazy">
+        <h3 class="card-title">Order books, live</h3>
+        <p class="card-text">Java on EC2 watching 200+ crypto markets through Kraken&rsquo;s API around the clock, keeping the order-book history that nobody publishes.</p>
+        <p class="card-tags mono">java &middot; aws &middot; kraken</p>
+      </a>
+    </li>
+    <li class="card">
+      <a class="card-link" href="#code"> <!-- EDIT -->
+        <span class="card-index mono">03</span>
+        <img class="card-img" src="/img/project-3.svg" alt="" width="800" height="500" loading="lazy">
+        <h3 class="card-title">Earnings &rarr; direction</h3>
+        <p class="card-text">Fifteen model variants trained on reports, guidance, and analyst estimates. 57% next-day direction accuracy in backtests, which is a bigger number than it sounds.</p>
+        <p class="card-tags mono">python &middot; ml &middot; backtesting</p>
+      </a>
+    </li>
+    <li class="card">
+      <a class="card-link" href="#machine">
+        <span class="card-index mono">04</span>
+        <img class="card-img" src="/img/project-4.svg" alt="" width="800" height="500" loading="lazy">
+        <h3 class="card-title">This website</h3>
+        <p class="card-text">Hand-written HTML on a Jetson in my room, reached through an outbound-only Cloudflare tunnel, with a 9B-parameter model answering questions one section down. No framework. No cloud AI.</p>
+        <p class="card-tags mono">caddy &middot; llama.cpp &middot; cloudflare tunnel</p>
+      </a>
+    </li>
+  </ul>
+
+  <p class="stack mono">C &middot; C++ &middot; Python &middot; Java &middot; React &middot; Linux &middot; AWS &middot; Postgres <span class="stack-more">&middot; and whatever the problem needs</span></p>
+</section>

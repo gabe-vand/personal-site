@@ -1,6 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <!-- EDIT: your initials. Change the fill colors to match style.css --accent. -->
-  <rect width="32" height="32" rx="7" fill="#1a1a1a"/>
-  <text x="16" y="22" text-anchor="middle"
-        font-family="Georgia, serif" font-size="17" font-weight="600" fill="#fdfcfa">G</text>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100"><style>path{stroke:#111}rect{fill:#111}@media (prefers-color-scheme:dark){path{stroke:#fff}rect{fill:#fff}}</style><g transform="translate(-3,0)"><path d="M 60 28.6 A 28 28 0 1 0 63.4 68 L 63.4 50 L 48 50" fill="none" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/><rect x="76" y="54" width="22" height="30"/></g></svg>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500" role="img" aria-label="screenshot: order books placeholder">
+<defs><pattern id="h" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="14" stroke="#2a2825" stroke-width="1"/></pattern></defs>
+<rect width="800" height="500" fill="#1b1a17"/><rect width="800" height="500" fill="url(#h)"/>
+<rect x="0.5" y="0.5" width="799" height="499" fill="none" stroke="#3a3733"/>
+<text x="400.0" y="244.0" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="25" fill="#8a857c">screenshot: order books</text>
+<text x="400.0" y="268.0" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="16" fill="#5c5852">replace site/img/project-2.svg</text>
+</svg>

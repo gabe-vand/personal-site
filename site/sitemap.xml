@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- EDIT: add a <url> block for each new page you create. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://gabevandevere.com/</loc></url>
-  <url><loc>https://gabevandevere.com/projects.html</loc></url>
 </urlset>

@@ -1,0 +1,57 @@
+/* 04 / machine: chat with the on-device model beside live board telemetry. Blue is the machine's color. */
+.machine-grid { display: grid; grid-template-columns: minmax(0, 3fr) minmax(16rem, 2fr); gap: 1.6rem; align-items: start; }
+
+.chat { display: flex; flex-direction: column; gap: 1rem; min-height: 26rem; padding: 1.25rem; border: 1px solid var(--stone-3); border-radius: 14px; background: var(--stone-2); }
+.chat-log { flex: 1; overflow-y: auto; max-height: 26rem; display: flex; flex-direction: column; gap: 1rem; scroll-behavior: smooth; padding-right: 0.25rem; }
+.msg p { margin: 0; max-width: none; white-space: pre-wrap; overflow-wrap: anywhere; }
+.msg-user { align-self: flex-end; max-width: 85%; background: var(--stone-3); padding: 0.6rem 0.95rem; border-radius: 14px 14px 3px 14px; }
+.msg-bot { align-self: flex-start; max-width: 94%; padding-left: 1rem; border-left: 2px solid var(--ice); }
+.msg-bot.is-streaming p::after { content: '\258D'; color: var(--ice); margin-left: 0.1em; animation: blink 1s steps(2, start) infinite; }
+.msg-bot.msg-error { border-left-color: var(--tape); color: var(--chalk-dim); }
+.msg-status { color: var(--chalk-faint); font-style: italic; }
+.msg-meta { display: block; margin-top: 0.45rem; color: var(--chalk-faint); }
+
+.chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.chip { border: 1px solid var(--stone-4); background: transparent; color: var(--chalk-dim); border-radius: 999px; padding: 0.4rem 0.85rem; font-size: 0.85rem; cursor: pointer; transition: border-color 0.2s, color 0.2s; }
+.chip:hover { border-color: var(--ice); color: var(--chalk); }
+.chat-form { display: flex; gap: 0.5rem; }
+.chat-form input, .contact-form input, .contact-form textarea { flex: 1; min-width: 0; background: var(--stone); border: 1px solid var(--stone-4); color: var(--chalk); font: inherit; padding: 0.7rem 1rem; border-radius: 999px; transition: border-color 0.2s; }
+.chat-form input { width: 0; } /* flex-grow fills it; without this the input's 20-char intrinsic width widens the column on phones */
+.chat-form input:focus { outline: none; border-color: var(--ice); }
+.chat-foot { color: var(--chalk-faint); margin: 0; }
+
+.telemetry { padding: 1.25rem; border: 1px solid var(--stone-3); border-radius: 14px; background: linear-gradient(180deg, var(--ice-soft), transparent 45%), var(--stone-2); }
+.tele-head { display: flex; align-items: center; gap: 0.6rem; margin: 0 0 0.9rem; color: var(--chalk); }
+.tele-state { margin-left: auto; color: var(--chalk-faint); text-align: right; }
+.tele-state.is-busy { color: var(--tape); }
+.tele-rows { margin: 0; }
+.tele-row { display: grid; grid-template-columns: 5.2rem minmax(0, 1fr); gap: 0.75rem; padding: 0.55rem 0; border-top: 1px solid var(--stone-3); font-family: var(--mono); font-size: 0.78rem; }
+.tele-row dt { color: var(--chalk-faint); text-transform: uppercase; letter-spacing: 0.12em; padding-top: 0.15em; }
+.tele-row dd { margin: 0; color: var(--chalk-dim); overflow-wrap: anywhere; }
+.tele-big { font-family: var(--serif); font-size: 1.7rem; line-height: 1; color: var(--chalk); margin-right: 0.15rem; }
+.spark { display: block; width: 100%; height: 32px; margin-top: 0.45rem; }
+.meter { display: block; height: 3px; margin-top: 0.5rem; background: var(--stone-3); border-radius: 2px; overflow: hidden; }
+.meter-fill { display: block; height: 100%; width: 0; background: var(--ice); transition: width 0.7s var(--ease-out); }
+.tele-note { color: var(--chalk-faint); margin: 1rem 0 0; }
+
+/* The path a question takes. A packet shuttles back and forth while the model works. */
+.pipeline { position: relative; list-style: none; margin: 2rem 0 0; padding: 1.2rem 0 0; display: flex; align-items: stretch; gap: 0.6rem; overflow-x: auto; font-family: var(--mono); font-size: 0.72rem; }
+.node { position: relative; flex: 1; min-width: 6.5rem; text-align: center; padding: 0.6rem 0.4rem; border: 1px solid var(--stone-4); border-radius: 8px; color: var(--chalk-dim); background: var(--stone); transition: border-color 0.3s, color 0.3s; }
+.node small { display: block; font-size: 0.62rem; color: var(--chalk-faint); margin-top: 0.15rem; }
+.node + .node::before { content: ''; position: absolute; left: -0.65rem; top: 50%; width: 0.6rem; border-top: 1px dashed var(--stone-4); }
+.packet { position: absolute; top: calc(50% + 0.6rem); left: 0; width: 9px; height: 9px; margin-top: -4px; border-radius: 50%; background: var(--ice); box-shadow: 0 0 14px var(--ice); opacity: 0; }
+.pipeline.is-busy .packet { opacity: 1; animation: travel 1.5s ease-in-out infinite alternate; }
+.pipeline.is-busy .node:last-child { border-color: var(--ice); color: var(--chalk); }
+@keyframes travel { from { left: 0; } to { left: calc(100% - 9px); } }
+
+@media (max-width: 900px) { .machine-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 760px) {
+    .pipeline { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: visible; }
+    .node { min-width: 0; }
+    .node + .node::before, .packet { display: none; }
+    .pipeline.is-busy .node { border-color: var(--ice); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .msg-bot.is-streaming p::after { animation: none; }
+    .pipeline.is-busy .packet { animation: none; left: calc(100% - 9px); }
+}

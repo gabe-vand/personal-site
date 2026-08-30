@@ -1,0 +1,32 @@
+<!-- ============================================================
+     00 / BASE. Full-height opener. The canvas behind it draws drifting
+     contour lines (js/contour.js) that bend toward the pointer.
+     EDIT: the lede paragraph is the one sentence most people will read.
+     ============================================================ -->
+<section class="pitch hero" id="base" aria-label="Introduction">
+  <canvas id="contour" class="hero-canvas" aria-hidden="true"></canvas>
+  <div class="hero-inner">
+    <p class="hero-kicker mono"><span class="live-dot" id="hero-dot" aria-hidden="true"></span><span id="hero-status">served live from a Jetson Orin Nano in Wayne, PA</span></p>
+    <h1 class="hero-name"><span class="hero-line">Gabe</span><span class="hero-line">Vandevere</span></h1>
+    <p class="hero-lede">Climbs <em>V9</em>. Lifts heavy. Writes code for fun. Keeps a nine-billion-parameter model on a board the size of a paperback &mdash; and that board is the one serving you this page.</p>
+    <p class="hero-cue mono"><a href="#climb"><span class="cue-arrow" aria-hidden="true">&darr;</span> start climbing</a></p>
+  </div>
+  <p class="hero-coord mono" aria-hidden="true">40.04&deg; N &middot; 75.39&deg; W &middot; elev. desk</p>
+</section>
+
+<!-- A slow ticker between the opener and the first section. The live slots
+     (uptime, temperature, watts, tokens) are filled by js/ticker.js from /api/status.
+     EDIT: add or remove <li> items freely. -->
+<div class="ticker" aria-hidden="true">
+  <ul class="ticker-track" id="ticker-track">
+    <li>V9 and pushing</li>
+    <li>Wayne, Pennsylvania</li>
+    <li>Delaware CS &rsquo;27</li>
+    <li>board up <span data-tick="uptime">&mdash;</span></li>
+    <li>GPU <span data-tick="gpu">&mdash;</span>&deg;C</li>
+    <li>drawing <span data-tick="watts">&mdash;</span> W</li>
+    <li><span data-tick="tokens">&mdash;</span> tokens generated since boot</li>
+    <li>no cloud involved</li>
+    <li>built by hand</li>
+  </ul>
+</div>

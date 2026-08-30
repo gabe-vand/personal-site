@@ -9,3 +9,5 @@ credentials.json
 *.log
 caddy/data/
 caddy/config/
+.deploy-state
+logs/

@@ -1,0 +1,59 @@
+/* ------------------------------------------------------------
+   Design tokens. Change a color or a font here and the whole site follows.
+   One committed look: chalk on dark stone, finger-tape orange for emphasis,
+   a cool blue reserved for everything about the machine.
+   ------------------------------------------------------------ */
+@font-face { font-family: 'Instrument Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/instrument-serif-normal-400.woff2') format('woff2'); }
+@font-face { font-family: 'Instrument Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('/fonts/instrument-serif-italic-400.woff2') format('woff2'); }
+@font-face { font-family: 'Instrument Sans'; font-style: normal; font-weight: 400 700; font-display: swap; src: url('/fonts/instrument-sans-normal-400-700.woff2') format('woff2'); }
+@font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 400 600; font-display: swap; src: url('/fonts/jetbrains-mono-normal-400-600.woff2') format('woff2'); }
+
+:root {
+    color-scheme: dark;
+
+    --stone: #141311;            /* page */
+    --stone-2: #1b1a17;          /* raised panels */
+    --stone-3: #26241f;          /* hairlines */
+    --stone-4: #3d3a34;          /* stronger lines, inactive controls */
+    --chalk: #ece7dc;            /* primary text */
+    --chalk-dim: #aaa49a;        /* secondary text */
+    --chalk-faint: #726d65;      /* tertiary text, labels */
+    --paper: #f2eee6;            /* polaroid frames */
+    --ink: #2a2825;              /* text on paper */
+
+    --tape: #ff5a1f;             /* accent: finger tape */
+    --tape-soft: rgba(255, 90, 31, 0.2);
+    --signal: #7fd18b;           /* online */
+    --ice: #8fbfff;              /* the machine */
+    --ice-soft: rgba(143, 191, 255, 0.12);
+
+    --steel: #8a857c;
+    --steel-dark: #4a4641;
+    --plate-red: #d63a2f;
+    --plate-blue: #2f63d6;
+    --plate-yellow: #e8b923;
+    --plate-green: #2e9a5a;
+    --plate-white: #e9e4d8;
+    --plate-chrome: #b8b5ae;
+
+    --serif: 'Instrument Serif', 'Iowan Old Style', 'Times New Roman', serif;
+    --sans: 'Instrument Sans', 'Helvetica Neue', Arial, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+    --measure: 62ch;
+    --gutter: clamp(1.25rem, 5vw, 5rem);
+    --rail: 5rem;                /* room on the right for the topo nav (desktop) */
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Konami code: MAXN_SUPER mode. Warmer stone, hotter accents. */
+[data-theme='maxn'] {
+    --stone: #1a0b05;
+    --stone-2: #24110a;
+    --stone-3: #3a1a0d;
+    --stone-4: #5c2c15;
+    --tape: #ffd166;
+    --tape-soft: rgba(255, 209, 102, 0.22);
+    --ice: #ff8a5b;
+    --ice-soft: rgba(255, 138, 91, 0.14);
+}

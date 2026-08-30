@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 800" width="640" height="800" role="img" aria-label="photo: under the bar placeholder">
+<defs><pattern id="h" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="14" stroke="#2a2825" stroke-width="1"/></pattern></defs>
+<rect width="640" height="800" fill="#1b1a17"/><rect width="640" height="800" fill="url(#h)"/>
+<rect x="0.5" y="0.5" width="639" height="799" fill="none" stroke="#3a3733"/>
+<text x="320.0" y="394.0" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="20" fill="#8a857c">photo: under the bar</text>
+<text x="320.0" y="418.0" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#5c5852">replace site/img/lift-1.svg</text>
+</svg>

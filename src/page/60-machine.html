@@ -1,0 +1,59 @@
+<!-- ============================================================
+     04 / MACHINE. Chat with the model on this board (js/chat.js) next to live
+     telemetry read from /sys (js/telemetry.js). The model's personality and
+     facts live in api/persona.py, NOT here.
+     ============================================================ -->
+<section class="pitch machine" id="machine">
+  <header class="pitch-head">
+    <p class="pitch-tag mono">04 / machine</p>
+    <h2 class="pitch-title">Talk to the machine.<span class="pitch-sub">It lives on my desk. It is serving you this page.</span></h2>
+  </header>
+
+  <p class="machine-intro">Most &ldquo;AI on a website&rdquo; is a request to somebody else&rsquo;s datacenter. This is a nine-billion-parameter model running on the GPU of the Jetson under my desk &mdash; the same board that just sent you this HTML. When it answers, watch the power draw on the right climb.</p>
+
+  <div class="machine-grid">
+    <div class="chat" id="chat">
+      <div class="chat-log" id="chat-log" role="log" aria-live="polite">
+        <div class="msg msg-bot"><p>Hi. I&rsquo;m the computer this website runs on. Ask me about Gabe, or about me.</p></div>
+      </div>
+      <div class="chips" id="chips">
+        <button type="button" class="chip" data-q="What does Gabe climb?">What does Gabe climb?</button>
+        <button type="button" class="chip" data-q="What is Gabe working on these days?">What is he working on?</button>
+        <button type="button" class="chip" data-q="What are you, exactly?">What are you, exactly?</button>
+        <button type="button" class="chip" data-q="How hot are you right now?">How hot are you right now?</button>
+      </div>
+      <form class="chat-form" id="chat-form" autocomplete="off">
+        <label class="visually-hidden" for="chat-input">Ask the machine</label>
+        <input id="chat-input" name="q" type="text" maxlength="500" placeholder="Ask the machine&hellip;" required>
+        <button type="submit" class="btn" id="chat-send">Ask</button>
+      </form>
+      <p class="chat-foot mono" id="chat-foot">one slot &middot; answers stream token by token &middot; nothing leaves this board</p>
+    </div>
+
+    <aside class="telemetry" id="telemetry" aria-label="Live board telemetry">
+      <p class="tele-head mono"><span class="live-dot" id="tele-dot" aria-hidden="true"></span><span id="tele-host">orin</span><span class="tele-state" id="tele-state">connecting&hellip;</span></p>
+      <dl class="tele-rows">
+        <div class="tele-row"><dt>board</dt><dd id="t-board">&mdash;</dd></div>
+        <div class="tele-row"><dt>model</dt><dd id="t-model">&mdash;</dd></div>
+        <div class="tele-row tele-power"><dt>power</dt><dd><span class="tele-big" id="t-watts">&mdash;</span> W<canvas class="spark" id="t-spark" width="180" height="32" aria-hidden="true"></canvas></dd></div>
+        <div class="tele-row"><dt>gpu</dt><dd><span id="t-gpu-temp">&mdash;</span>&deg;C &middot; <span id="t-gpu-load">&mdash;</span>%<span class="meter"><span class="meter-fill" id="t-gpu-bar"></span></span></dd></div>
+        <div class="tele-row"><dt>cpu</dt><dd><span id="t-cpu-temp">&mdash;</span>&deg;C &middot; load <span id="t-load">&mdash;</span></dd></div>
+        <div class="tele-row"><dt>memory</dt><dd><span id="t-mem">&mdash;</span><span class="meter"><span class="meter-fill" id="t-mem-bar"></span></span></dd></div>
+        <div class="tele-row"><dt>speed</dt><dd><span id="t-tps">&mdash;</span> tokens/s</dd></div>
+        <div class="tele-row"><dt>generated</dt><dd><span id="t-tokens">&mdash;</span> tokens since boot</dd></div>
+        <div class="tele-row"><dt>up</dt><dd id="t-uptime">&mdash;</dd></div>
+      </dl>
+      <p class="tele-note mono">read from /sys every few seconds &middot; the watts jump when it thinks</p>
+    </aside>
+  </div>
+
+  <ol class="pipeline" id="pipeline" aria-label="The path a question takes">
+    <li class="node">you</li>
+    <li class="node">Cloudflare edge</li>
+    <li class="node">tunnel<small>outbound only</small></li>
+    <li class="node">Caddy<small>:8081</small></li>
+    <li class="node">proxy<small>:8002</small></li>
+    <li class="node">llama.cpp<small>Jetson GPU</small></li>
+    <span class="packet" aria-hidden="true"></span>
+  </ol>
+</section>

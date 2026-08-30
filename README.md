@@ -1,114 +1,109 @@
 # gabevandevere.com
 
-A hand-written static site, served by Caddy from this machine (`orin`,
-a Jetson Orin Nano). No build step, no framework, no `node_modules`. You edit
-an HTML file, save it, refresh the browser. That's the whole workflow.
+A hand-written site served by Caddy from this machine (`orin`, a Jetson Orin
+Nano Super) and reached through an outbound-only Cloudflare Tunnel. The "machine"
+section talks to the local LLM (`llama.cpp` on :8080) through a small Python proxy
+that holds the API key. No framework, no `node_modules`, no cloud AI.
+
+Docs live in `docs/`. The feature list and what is still placeholder is in
+[`docs/status.md`](docs/status.md).
 
 ```
 gabevandevere.com/
-├── site/              <- everything in here is public
-│   ├── index.html     <- front page
-│   ├── projects.html
-│   ├── 404.html
-│   ├── style.css      <- all styling; variables at the top
-│   ├── main.js        <- tiny; footer year + the "Ask" box
-│   ├── favicon.svg
-│   ├── robots.txt
-│   └── sitemap.xml
+├── deploy.sh          <- THE command. Build, reload, restart API if changed, smoke test, commit.
+├── build.py           <- assembles site/index.html + site/style.css from src/
+├── src/
+│   ├── page/          <- one HTML file per section, in order (00-head ... 90-tail)
+│   └── css/           <- one stylesheet per concern; 00-tokens.css holds colors + fonts
+├── site/              <- the public web root (Caddy serves this directory as-is)
+│   ├── index.html     <- GENERATED. Do not edit; edit src/page/ and run ./deploy.sh
+│   ├── style.css      <- GENERATED from src/css/
+│   ├── js/            <- ES modules, one per feature (hand-written, served as-is)
+│   ├── img/           <- placeholder art; drop real photos here with the same names
+│   ├── fonts/         <- Instrument Serif / Instrument Sans / JetBrains Mono (self-hosted)
+│   └── 404.html, favicon.*, site.webmanifest, robots.txt, sitemap.xml
+├── api/               <- the LLM proxy + telemetry (Python stdlib, runs as site-api.service)
+│   ├── persona.py     <- what the model knows about you. EDIT THIS to teach it more.
+│   ├── config.py      <- limits, token caps, ports
+│   └── server.py, chat.py, telemetry.py, limits.py
 ├── Caddyfile          <- web server config
-├── access.log         <- request log (gitignored)
-└── README.md
+└── docs/              <- status page, deployment research
 ```
 
-## Editing
+## The editing loop
 
-Change a file in `site/` and reload the page. Nothing to rebuild, nothing to
-restart — Caddy reads from disk on every request.
+1. Edit something under `src/` (page text, styles), `site/js/` (behaviour), or `api/persona.py`.
+2. Run `./deploy.sh "what you changed"`.
 
-Start with these, in order:
+That's it. `deploy.sh` rebuilds, validates and reloads Caddy, restarts the API only if
+`api/` changed, checks the site locally and through Cloudflare, and commits. It prints
+`OK`/`FAIL` per step and stops at the first failure. Prod is served straight from
+`site/` on disk, so a green run *is* the deploy.
 
-1. `site/index.html` — the `<!-- EDIT -->` comments mark every spot that has
-   placeholder text. The intro paragraph and the links list are the two that
-   matter.
-2. `site/style.css` — the `:root` block at the top holds colors, fonts, and
-   the text column width. Change `--accent` to recolor every link at once.
-   Dark mode is a second block a few lines below; change both.
-3. `site/projects.html` — copy an `<article class="entry">` block to add an
-   entry.
+### Where things are
 
-To add a page: copy `projects.html`, rename it, edit the contents, then add a
-link to it in the `<nav>` of every page and a `<url>` entry in `sitemap.xml`.
+| You want to change | Edit |
+|---|---|
+| The intro sentence | `src/page/20-hero.html` (the `.hero-lede` paragraph) |
+| Climbing text, ladder notes, send log | `src/page/30-climb.html` (`data-note` on each rung) |
+| Your real lift numbers | `src/page/40-lift.html` (`data-kg` on the preset buttons) |
+| Project cards, links, tags | `src/page/50-code.html` |
+| Suggested questions for the model | `src/page/60-machine.html` (the `.chip` buttons) |
+| What the model knows / how it talks | `api/persona.py` |
+| Email address | `site/js/contact.js` **and** the link in `src/page/70-contact.html` |
+| Photos | replace `site/img/*.svg` with real images, update the `src=` and `width/height` |
+| Colors, fonts | `src/css/00-tokens.css` |
+| Ticker items | `src/page/20-hero.html` (the `.ticker-track` list) |
 
-### Version control
+Every spot with placeholder content is marked `<!-- EDIT -->`.
 
-The directory is a git repo. After a round of edits:
+### House rules for this repo
 
-```bash
-cd ~/gabevandevere.com
-git add -A && git commit -m "update intro"
-```
-
-That's your undo button. `git diff` before committing shows what changed, and
-`git checkout -- site/index.html` throws away a bad edit.
+- Every hand-written file stays under 200 lines (`build.py --strict` refuses otherwise; the
+  two generated files are exempt).
+- No inline `style=""` attributes: the Content-Security-Policy is `style-src 'self'`.
+  Styles go in `src/css/`; JS may set `el.style.x` (that's allowed).
+- Documentation lives in `docs/` and `docs/status.md` is updated with every change.
 
 ## Running it
 
-Caddy runs as a **user** systemd service, so none of this needs `sudo`.
+Three `systemctl --user` units (no `sudo` needed; lingering is enabled so they survive logout/reboot):
 
-```bash
-systemctl --user status caddy      # is it up?
-systemctl --user reload caddy      # after editing the Caddyfile
-systemctl --user restart caddy     # if reload isn't enough
-journalctl --user -u caddy -f      # live logs
-```
+| Unit | What | Logs |
+|---|---|---|
+| `caddy` | serves `site/` on 127.0.0.1:8081 | `journalctl --user -u caddy -f` |
+| `cloudflared` | tunnel to Cloudflare's edge | `journalctl --user -u cloudflared -f` |
+| `site-api` | `api/server.py` on 127.0.0.1:8002 | `journalctl --user -u site-api -f` |
 
-Lingering is enabled (`loginctl enable-linger gabevandevere`), so it starts at
-boot without anyone logging in.
-
-Check a config change before applying it:
-
-```bash
-~/.local/bin/caddy validate --config ~/gabevandevere.com/Caddyfile
-```
-
-### Ports on this machine
+`systemctl --user status caddy cloudflared site-api` shows all three.
 
 | Port | What |
 |-----:|------|
-| 8080 | `llama.cpp` (`oracle-llm.service`) — **do not touch** |
+| 8080 | `llama.cpp` (`oracle-llm.service`, system unit) — **do not touch** |
 | 8000 | reserved — **left free deliberately** |
-| 8081 | this website |
-| 22   | ssh |
+| 8081 | Caddy (loopback only; only cloudflared can reach it) |
+| 8002 | site API (loopback only; only Caddy can reach it) |
 
-## Wiring in the LLM
+## The API
 
-`index.html` has an `<section id="ask" hidden>` block and `main.js` has the
-code to drive it. It posts to `/api/ask` on this same site. It is switched off
-until a backend exists.
+Caddy forwards `/api/*` to `api/server.py` and strips the prefix.
 
-**The one rule: the llama.cpp API key must never reach the browser.**
-It lives in `/etc/oracle-llm/api-key`. A page that calls `:8080` directly would
-have to ship that key in JavaScript, where anyone can read it with View Source.
+- `GET /api/status` — board telemetry: temperatures, INA3221 power rails, GPU load,
+  memory, uptime, llama.cpp token counters, model info. Cached 2 s.
+- `POST /api/chat` — `{"messages":[{"role":"user","content":"..."}]}` → server-sent
+  events (`status`, `token`…, `done` with real tokens/s). The system prompt from
+  `persona.py` plus a live line ("GPU 48 C, drawing 5 W…") is added server-side.
 
-So the shape is:
+**The API key for llama.cpp lives in `/etc/oracle-llm/api-key` and never leaves the
+proxy.** The proxy also caps output at 220 tokens, keeps 6 messages of history, allows
+6 questions per visitor then 1/minute, 40 site-wide per 10 minutes, 600 a day, and lets
+two people queue behind the single model slot. All numbers are in `api/config.py`.
 
-```
-browser  ──POST /api/ask──>  Caddy :8081  ──>  proxy :8002  ──>  llama.cpp :8080
-                                                  ^                    ^
-                                          holds the API key,    never exposed
-                                          rate limits,          to the internet
-                                          caps max_tokens,
-                                          fixes the system prompt
-```
+The model is shared with the Raspberry Pi "Oracle" that uses the same llama.cpp server;
+the proxy waits its turn rather than competing.
 
-Two things make the proxy non-optional rather than nice-to-have:
+## Caches
 
-- **`--parallel 1`.** The model serves exactly one request at a time. A single
-  person holding down refresh takes the site's LLM offline for everyone. Rate
-  limiting is the feature, not an add-on.
-- **Cost is heat and power.** This is a 7–25 W board doing GPU inference in a
-  room in your apartment. Unmetered public inference is a bad night.
-
-When you're ready: build the proxy, run it on 8002, uncomment the
-`handle /api/*` block in the `Caddyfile`, reload, and delete the `hidden`
-attribute from the `<section id="ask">` in `index.html`.
+HTML is never cached. CSS/JS are cached for 10 minutes but linked with a `?v=` hash, so a
+new build is picked up on the next page load. Images are cached for a day at the
+Cloudflare edge: after replacing a photo, either rename it or wait.

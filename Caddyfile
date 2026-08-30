@@ -11,6 +11,7 @@
 #    8080  llama.cpp (oracle-llm.service)  -- do not touch
 #    8000  reserved                        -- do not touch
 #    8081  this server
+#    8002  site API (api/server.py, site-api.service) -- loopback only
 # ============================================================
 {
 	# Admin API on a unix socket, not a TCP port: nothing on the network
@@ -31,7 +32,20 @@
 
 	root * /home/gabevandevere/gabevandevere.com/site
 
-	encode zstd gzip
+	# Compress text, but NOT text/event-stream: the LLM answers arrive as a
+	# live stream and a compressor in the middle would buffer the words.
+	encode zstd gzip {
+		match {
+			header Content-Type text/html*
+			header Content-Type text/css*
+			header Content-Type text/plain*
+			header Content-Type text/xml*
+			header Content-Type application/json*
+			header Content-Type application/javascript*
+			header Content-Type application/manifest+json*
+			header Content-Type image/svg+xml*
+		}
+	}
 
 	# --- security headers -------------------------------------
 	header {
@@ -55,27 +69,37 @@
 	@html path *.html /
 	header @html Cache-Control "no-cache"
 
-	# Static assets: cache for an hour. Bump this once the site settles.
-	@assets path *.css *.js *.svg *.png *.jpg *.woff2
-	header @assets Cache-Control "public, max-age=3600"
+	# CSS/JS: ten minutes. index.html links them with a ?v= hash from build.py,
+	# so a fresh build is picked up on the next page load anyway.
+	@code path *.css *.js
+	header @code Cache-Control "public, max-age=600"
+	# Images and fonts: a day / a year. Fonts never change; images rarely.
+	@images path *.svg *.png *.jpg *.webp *.ico
+	header @images Cache-Control "public, max-age=86400"
+	@fonts path *.woff2
+	header @fonts Cache-Control "public, max-age=31536000, immutable"
+	# Go's mime table does not know .webmanifest.
+	@manifest path /site.webmanifest
+	header @manifest Content-Type "application/manifest+json"
 
-	# --- LLM proxy (OFF until the backend exists) --------------
-	# The site's "Ask" box posts to /api/ask. Uncomment this once you
-	# have the proxy running. Do NOT point this straight at :8080 --
-	# that would put an unauthenticated, unmetered LLM on the public
-	# internet and the API key would have to live somewhere the
-	# browser could reach. Route through a small proxy that holds the
-	# key, rate-limits, and caps token counts.
+	# --- site API: local LLM proxy + board telemetry ------------
+	# The page's "machine" section talks to /api/*. This is NOT :8080
+	# directly: that would put an unmetered LLM on the public internet
+	# and the API key would have to live where the browser can read it.
+	# api/server.py (site-api.service) holds the key, fixes the system
+	# prompt, caps tokens, rate-limits, and queues for the single slot.
 	#
-	# Use handle_path, NOT handle: handle_path strips the matched
-	# prefix, handle does not. With plain `handle`, a request for
-	# /api/llm/v1/chat/completions arrives at the backend still
-	# carrying /api/llm and 404s in a way that looks like the model
-	# is broken rather than the routing.
-	#
-	# handle_path /api/* {
-	# 	reverse_proxy 127.0.0.1:8002
-	# }
+	# handle_path strips the /api prefix, so the backend sees /chat and
+	# /status. flush_interval -1 pushes each streamed token through
+	# immediately instead of buffering the response.
+	handle_path /api/* {
+		reverse_proxy 127.0.0.1:8002 {
+			flush_interval -1
+			transport http {
+				response_header_timeout 120s
+			}
+		}
+	}
 
 	# --- static files -----------------------------------------
 	file_server
