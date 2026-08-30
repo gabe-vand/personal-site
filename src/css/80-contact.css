@@ -5,6 +5,7 @@
 .contact-form input:focus, .contact-form textarea:focus { outline: none; border-color: var(--tape); }
 .btn-big { justify-self: start; padding: 0.9rem 1.6rem; font-size: 1.05rem; }
 .contact-form .hp { position: absolute; left: -10000px; width: 1px; height: 1px; opacity: 0; }
+.btn-dev { justify-self: start; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.1em; opacity: 0.5; }
 .contact-note { margin: 0; color: var(--tape); font-size: 0.8rem; }
 .contact-note.is-ok { color: var(--chalk); }
 .contact-alt { color: var(--chalk-dim); margin: 1.8rem 0 0; }
@@ -16,7 +17,6 @@
 .plane-wing { fill: var(--chalk); stroke: var(--stone); stroke-width: 1; stroke-linejoin: round; }
 .plane-wing-low { fill: var(--chalk-dim); }
 .plane-keel { fill: var(--chalk-faint); stroke: var(--stone); stroke-width: 1; stroke-linejoin: round; }
-.plane-trail { stroke: var(--tape); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 20 16; opacity: 0.8; }
 
 .site-footer { max-width: 84rem; margin: 0 auto; padding: 2.5rem var(--gutter) 4rem; border-top: 1px solid var(--stone-3); color: var(--chalk-faint); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
 .site-footer p { margin: 0; max-width: none; }

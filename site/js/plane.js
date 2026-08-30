@@ -1,11 +1,9 @@
 // Paper airplane: launched from an element, it drifts across the viewport on a breeze, does a
-// loop-de-loop and glides out the right edge, leaving a dashed trail. The trail is rebuilt from
-// where the plane has actually been (so it never runs ahead). Breeze = two slow, long-period
+// loop-de-loop and glides out the right edge. Breeze = two slow, long-period
 // swells across the route plus a lagged heading and a bank on lateral drift, so it floats rather
 // than zig-zags. Pure SVG + rAF, no inline styles (CSP). Used by contact.js on send.
 const NS = 'http://www.w3.org/2000/svg';
 const DURATION = 4200; // ms
-const STEP = 6; // px of travel between trail samples
 
 function el(name, attrs) {
     const node = document.createElementNS(NS, name);
@@ -37,7 +35,6 @@ export function flyPlane(from, startDeg = null) {
     const vh = window.innerHeight;
     const svg = el('svg', { class: 'plane-layer', 'aria-hidden': 'true', viewBox: `0 0 ${vw} ${vh}` });
     const guide = el('path', { d: route(box.left + box.width / 2, box.top + box.height / 2, vw, vh), fill: 'none', stroke: 'none' });
-    const trail = el('path', { class: 'plane-trail', d: '', fill: 'none' });
     const plane = el('g', { class: 'plane' });
     plane.append(
         el('path', { class: 'plane-wing', d: 'M 0 0 L -64 -30 L -40 -4 Z' }),
@@ -45,8 +42,6 @@ export function flyPlane(from, startDeg = null) {
         el('path', { class: 'plane-keel', d: 'M 0 0 L -40 -4 L -48 10 L -40 4 Z' }),
     );
     const total = guide.getTotalLength();
-    let sampled = 0;
-    let d = '';
     let heading = startDeg === null ? null : (startDeg * Math.PI) / 180;
     let bank = 0;
     let start;
@@ -79,19 +74,13 @@ export function flyPlane(from, startDeg = null) {
         const u = Math.min(1, (now - start) / DURATION);
         const len = progress(u) * total;
         place(len);
-        while (sampled <= len) {
-            const s = pointAt(sampled);
-            d += (d ? ' L ' : 'M ') + `${s.x.toFixed(1)} ${s.y.toFixed(1)}`;
-            sampled += STEP;
-        }
-        trail.setAttribute('d', d);
         if (u < 1) return requestAnimationFrame(frame);
         svg.classList.add('is-done');
         setTimeout(() => svg.remove(), 1000);
     }
 
     place(0); // position it before it is ever painted
-    svg.append(guide, trail, plane);
+    svg.append(guide, plane);
     document.body.appendChild(svg);
     requestAnimationFrame(frame);
 }

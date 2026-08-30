@@ -6,9 +6,10 @@
 .send-btn:hover { background: var(--chalk); color: var(--stone); }
 .send-btn .send-label { position: relative; z-index: 2; opacity: var(--text-opacity, 1); }
 .send-btn.is-folding, .send-btn.is-folding:disabled { background: transparent; border-color: transparent; opacity: 1; }
-.send-btn.is-away { opacity: 0; transform: translateY(-8px); }
-.send-btn.is-away .send-plane { display: none; }
 .send-btn.is-folding .send-plane { display: block; }
+/* Once the SVG plane takes over, the folded button-plane must vanish instantly (these outrank the folding rules above). */
+.send-btn.is-away, .send-btn.is-away:disabled { opacity: 0; transform: translateY(-8px); transition: none; }
+.send-btn.is-away .send-plane, .send-btn.is-folding.is-away .send-plane { display: none; }
 .send-plane { display: none; position: absolute; inset: -1px; pointer-events: none; z-index: 1; filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4)); transform: rotate(calc(var(--rotate, 0) * 1deg)) translateZ(0); }
 .send-plane i { position: absolute; inset: 0; display: block; transform: translate(calc(var(--plane-x, 0) * 1px), calc(var(--plane-y, 0) * 1px)) translateZ(0); }
 .send-plane i::before, .send-plane i::after { content: ''; position: absolute; inset: 0; border-radius: calc(var(--radius, 999) * 1px); transform: translate(var(--part-x, 0.4%), 0) translateZ(0); z-index: var(--z, 2); background: var(--bg, var(--chalk)); clip-path: polygon(calc(var(--fx) * 1%) calc(var(--fy) * 1%), calc(var(--sx) * 1%) calc(var(--sy) * 1%), calc(var(--tx) * 1%) calc(var(--ty) * 1%)); }
