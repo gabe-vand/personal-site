@@ -1,13 +1,12 @@
 // Contact form. POSTs to /api/contact; the board emails Gabe through its own mailbox
 // (api/mail.py). The "website" field is a honeypot: hidden from people, filled by bots.
-// On send the button folds itself into a paper plane (fold.js) which then flies off (plane.js),
-// and the form gives way to a "Sent." card. The dev "test plane" button runs the identical
+// On send the button folds itself into a paper plane and flies off (paperplane.js), and the
+// form gives way to a "Sent." card. The dev "test plane" button runs the identical
 // success path with a fake request, so the whole experience can be checked without emailing.
-import { foldButton, unfoldButton } from './fold.js?v=75b6b9bd';
-import { flyPlane } from './plane.js?v=75b6b9bd';
+import { foldButton, unfoldButton } from './fold.js?v=229475bb';
+import { flyPlane } from './plane.js?v=229475bb';
 
 const ADDRESS = 'gabe@gabevandevere.com';
-const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
 export function initContact() {
@@ -23,14 +22,7 @@ export function initContact() {
         note.classList.toggle('is-ok', !!ok);
         note.hidden = false;
     };
-    async function takeOff() {
-        if (reduced()) return;
-        await foldButton(button);
-        // Launch from where the folded dart actually is (rotation + hop) BEFORE hiding it: flyPlane measures on call.
-        flyPlane(button.querySelector('.send-plane i'), -45);
-        button.classList.add('is-away');
-        await wait(1500);
-    }
+    const takeOff = () => launchPlane(button);
     function showSent(replyTo) {
         document.getElementById('sent-reply').textContent = replyTo ? ` to ${replyTo}` : '';
         form.classList.add('is-hidden');
@@ -52,7 +44,7 @@ export function initContact() {
             say(`${err.message} (${ADDRESS})`, false);
             label.textContent = 'Try again →';
         } finally {
-            unfoldButton(button);
+            button.classList.remove('is-away');
             button.disabled = false;
             busy = false;
         }

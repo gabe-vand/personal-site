@@ -282,28 +282,17 @@ p { margin: 0 0 1.1em; max-width: var(--measure); }
 /* The chat and the contact form sit close together: halve the seam between them. */
 .machine { padding-bottom: clamp(2rem, 4vh, 3.5rem); }
 .contact { padding-top: clamp(2rem, 4vh, 3.5rem); }
-/* The Send button that folds into a paper plane (js/fold.js drives the --vars; js/plane.js
-   flies it). The two halves are pseudo-elements clipped to triangles whose corners are the
-   custom properties below, in % of the button box. Adapted from Aaron Iker's paper-plane
-   button, recoloured with our tokens: the sheet is chalk, creases go darker as it folds. */
-.send-btn { position: relative; background: var(--chalk); color: var(--stone); border-color: var(--chalk); overflow: visible; transition: opacity 0.35s, transform 0.35s var(--ease-out); }
+/* The Send button that becomes a paper plane (js/paperplane.js draws it in the fixed SVG
+   overlay). The button itself is a solid chalk pill; on send it hides instantly and the SVG
+   sheet takes its exact place. Facets darken as the fold progresses (data-shade 0..3). */
+.send-btn { position: relative; background: var(--chalk); color: var(--stone); border-color: var(--chalk); transition: opacity 0.35s, transform 0.35s var(--ease-out); }
 .send-btn:hover { background: var(--chalk); color: var(--stone); }
-.send-btn .send-label { position: relative; z-index: 2; opacity: var(--text-opacity, 1); }
-.send-btn.is-folding, .send-btn.is-folding:disabled { background: transparent; border-color: transparent; opacity: 1; }
-.send-btn.is-folding .send-plane { display: block; }
-/* Once the SVG plane takes over, the folded button-plane must vanish instantly (these outrank the folding rules above). */
-.send-btn.is-away, .send-btn.is-away:disabled { opacity: 0; transform: translateY(-8px); transition: none; }
-.send-btn.is-away .send-plane, .send-btn.is-folding.is-away .send-plane { display: none; }
-.send-plane { display: none; position: absolute; inset: -1px; pointer-events: none; z-index: 1; filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4)); transform: rotate(calc(var(--rotate, 0) * 1deg)) translateZ(0); }
-.send-plane i { position: absolute; inset: 0; display: block; transform: translate(calc(var(--plane-x, 0) * 1px), calc(var(--plane-y, 0) * 1px)) translateZ(0); }
-.send-plane i::before, .send-plane i::after { content: ''; position: absolute; inset: 0; border-radius: calc(var(--radius, 999) * 1px); transform: translate(var(--part-x, 0.4%), 0) translateZ(0); z-index: var(--z, 2); background: var(--bg, var(--chalk)); clip-path: polygon(calc(var(--fx) * 1%) calc(var(--fy) * 1%), calc(var(--sx) * 1%) calc(var(--sy) * 1%), calc(var(--tx) * 1%) calc(var(--ty) * 1%)); }
-.send-plane .l::before { --fx: var(--left-wing-first-x, 0); --fy: var(--left-wing-first-y, 0); --sx: var(--left-wing-second-x, 50); --sy: var(--left-wing-second-y, 0); --tx: var(--left-wing-third-x, 0); --ty: var(--left-wing-third-y, 100); }
-.send-plane .l::after { --part-x: -1%; --z: 1; --bg: var(--body-l); --fx: var(--left-body-first-x, 51); --fy: var(--left-body-first-y, 0); --sx: var(--left-body-second-x, 51); --sy: var(--left-body-second-y, 100); --tx: var(--left-body-third-x, 0); --ty: var(--left-body-third-y, 100); }
-.send-plane .r::before { --part-x: -1%; --bg: var(--wing-r); --fx: var(--right-wing-first-x, 49); --fy: var(--right-wing-first-y, 0); --sx: var(--right-wing-second-x, 100); --sy: var(--right-wing-second-y, 0); --tx: var(--right-wing-third-x, 100); --ty: var(--right-wing-third-y, 100); }
-.send-plane .r::after { --part-x: 0; --z: 1; --bg: var(--body-r); --fx: var(--right-body-first-x, 49); --fy: var(--right-body-first-y, 0); --sx: var(--right-body-second-x, 49); --sy: var(--right-body-second-y, 100); --tx: var(--right-body-third-x, 100); --ty: var(--right-body-third-y, 100); }
-/* Creases darken as the fold progresses (--shade 0..3, stepped by fold.js). */
-.send-btn { --wing-r: var(--chalk); --body-l: var(--chalk); --body-r: var(--chalk); }
-.send-btn[style*='--shade: 1'], .send-btn[style*='--shade: 2'], .send-btn[style*='--shade: 3'] { --wing-r: var(--chalk-dim); }
-.send-btn[style*='--shade: 2'], .send-btn[style*='--shade: 3'] { --body-l: var(--chalk-dim); --body-r: var(--chalk-faint); }
-.send-btn[style*='--shade: 3'] { --wing-r: var(--chalk); --body-r: var(--stone-4); }
+.send-btn.is-away, .send-btn.is-away:disabled { opacity: 0; transition: none; }
+.pp { filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5)); }
+.pp-sheet { fill: var(--chalk); }
+.pp polygon { fill: var(--chalk); stroke: var(--stone); stroke-width: 0.6; stroke-linejoin: round; }
+.pp[data-shade='1'] .pp-rw, .pp[data-shade='2'] .pp-rw { fill: var(--chalk-dim); }
+.pp[data-shade='2'] .pp-lb, .pp[data-shade='3'] .pp-lb { fill: var(--chalk-dim); }
+.pp[data-shade='2'] .pp-rb { fill: var(--chalk-faint); }
+.pp[data-shade='3'] .pp-rb { fill: var(--stone-4); }
 @media (prefers-reduced-motion: reduce) { .send-btn { transition: none; } }
