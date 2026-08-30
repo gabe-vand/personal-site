@@ -28,8 +28,12 @@ function route(sx, sy, vw, vh, deg) {
 
 // Breeze across the direction of travel: two slow swells (periods ~1100 px and ~560 px).
 const swell = (len) => 26 * Math.sin(len * 0.0057 + 0.6) + 11 * Math.sin(len * 0.0112 + 2.1);
-// Progress: an ease-out with a gentle surge/glide rhythm layered on, like a plane catching air.
-const progress = (u) => Math.min(1, 1 - Math.pow(1 - u, 1.55) + 0.02 * Math.sin(u * Math.PI * 3));
+// Progress: accelerates gently out of the button's hop (so the handoff has no velocity jump),
+// then a long ease-out with a faint surge/glide rhythm, like a plane catching air.
+const progress = (u) => {
+    const base = u < 0.22 ? 0.3 * (u / 0.22) * (u / 0.22) : 0.3 + 0.7 * (1 - Math.pow(1 - (u - 0.22) / 0.78, 1.5));
+    return Math.min(1, base + 0.015 * Math.sin(u * Math.PI * 3));
+};
 
 /** Fly from the centre of `from` (an element) heading `startDeg` (screen degrees, negative = up). */
 export function flyPlane(from, startDeg = -20) {
