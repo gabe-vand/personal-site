@@ -10,8 +10,8 @@ const AWAY_MS = 1500; // how long after launch the caller may bring the button b
 // Four facets, each 3 points, in % of the button box (nose ends up at the top centre).
 const REST = { lw: [0, 0, 50, 0, 0, 100], lb: [51, 0, 51, 100, 0, 100], rw: [49, 0, 100, 0, 100, 100], rb: [49, 0, 49, 100, 100, 100], rot: 0, sheet: 1, shade: 0 };
 const FOLD = [
-    { ms: 110, to: { sheet: 0 }, set: { shade: 1 } },
-    { ms: 200, to: { lw: [50, 100, 50, 0, 0, 100], rw: [49, 0, 50, 100, 100, 100] } },
+    { ms: 110, to: { sheet: 0 } },
+    { ms: 200, set: { shade: 1 }, to: { lw: [50, 100, 50, 0, 0, 100], rw: [49, 0, 50, 100, 100, 100] } },
     { ms: 200, set: { lw: [50, 0, 40, 100, 0, 100], lb: [51, 0, 51, 100, 40, 100], rw: [50, 0, 60, 100, 100, 100], rb: [49, 0, 49, 100, 60, 100], shade: 2 },
       to: { lw: [50, 0, 40, 90, 20, 90], lb: [51, 0, 51, 100, 40, 90], rw: [50, 0, 60, 90, 80, 90], rb: [49, 0, 49, 100, 60, 90] } },
     { ms: 250, set: { shade: 3 }, to: { rot: 50, lw: [50, 0, 40, 90, 27, 95], rw: [50, 0, 45, 90, 60, 83], rb: [49, 0, 49, 100, 45, 90] } },

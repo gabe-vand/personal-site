@@ -3,7 +3,7 @@
 // On send the button folds itself into a paper plane and flies off (paperplane.js), and the
 // form gives way to a "Sent." card. The dev "test plane" button runs the identical
 // success path with a fake request, so the whole experience can be checked without emailing.
-import { launchPlane } from './paperplane.js?v=2c4ba10d';
+import { launchPlane } from './paperplane.js?v=cbb02902';
 
 const ADDRESS = 'gabe@gabevandevere.com';
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
