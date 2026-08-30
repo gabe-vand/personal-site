@@ -9,6 +9,13 @@
 .contact-note.is-ok { color: var(--chalk); }
 .contact-alt { color: var(--chalk-dim); margin: 1.8rem 0 0; }
 
+/* Paper airplane (js/plane.js): fixed SVG overlay above everything but the grain. */
+.plane-layer { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 52; pointer-events: none; transition: opacity 0.8s; }
+.plane-layer.is-done { opacity: 0; }
+.plane-body { fill: var(--chalk); stroke: var(--stone); stroke-width: 1; stroke-linejoin: round; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5)); }
+.plane-trail circle { fill: var(--tape); animation: trail-fade 1.6s ease-out forwards; }
+@keyframes trail-fade { from { opacity: 0.9; } to { opacity: 0.15; } }
+
 .site-footer { max-width: 84rem; margin: 0 auto; padding: 2.5rem var(--gutter) 4rem; border-top: 1px solid var(--stone-3); color: var(--chalk-faint); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
 .site-footer p { margin: 0; max-width: none; }
 .foot-hint { opacity: 0.35; letter-spacing: 0.2em; }

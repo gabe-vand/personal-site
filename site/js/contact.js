@@ -1,5 +1,7 @@
 // Contact form. POSTs to /api/contact; the board emails Gabe through its own mailbox
 // (api/mail.py). The "website" field is a honeypot: hidden from people, filled by bots.
+import { flyPlane } from './plane.js?v=b5662a0d';
+
 const ADDRESS = 'gabe@gabevandevere.com';
 
 export function initContact() {
@@ -19,6 +21,7 @@ export function initContact() {
         const payload = { subject: form.elements.subject.value.trim(), body, from: form.elements.from.value.trim(), website: form.elements.website.value };
         button.disabled = true;
         button.textContent = 'Sending…';
+        flyPlane(button);
         try {
             const res = await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
             const data = await res.json().catch(() => ({}));

@@ -1,7 +1,7 @@
 // Drifting contour lines behind the hero, like a topo map that will not sit still.
 // Cheap on purpose: ~34 polylines x 96 points of 2D noise per frame, only while the hero
 // is on screen and the tab is visible. The pointer pushes the lines apart as it passes.
-import { noise2 } from './noise.js?v=3fc2da3a';
+import { noise2 } from './noise.js?v=b5662a0d';
 
 const LINES = 34;
 const STEPS = 96;
