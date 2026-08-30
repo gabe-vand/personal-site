@@ -38,7 +38,6 @@ nav hold in `10-nav.html` plus the import in `main.js`.
 ## Placeholders waiting on Gabe
 
 - Hero lede (`20-hero.html`).
-- GitHub / LinkedIn links in the contact section.
 - Anything more the model should know: `api/persona.py` (full resume detail; one line on climbing/lifting; nothing about the hardware).
 
 ## Deferred

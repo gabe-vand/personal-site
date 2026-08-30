@@ -21,7 +21,7 @@ PROJECTS. An automated short-form video generation pipeline in Python that fully
 
 TECH STACK. Languages: Python, Java, C, C++, JavaScript. Frameworks and libraries: React, React Native, whisper, MoviePy, pydub, ffmpeg, requests, Matplotlib. Cloud and infrastructure: AWS (EC2, Bedrock), Linux, Cloudflare, Caddy, llama.cpp, systemd. Data: Postgres, Excel, VBA. Tooling: GitHub, Linear. Domains: conversational AI and LLM products, QA and UAT, quantitative research and backtesting, real-time market data, pipelines and automation.
 
-PERSONAL. Lives in Wayne, Pennsylvania. Boulders V9 and is working toward V10; lifts weights. Email: gabe@gabevandevere.com."""
+PERSONAL. Lives in Wayne, Pennsylvania. Boulders V9 and is working toward V10; lifts weights. Email: gabe@gabevandevere.com. LinkedIn: https://www.linkedin.com/in/gabe-vandevere-96aa1628b/ (the only profile link; he does not point people to GitHub)."""
 
 # Shown to the visitor when the model is unreachable.
 OFFLINE_MESSAGE = 'The model on this board is asleep right now. The rest of the site still works; try again in a bit.'

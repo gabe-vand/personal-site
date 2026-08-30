@@ -48,7 +48,7 @@ That's it. `deploy.sh` rebuilds, validates and reloads Caddy, restarts the API o
 | Suggested questions for the model | `src/page/60-machine.html` (the `.chip` buttons) |
 | Bring back a retired section (climb, lift, build) | move it from `src/archive/` back into `src/page/`, `src/css/`, `site/js/` (and re-add the nav hold + `main.js` import) |
 | What the model knows / how it talks | `api/persona.py` |
-| Email address | `site/js/contact.js` **and** the link in `src/page/70-contact.html` |
+| Email address, LinkedIn link | `site/js/contact.js` **and** the links in `src/page/70-contact.html` |
 | Colors, fonts | `src/css/00-tokens.css` |
 | Ticker items | `src/page/20-hero.html` (the `.ticker-track` list) |
 
