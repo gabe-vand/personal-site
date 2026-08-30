@@ -1,7 +1,7 @@
 // Polls /api/status and paints the machine panel, the hero status line, the power sparkline,
 // and anything that subscribed with onTelemetry (the ticker). Polls every 2.5 s while the
 // panel is near the viewport, every 15 s otherwise, never while the tab is hidden.
-import { fmtUptime, fmtInt, fmtNum } from './format.js?v=fe06d338';
+import { fmtUptime, fmtInt, fmtNum } from './format.js?v=86482b3f';
 
 const listeners = new Set();
 const power = [];
@@ -26,6 +26,17 @@ export function setGenerating(flag) {
     generating = flag;
     if (!flag && lastData) lastData.busy = false;
     paintState(lastData);
+}
+
+// Live generation speed measured in the browser (chat.js) while an answer streams; null when
+// idle, and the row falls back to the server's rolling average on the next paint.
+let liveTps = null;
+export function setLiveTps(value) {
+    liveTps = value;
+    const el = $('t-tps');
+    if (!el) return;
+    el.classList.toggle('is-live', value != null);
+    text('t-tps', fmtNum(value != null ? value : lastData && lastData.tps_last));
 }
 
 export function initTelemetry() {
@@ -81,7 +92,7 @@ function paint(d) {
         text('t-mem', `${(d.mem.used_mb / 1024).toFixed(1)} / ${(d.mem.total_mb / 1024).toFixed(1)} GB`);
         meter('t-mem-bar', (100 * d.mem.used_mb) / d.mem.total_mb);
     }
-    text('t-tps', fmtNum(d.tps_last));
+    text('t-tps', fmtNum(liveTps != null ? liveTps : d.tps_last));
     text('t-tokens', d.llm ? fmtInt(d.llm.tokens_generated) : '—');
     text('t-uptime', fmtUptime(d.uptime_s));
     text('foot-up', fmtUptime(d.uptime_s));

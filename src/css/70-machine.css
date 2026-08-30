@@ -27,6 +27,7 @@
 .tele-state.is-busy { color: var(--tape); }
 .tele-rows { margin: 0; }
 .tele-row { display: grid; grid-template-columns: 5.2rem minmax(0, 1fr); gap: 0.75rem; padding: 0.55rem 0; border-top: 1px solid var(--stone-3); font-family: var(--mono); font-size: 0.78rem; }
+#t-tps.is-live { color: var(--ice); }
 .tele-row dt { color: var(--chalk-faint); text-transform: uppercase; letter-spacing: 0.12em; padding-top: 0.15em; }
 .tele-row dd { margin: 0; color: var(--chalk-dim); overflow-wrap: anywhere; }
 .tele-big { font-family: var(--serif); font-size: 1.7rem; line-height: 1; color: var(--chalk); margin-right: 0.15rem; }

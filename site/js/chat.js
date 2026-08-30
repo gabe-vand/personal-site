@@ -1,7 +1,7 @@
 // Chat with the model on this board. POSTs to /api/chat and reads the server-sent event
 // stream (status -> token* -> done | error), painting each token as it lands.
 // Nothing here knows an API key; the proxy in api/ holds it.
-import { setGenerating } from './telemetry.js?v=fe06d338';
+import { setGenerating, setLiveTps } from './telemetry.js?v=86482b3f';
 
 export function initChat() {
     const form = document.getElementById('chat-form');
@@ -69,6 +69,9 @@ export function initChat() {
         setStatus(bot, 'sending to the board…');
         const p = bot.querySelector('p');
         let answer = '';
+        let tokens = 0;
+        let t0 = 0;
+        let lastTick = 0;
         setGenerating(true);
         try {
             const res = await fetch('/api/chat', {
@@ -87,6 +90,14 @@ export function initChat() {
                     answer += ev.data.t;
                     p.textContent = answer;
                     log.scrollTop = log.scrollHeight;
+                    // Live speed for the panel: tokens landed here per second, updated ~4x/s after a short warm-up.
+                    const now = performance.now();
+                    if (!t0) t0 = now;
+                    tokens += 1;
+                    if (tokens > 3 && now - lastTick > 250) {
+                        lastTick = now;
+                        setLiveTps((tokens - 1) / ((now - t0) / 1000));
+                    }
                 } else if (ev.event === 'done') {
                     addMeta(bot, ev.data);
                 } else if (ev.event === 'error') {
@@ -103,6 +114,7 @@ export function initChat() {
             busy = false;
             send.disabled = false;
             setGenerating(false);
+            setLiveTps(null);
             log.scrollTop = log.scrollHeight;
         }
     }
