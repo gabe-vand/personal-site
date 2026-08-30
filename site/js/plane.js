@@ -68,7 +68,9 @@ export function flyPlane(from, startDeg = -20) {
         const w = swell(len);
         return { x: p.x - (dy / n) * w, y: p.y + (dx / n) * w };
     }
-    function place(len) {
+    // Size over the flight: starts at the folded dart's size, swells toward the viewer through the loop, settles as it exits.
+    const size = (u) => 0.72 + 0.48 * Math.sin(Math.min(1, u * 1.25) * Math.PI) * (1 - 0.3 * u) + 0.2 * u;
+    function place(len, u) {
         const a = pointAt(len);
         const b = pointAt(Math.min(total, len + 4));
         let target = Math.atan2(b.y - a.y, b.x - a.x);
@@ -79,19 +81,20 @@ export function flyPlane(from, startDeg = -20) {
         const push = (swell(len + 6) - swell(len - 6)) / 12;
         bank += (Math.max(-1, Math.min(1, push * 1.6)) - bank) * 0.08;
         const deg = (heading * 180) / Math.PI;
-        plane.setAttribute('transform', `translate(${a.x.toFixed(1)} ${a.y.toFixed(1)}) rotate(${deg.toFixed(1)}) scale(1 ${(1 - Math.abs(bank) * 0.55).toFixed(3)})`);
+        const k = size(u);
+        plane.setAttribute('transform', `translate(${a.x.toFixed(1)} ${a.y.toFixed(1)}) rotate(${deg.toFixed(1)}) scale(${k.toFixed(3)} ${(k * (1 - Math.abs(bank) * 0.55)).toFixed(3)})`);
     }
     function frame(now) {
         start ??= now;
         const u = Math.min(1, (now - start) / DURATION);
         const len = progress(u) * total;
-        place(len);
+        place(len, u);
         if (u < 1) return requestAnimationFrame(frame);
         svg.classList.add('is-done');
         setTimeout(() => svg.remove(), 1000);
     }
 
-    place(0); // position it before it is ever painted
+    place(0, 0); // position it before it is ever painted
     svg.append(guide, plane);
     document.body.appendChild(svg);
     requestAnimationFrame(frame);

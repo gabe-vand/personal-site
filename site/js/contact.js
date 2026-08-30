@@ -3,8 +3,8 @@
 // On send the button folds itself into a paper plane (fold.js) which then flies off (plane.js),
 // and the form gives way to a "Sent." card. The dev "test plane" button runs the identical
 // success path with a fake request, so the whole experience can be checked without emailing.
-import { foldButton, unfoldButton } from './fold.js?v=3c23d676';
-import { flyPlane } from './plane.js?v=3c23d676';
+import { foldButton, unfoldButton } from './fold.js?v=3e700201';
+import { flyPlane } from './plane.js?v=3e700201';
 
 const ADDRESS = 'gabe@gabevandevere.com';
 const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
