@@ -13,7 +13,7 @@ function el(name, attrs) {
 
 function route(sx, sy, vw) {
     // Rise off the button, loop a little past a third of the way, then climb out right.
-    const r = Math.min(70, vw * 0.09);
+    const r = Math.min(90, vw * 0.1);
     const lx = sx + Math.max(160, vw * 0.28);
     const ly = sy - 120;
     const ex = vw + 80;
@@ -30,7 +30,7 @@ export function flyPlane(from) {
     const svg = el('svg', { class: 'plane-layer', 'aria-hidden': 'true', viewBox: `0 0 ${vw} ${window.innerHeight}` });
     const path = el('path', { d: route(box.left + box.width / 2, box.top + box.height / 2, vw), fill: 'none' });
     const trail = el('g', { class: 'plane-trail' });
-    const plane = el('path', { class: 'plane-body', d: 'M 0 0 L -18 -8 L -12 0 L -18 8 Z' });
+    const plane = el('path', { class: 'plane-body', d: 'M 0 0 L -24 -11 L -16 0 L -24 11 Z' });
     svg.append(path, trail, plane);
     document.body.appendChild(svg);
 
