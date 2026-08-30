@@ -1,7 +1,7 @@
 // Polls /api/status and paints the machine panel, the hero status line, the power sparkline,
 // and anything that subscribed with onTelemetry (the ticker). Polls every 2.5 s while the
 // panel is near the viewport, every 15 s otherwise, never while the tab is hidden.
-import { fmtUptime, fmtInt, fmtNum } from './format.js?v=1f5bd0fe';
+import { fmtUptime, fmtInt, fmtNum } from './format.js?v=dfc225fb';
 
 const listeners = new Set();
 const power = [];
@@ -81,7 +81,7 @@ function paint(d) {
         text('t-mem', `${(d.mem.used_mb / 1024).toFixed(1)} / ${(d.mem.total_mb / 1024).toFixed(1)} GB`);
         meter('t-mem-bar', (100 * d.mem.used_mb) / d.mem.total_mb);
     }
-    text('t-tps', d.tps_last == null ? 'ask it something' : fmtNum(d.tps_last));
+    text('t-tps', fmtNum(d.tps_last));
     text('t-tokens', d.llm ? fmtInt(d.llm.tokens_generated) : '—');
     text('t-uptime', fmtUptime(d.uptime_s));
     text('foot-up', fmtUptime(d.uptime_s));

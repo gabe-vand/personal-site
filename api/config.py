@@ -5,6 +5,7 @@ browser must never hold that key, and one impatient visitor must never be
 able to pin the GPU. So the page talks to this process, which holds the key,
 fixes the system prompt, caps output length, and queues politely.
 """
+import os
 
 UPSTREAM = 'http://127.0.0.1:8080'
 API_KEY_PATH = '/etc/oracle-llm/api-key'
@@ -34,6 +35,9 @@ GLOBAL_PER_DAY = 600
 
 # Telemetry
 TELEMETRY_CACHE_S = 2.0
+TPS_TYPICAL = 10.6          # measured tok/s on this board; shown until there is real history
+TPS_WINDOW = 20             # generations averaged for the panel's speed
+TPS_STATE_PATH = os.path.expanduser('~/.local/state/site-api/tps')
 MODEL_INFO_CACHE_S = 600.0
 HOSTNAME = 'orin · on my desk'   # label in the panel, not the real hostname
 BOARD = 'NVIDIA Jetson Orin Nano Super (8 GB)'

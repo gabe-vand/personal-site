@@ -13,6 +13,7 @@ import urllib.request
 
 import config
 import persona
+import speed
 import telemetry
 
 
@@ -54,7 +55,7 @@ def _request(history):
 def _done(timings, choice, pieces, started):
     tps = timings.get('predicted_per_second')
     if tps:
-        telemetry.note_tps(tps)
+        speed.note(tps)
     return sse('done', {
         'tokens': timings.get('predicted_n', pieces),
         'prompt_tokens': timings.get('prompt_n'),

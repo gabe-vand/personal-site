@@ -14,12 +14,12 @@ import urllib.request
 
 import config
 import limits
+import speed
 
 _lock = threading.Lock()
 _cache = {'ts': 0.0, 'data': None}
 _model = {'ts': 0.0, 'data': None}
 _power_mode = None
-_last_tps = None
 _boot_ts = time.time()
 
 
@@ -35,9 +35,6 @@ def api_key():
     return _read(config.API_KEY_PATH, '')
 
 
-def note_tps(tps):
-    global _last_tps
-    _last_tps = round(float(tps), 1)
 
 
 def temps():
@@ -176,7 +173,8 @@ def snapshot():
         'waiting': limits.waiting_count(),
         'llm': metrics,
         'model': model_info(),
-        'tps_last': _last_tps,
+        'tps_last': speed.average(),
+        'tps_samples': speed.samples(),
         'api_uptime_s': int(now - _boot_ts),
     }
     with _lock:
