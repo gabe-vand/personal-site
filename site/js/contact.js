@@ -1,8 +1,8 @@
 // Contact form. POSTs to /api/contact; the board emails Gabe through its own mailbox
 // (api/mail.py). The "website" field is a honeypot: hidden from people, filled by bots.
 // On send the button folds itself into a paper plane (fold.js) which then flies off (plane.js).
-import { foldButton, unfoldButton } from './fold.js?v=943620da';
-import { flyPlane } from './plane.js?v=943620da';
+import { foldButton, unfoldButton } from './fold.js?v=b3c3cbb1';
+import { flyPlane } from './plane.js?v=b3c3cbb1';
 
 const ADDRESS = 'gabe@gabevandevere.com';
 const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;

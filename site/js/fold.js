@@ -13,7 +13,7 @@ const REST = {
 
 // Each step: {to: {...}, set: {...}, ms}. `set` jumps instantly at the start of the step.
 const STEPS = [
-    { ms: 110, to: { 'text-opacity': 0, radius: 0, shade: 1 } },
+    { ms: 110, set: { shade: 1 }, to: { 'text-opacity': 0, radius: 0 } },
     { ms: 200, to: { 'left-wing-first-x': 50, 'left-wing-first-y': 100, 'right-wing-second-x': 50, 'right-wing-second-y': 100 } },
     {
         ms: 200,
@@ -23,7 +23,7 @@ const STEPS = [
         },
         to: { 'left-wing-third-x': 20, 'left-wing-third-y': 90, 'left-wing-second-y': 90, 'left-body-third-y': 90, 'right-wing-third-x': 80, 'right-wing-third-y': 90, 'right-body-third-y': 90, 'right-wing-second-y': 90 },
     },
-    { ms: 250, to: { rotate: 50, 'left-wing-third-y': 95, 'left-wing-third-x': 27, 'right-body-third-x': 45, 'right-wing-second-x': 45, 'right-wing-third-x': 60, 'right-wing-third-y': 83, shade: 3 } },
+    { ms: 250, set: { shade: 3 }, to: { rotate: 50, 'left-wing-third-y': 95, 'left-wing-third-x': 27, 'right-body-third-x': 45, 'right-wing-second-x': 45, 'right-wing-third-x': 60, 'right-wing-third-y': 83 } },
     { ms: 200, to: { rotate: 60, 'plane-x': -8, 'plane-y': 14 } },
     { ms: 180, to: { rotate: 45, 'plane-x': 30, 'plane-y': -60 } },
 ];
