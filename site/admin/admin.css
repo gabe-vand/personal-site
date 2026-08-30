@@ -1,5 +1,6 @@
 /* Admin UI. Dense, mono-heavy, same tokens as the site. Loaded after /style.css. */
 body.admin { min-height: 100vh; }
+.login[hidden], .app[hidden], .admin [hidden] { display: none !important; }
 .login { min-height: 100vh; display: grid; place-items: center; padding: 2rem; }
 .login-card { width: min(24rem, 100%); display: grid; gap: 0.5rem; padding: 1.6rem; border: 1px solid var(--stone-3); border-radius: 14px; background: var(--stone-2); }
 .login-card label { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--chalk-faint); margin-top: 0.6rem; }
