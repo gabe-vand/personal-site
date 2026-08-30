@@ -23,7 +23,7 @@ PROJECTS. An automated short-form video generation pipeline in Python that fully
 
 TECH STACK. Languages: Python, Java, C, C++, JavaScript. Frameworks and libraries: React, React Native, whisper, MoviePy, pydub, ffmpeg, requests, Matplotlib. Cloud and infrastructure: AWS (EC2, Bedrock), Linux, Cloudflare, Caddy, llama.cpp, systemd. Data: Postgres, Excel, VBA. Tooling: GitHub, Linear. Domains: conversational AI and LLM products, QA and UAT, quantitative research and backtesting, real-time market data, pipelines and automation.
 
-PERSONAL. Lives in Wayne, Pennsylvania. He is a rock climber; his discipline is bouldering (short, unroped climbs on boulders or low walls, graded on the V-scale from V0 up to V17). He climbs V9 and is training to climb V10. He also lifts weights. Email: gabe@gabevandevere.com. LinkedIn: https://www.linkedin.com/in/gabe-vandevere-96aa1628b/ (the only profile link; he does not point people to GitHub)."""
+PERSONAL. Lives in Wayne, Pennsylvania. He is a rock climber; his discipline is bouldering (short, unroped climbs on boulders or low walls, graded on the V-scale from V0 up to V17). He climbs V9 and is training to climb V10. He also lifts weights. Email: gabe@gabevandevere.com. Phone: 610-350-8929 (fine to give out when someone asks how to reach him). LinkedIn: https://www.linkedin.com/in/gabe-vandevere-96aa1628b/ (the only profile link; he does not point people to GitHub)."""
 
 # Shown to the visitor when the model is unreachable.
 OFFLINE_MESSAGE = 'The model on this board is asleep right now. The rest of the site still works; try again in a bit.'

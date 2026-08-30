@@ -14,7 +14,7 @@ def load() -> dict:
 
 def jsonld(f: dict) -> str:
     person = {
-        '@type': 'Person', '@id': f['url'] + '#me', 'name': f['name'], 'url': f['url'], 'email': f['email'], 'jobTitle': f['title'],
+        '@type': 'Person', '@id': f['url'] + '#me', 'name': f['name'], 'url': f['url'], 'email': f['email'], 'telephone': f.get('phone', ''), 'jobTitle': f['title'],
         'description': f['summary'], 'sameAs': [f['linkedin']], 'knowsAbout': f['skills'],
         'address': {'@type': 'PostalAddress', 'addressLocality': f['location']['locality'], 'addressRegion': f['location']['region'], 'addressCountry': f['location']['country']},
         'alumniOf': {'@type': 'CollegeOrUniversity', 'name': f['education']['school'], 'url': f['education']['school_url']},
@@ -28,7 +28,7 @@ def jsonld(f: dict) -> str:
 
 def llms_txt(f: dict, date: str) -> str:
     loc = f['location']
-    lines = [f"# {f['name']}", '', f"> {f['summary']}", '', f"- Site: {f['url']}", f"- Email: {f['email']}", f"- LinkedIn: {f['linkedin']}",
+    lines = [f"# {f['name']}", '', f"> {f['summary']}", '', f"- Site: {f['url']}", f"- Email: {f['email']}", f"- Phone: {f.get('phone', '')}", f"- LinkedIn: {f['linkedin']}",
              f"- Location: {loc['locality']}, {loc['region']}, {loc['country']} ({loc['area']})", f"- Last updated: {date}", '', '## Education', '',
              f"- {f['education']['degree']}, {f['education']['school']}, expected {f['education']['expected']}, GPA {f['education']['gpa']}", '', '## Experience', '']
     for r in f['roles']:

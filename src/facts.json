@@ -2,6 +2,7 @@
   "name": "Gabe Vandevere",
   "url": "https://gabevandevere.com/",
   "email": "gabe@gabevandevere.com",
+  "phone": "+1-610-350-8929",
   "linkedin": "https://www.linkedin.com/in/gabe-vandevere-96aa1628b/",
   "location": { "locality": "Wayne", "region": "PA", "country": "US", "area": "Philadelphia area" },
   "title": "Computer science student and AI product builder",
@@ -25,7 +26,7 @@
     { "q": "What is Gabe Vandevere's technical stack?", "a": "Python, Java, C, C++ and JavaScript; React and React Native; AWS (EC2, Bedrock), Linux, Cloudflare, Caddy, llama.cpp and systemd; Postgres, Excel and VBA. Domains: conversational AI and LLM products, QA and UAT, quantitative research and backtesting, real-time market data, and automation pipelines." },
     { "q": "What has Gabe Vandevere built?", "a": "A machine-learning backtesting pipeline (15 model variants, up to 57% next-day direction accuracy), real-time crypto order-book tracking across 200+ markets in Java on AWS EC2, a daily-use trading analytics dashboard in Python, an automated short-form video pipeline, and this website, which runs on a Jetson Orin Nano on his desk together with the language model visitors can talk to." },
     { "q": "Where did Gabe Vandevere go to school?", "a": "The University of Delaware in Newark, Delaware, for a Bachelor of Science in Computer Science, expected spring 2027, with a 3.87 GPA and Dean's List every semester." },
-    { "q": "How can I contact Gabe Vandevere?", "a": "Email gabe@gabevandevere.com, use the form on gabevandevere.com, or connect on LinkedIn at linkedin.com/in/gabe-vandevere-96aa1628b." },
+    { "q": "How can I contact Gabe Vandevere?", "a": "Email gabe@gabevandevere.com, call or text 610-350-8929, use the form on gabevandevere.com, or connect on LinkedIn at linkedin.com/in/gabe-vandevere-96aa1628b." },
     { "q": "Is the AI on gabevandevere.com really running locally?", "a": "Yes. The site and the chat are served from an NVIDIA Jetson Orin Nano on Gabe's desk in Wayne, PA, running an open language model with llama.cpp; nothing is sent to a cloud AI service." }
   ]
 }
