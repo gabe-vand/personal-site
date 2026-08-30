@@ -2,7 +2,7 @@
 
 Living status page for gabevandevere.com. Updated with every change.
 
-Last updated: 2026-08-29.
+Last updated: 2026-08-29 (evening: page reduced to machine + contact).
 
 ## Live
 
@@ -14,9 +14,6 @@ Last updated: 2026-08-29.
 | Hero with drifting contour field that bends around the pointer | `20-hero.html`, `js/contour.js` | done |
 | Topo-route navigation (chalk line fills with scroll; bottom bar on phones) | `10-nav.html`, `js/topo.js` | done |
 | Ticker with live uptime / GPU temp / watts / token count | `20-hero.html`, `js/ticker.js` | done |
-| Climb: V-scale ladder with notes, send log | `30-climb.html`, `js/ladder.js` | done, notes and log are placeholders |
-| Lift: load-the-bar barbell, presets | `40-lift.html`, `js/barbell.js` | done, preset numbers are placeholders |
-| Build: project cards that tilt toward the pointer | `50-code.html`, `js/tilt.js` | done, images and links are placeholders |
 | Machine: streaming chat with the on-device model | `60-machine.html`, `js/chat.js`, `api/` | done; each exchange is logged (truncated) to `journalctl --user -u site-api` for review |
 | Machine: live telemetry panel with power sparkline | `js/telemetry.js`, `api/telemetry.py` | done |
 | Machine: request pipeline diagram with in-flight packet | `60-machine.html` | done |
@@ -26,13 +23,23 @@ Last updated: 2026-08-29.
 | Reduced-motion: every animation has an off switch | all CSS/JS | done |
 | 404 page in the new style | `site/404.html` | done |
 
+## Archived (built, working, not on the page)
+
+Retired on 2026-08-29 while the page is being rethought. Everything lives in `src/archive/`
+and comes back by moving the files into `src/page/`, `src/css/`, `site/js/` and re-adding a
+nav hold in `10-nav.html` plus the import in `main.js`.
+
+| Section | Files |
+|---|---|
+| Climb: V-scale ladder, send log | `page/30-climb.html`, `css/40-climb.css`, `js/ladder.js`, `img/climb-*.svg` |
+| Lift: load-the-bar barbell, presets | `page/40-lift.html`, `css/50-lift.css`, `js/barbell.js`, `img/lift-1.svg` |
+| Build: tilting project cards | `page/50-code.html`, `css/60-code.css`, `js/tilt.js`, `img/project-*.svg` |
+
 ## Placeholders waiting on Gabe
 
-- Hero lede and climbing/lifting paragraphs (lorem where marked `<!-- EDIT -->`).
-- Photos: `site/img/climb-1.svg`, `climb-2.svg`, `lift-1.svg`, `project-1..4.svg`.
-- Ladder notes per grade, the send log, real PRs for the presets.
-- GitHub / LinkedIn links in the contact section; repo links on the cards.
-- Anything more the model should know: `api/persona.py`.
+- Hero lede (`20-hero.html`).
+- GitHub / LinkedIn links in the contact section.
+- Anything more the model should know: `api/persona.py` (it still knows about climbing and lifting).
 
 ## Deferred
 

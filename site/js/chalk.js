@@ -1,5 +1,5 @@
 // Chalk burst: a puff of particles when you top out (reach the contact section), when you
-// click the mark, and when the Konami code lands. Draws on the fixed #chalk canvas.
+// click the mark, and when the Konami code lands. ("Top out" = reaching the end of the page.) Draws on the fixed #chalk canvas.
 let canvas = null;
 let ctx = null;
 let particles = [];

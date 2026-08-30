@@ -1,4 +1,4 @@
-/* 05 / top out: the mailto form, links, footer. */
+/* 02 / send it: the mailto form, links, footer. */
 .contact-form { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.8rem; max-width: 40rem; }
 .contact-form input, .contact-form textarea { border-radius: 10px; width: 100%; }
 .contact-form textarea { resize: vertical; min-height: 8rem; font-family: var(--sans); }

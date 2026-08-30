@@ -45,13 +45,10 @@ That's it. `deploy.sh` rebuilds, validates and reloads Caddy, restarts the API o
 | You want to change | Edit |
 |---|---|
 | The intro sentence | `src/page/20-hero.html` (the `.hero-lede` paragraph) |
-| Climbing text, ladder notes, send log | `src/page/30-climb.html` (`data-note` on each rung) |
-| Your real lift numbers | `src/page/40-lift.html` (`data-kg` on the preset buttons) |
-| Project cards, links, tags | `src/page/50-code.html` |
 | Suggested questions for the model | `src/page/60-machine.html` (the `.chip` buttons) |
+| Bring back a retired section (climb, lift, build) | move it from `src/archive/` back into `src/page/`, `src/css/`, `site/js/` (and re-add the nav hold + `main.js` import) |
 | What the model knows / how it talks | `api/persona.py` |
 | Email address | `site/js/contact.js` **and** the link in `src/page/70-contact.html` |
-| Photos | replace `site/img/*.svg` with real images, update the `src=` and `width/height` |
 | Colors, fonts | `src/css/00-tokens.css` |
 | Ticker items | `src/page/20-hero.html` (the `.ticker-track` list) |
 
