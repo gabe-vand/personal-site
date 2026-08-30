@@ -32,6 +32,16 @@
 
 	root * /home/gabevandevere/gabevandevere.com/site
 
+	# --- one canonical origin ----------------------------------
+	# Cloudflare terminates TLS and tells us the visitor's scheme in
+	# X-Forwarded-Proto. Plain-http visits and the www host both 301 to
+	# https://gabevandevere.com so there is exactly one URL for every page
+	# (search engines and link previews otherwise see two copies).
+	@insecure header X-Forwarded-Proto http
+	redir @insecure https://gabevandevere.com{uri} 301
+	@www host www.gabevandevere.com
+	redir @www https://gabevandevere.com{uri} 301
+
 	# Compress text, but NOT text/event-stream: the LLM answers arrive as a
 	# live stream and a compressor in the middle would buffer the words.
 	encode zstd gzip {
@@ -49,6 +59,8 @@
 
 	# --- security headers -------------------------------------
 	header {
+		# Browsers remember to use https for a year (Cloudflare serves the TLS).
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
 		# Don't let other sites frame this one.
 		X-Frame-Options "SAMEORIGIN"
 		# Don't guess content types.
