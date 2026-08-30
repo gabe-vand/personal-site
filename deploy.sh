@@ -37,8 +37,12 @@ code=$(curl -s -o /dev/null -w '%{http_code}' -m 5 http://127.0.0.1:8081/api/hea
 [ "$code" = "200" ] || fail "local /api/health returned $code (journalctl --user -u site-api -n 30)"
 ok "local 8081 + api"
 
-code=$(curl -s -o /dev/null -w '%{http_code}' -m 15 "https://gabevandevere.com/?deploy=$(date +%s)")
-[ "$code" = "200" ] || fail "live site returned $code (systemctl --user status cloudflared)"
+# Fetch the plain URL (no cache-buster) and require this build's version hash in it, so a stale
+# copy anywhere between here and the visitor fails the deploy instead of going unnoticed.
+v=$(grep -o 'style.css?v=[0-9a-f]*' site/index.html | head -1 | cut -d= -f2)
+live=$(curl -s -m 15 https://gabevandevere.com/) || fail "live site unreachable (systemctl --user status cloudflared)"
+printf '%s' "$live" | grep -q "style.css?v=$v" || fail "live site is serving a stale build (expected v=$v)"
+printf '%s' "$live" | grep -q 'id="about"' || fail "live HTML is missing the about section"
 code=$(curl -s -o /dev/null -w '%{http_code}' -m 15 https://gabevandevere.com/api/status)
 [ "$code" = "200" ] || fail "live /api/status returned $code"
 ok "live https://gabevandevere.com"
