@@ -1,5 +1,5 @@
-import { api } from './api.js?v=81a64e85';
-import { el, table, when, dur, num, tag, section, kv, bars, ago } from './ui.js?v=81a64e85';
+import { api } from './api.js?v=4e21be70';
+import { el, table, when, dur, num, tag, section, kv, bars, ago } from './ui.js?v=4e21be70';
 
 const go = (hash) => { location.hash = hash; };
 

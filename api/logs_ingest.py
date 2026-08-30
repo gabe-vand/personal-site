@@ -13,7 +13,8 @@ import bots
 import config
 import db
 
-SKIP_PREFIX = ('/api/beacon',)
+SKIP_PREFIX = ('/api/beacon', '/api/status', '/api/health')  # telemetry polls and health checks are not visits
+SKIP_IPS = ('127.0.0.1',)  # deploy.sh smoke tests
 _STAMP = re.compile(r'^(\d{4})/(\d{2})/(\d{2}) (\d{2}):(\d{2}):(\d{2})(?:\.(\d+))?')  # console-format prefix, UTC
 
 
@@ -40,6 +41,8 @@ def _parse(line: str):
     if path.startswith(SKIP_PREFIX):
         return None
     ua = hv('User-Agent')
+    if (hv('Cf-Connecting-Ip') or req.get('client_ip') or '') in SKIP_IPS or (not hv('Cf-Connecting-Ip') and req.get('remote_ip') in SKIP_IPS):
+        return None
     klass, bot = bots.classify(ua)
     ip = hv('Cf-Connecting-Ip') or req.get('client_ip') or req.get('remote_ip') or ''
     loc = ', '.join(p for p in (hv('Cf-Ipcity'), hv('Cf-Region-Code') or hv('Cf-Region'), hv('Cf-Ipcountry')) if p)

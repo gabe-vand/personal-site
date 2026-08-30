@@ -1,7 +1,9 @@
 // Polls /api/status and paints the machine panel, the hero status line, the power sparkline,
-// and anything that subscribed with onTelemetry (the ticker). Polls every 2.5 s while the
-// panel is near the viewport, every 15 s otherwise, never while the tab is hidden.
-import { fmtUptime, fmtInt, fmtNum } from './format.js?v=81a64e85';
+// and anything that subscribed with onTelemetry (the ticker). Polls every 4 s while the
+// panel is near the viewport, every 20 s otherwise, never while the tab is hidden, and stops
+// altogether once the visitor has been idle (no pointer, key, scroll, touch) for 3 minutes;
+// the next interaction restarts it. A tab left open all day costs the board nothing.
+import { fmtUptime, fmtInt, fmtNum } from './format.js?v=4e21be70';
 
 const listeners = new Set();
 const power = [];
@@ -9,6 +11,8 @@ let timer = 0;
 let near = false;
 let generating = false;
 let lastData = null;
+let lastActive = Date.now();
+const IDLE_MS = 3 * 60 * 1000;
 
 const $ = (id) => document.getElementById(id);
 const text = (id, value) => {
@@ -51,9 +55,16 @@ export function initTelemetry() {
         ).observe(panel);
     }
     document.addEventListener('visibilitychange', () => {
-        if (!document.hidden) poll();
+        if (!document.hidden) wake();
     });
+    for (const ev of ['pointermove', 'pointerdown', 'keydown', 'scroll', 'touchstart']) addEventListener(ev, wake, { passive: true });
     poll();
+}
+
+function wake() {
+    const wasIdle = Date.now() - lastActive > IDLE_MS;
+    lastActive = Date.now();
+    if (wasIdle || !timer) poll();
 }
 
 async function poll() {
@@ -68,7 +79,9 @@ async function poll() {
         lastData = null;
         paintState(null);
     }
-    if (!document.hidden) timer = setTimeout(poll, near ? 2500 : 15000);
+    timer = 0;
+    if (document.hidden || Date.now() - lastActive > IDLE_MS) return; // resumes from wake()
+    timer = setTimeout(poll, near ? 4000 : 20000);
 }
 
 function paint(d) {
