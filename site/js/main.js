@@ -1,13 +1,14 @@
 // Entry point. Every feature is its own module and guards its own DOM, so deleting a
 // section from src/page/ never breaks the rest of the page.
-import { initTelemetry } from './telemetry.js?v=86482b3f';
-import { initContour } from './contour.js?v=86482b3f';
-import { initTopo } from './topo.js?v=86482b3f';
-import { initTicker } from './ticker.js?v=86482b3f';
-import { initChat } from './chat.js?v=86482b3f';
-import { initChalk } from './chalk.js?v=86482b3f';
-import { initReveal, initKonami } from './reveal.js?v=86482b3f';
-import { initContact } from './contact.js?v=86482b3f';
+import { initTelemetry } from './telemetry.js?v=cce727bd';
+import { initContour } from './contour.js?v=cce727bd';
+import { initTopo } from './topo.js?v=cce727bd';
+import { initTicker } from './ticker.js?v=cce727bd';
+import { initChat } from './chat.js?v=cce727bd';
+import { initChalk } from './chalk.js?v=cce727bd';
+import { initReveal, initKonami } from './reveal.js?v=cce727bd';
+import { initContact } from './contact.js?v=cce727bd';
+import { initTrack } from './track.js?v=cce727bd';
 
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 document.documentElement.classList.add('has-js');
@@ -24,3 +25,4 @@ initChalk(reduced);
 initReveal(reduced);
 initKonami();
 initContact();
+initTrack();

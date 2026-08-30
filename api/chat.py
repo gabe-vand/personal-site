@@ -12,6 +12,7 @@ import urllib.error
 import urllib.request
 
 import config
+import convo
 import persona
 import speed
 import telemetry
@@ -66,13 +67,19 @@ def _done(timings, choice, pieces, started):
     })
 
 
-def _log(question, answer, timings):
+def _log(question, answer, timings, meta):
     tps = timings.get('predicted_per_second') or 0
     print(f"chat {timings.get('predicted_n', 0)} tok {tps:.1f} tok/s | Q: {question[:120]!r} | A: {answer[:200]!r}", flush=True)
+    try:
+        convo.record_turn(meta, question, answer, timings)
+    except Exception as exc:  # storage must never break the answer
+        print(f'convo record error: {type(exc).__name__}: {exc}', flush=True)
 
 
-def stream(history):
-    """Yield SSE byte strings for one exchange. Closing the generator early cancels generation upstream."""
+def stream(history, meta=None):
+    """Yield SSE byte strings for one exchange. Closing the generator early cancels generation upstream.
+    meta: {vid, sid, ip, country, ua} for the conversation record."""
+    meta = meta or {}
     started = time.monotonic()
     pieces = 0
     answer = []
@@ -94,9 +101,11 @@ def stream(history):
                     answer.append(text)
                     yield sse('token', {'t': text})
                 if chunk.get('timings'):
-                    _log(history[-1]['content'], ''.join(answer), chunk['timings'])
+                    chunk['timings']['ms'] = int((time.monotonic() - started) * 1000)
+                    _log(history[-1]['content'], ''.join(answer), chunk['timings'], meta)
                     yield _done(chunk['timings'], choice, pieces, started)
                     return
+        _log(history[-1]['content'], ''.join(answer), {'predicted_n': pieces, 'ms': int((time.monotonic() - started) * 1000)}, meta)
         yield sse('done', {'tokens': pieces, 'ms': int((time.monotonic() - started) * 1000)})
     except urllib.error.HTTPError as err:
         yield sse('error', {'message': f'The model refused the request (HTTP {err.code}).'})

@@ -1,7 +1,8 @@
 // Chat with the model on this board. POSTs to /api/chat and reads the server-sent event
 // stream (status -> token* -> done | error), painting each token as it lands.
 // Nothing here knows an API key; the proxy in api/ holds it.
-import { setGenerating, setLiveTps } from './telemetry.js?v=86482b3f';
+import { setGenerating, setLiveTps } from './telemetry.js?v=cce727bd';
+import { getIds, track } from './track.js?v=cce727bd';
 
 export function initChat() {
     const form = document.getElementById('chat-form');
@@ -73,11 +74,12 @@ export function initChat() {
         let t0 = 0;
         let lastTick = 0;
         setGenerating(true);
+        track('chat', question.slice(0, 120));
         try {
             const res = await fetch('/api/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ messages: history.slice(-6) }),
+                body: JSON.stringify({ messages: history.slice(-6), ...getIds() }),
             });
             if (!res.ok) {
                 const err = await res.json().catch(() => ({}));

@@ -53,3 +53,23 @@ CONTACT_MAX_SUBJECT = 120
 CONTACT_MAX_BODY = 2000
 CONTACT_PER_IP_PER_HOUR = 3
 CONTACT_PER_DAY = 40
+
+# Analytics, conversations, admin (api/db.py and friends). SQLite, not Postgres: this board has
+# ~150 MB free with the model loaded and a database daemon would be the first thing the kernel
+# kills. One 0600 file in the service's state directory is plenty.
+DB_PATH = os.path.expanduser('~/.local/state/site-api/site.db')
+ACCESS_LOG = os.path.expanduser('~/gabevandevere.com/access.log')
+LOG_INGEST_S = 30                 # how often new access-log lines are pulled into the db
+ADMIN_SECRET_PATH = os.path.expanduser('~/.config/site-api/admin')       # ADMIN_EMAIL, ADMIN_SALT, ADMIN_HASH, TOTP_SECRET, TOTP_ENABLED
+CF_READ_TOKEN_PATH = os.path.expanduser('~/.config/site-api/cf-token-read')  # Zone Analytics:Read token (optional)
+CF_ZONE_ID = 'c965a66f1a52994158bf8781806ce30d'
+ADMIN_SESSION_S = 12 * 3600       # sliding session lifetime
+ADMIN_LOGIN_MAX = 5               # failed logins per window per IP before lockout
+ADMIN_LOGIN_WINDOW_S = 15 * 60
+ADMIN_LOGIN_GLOBAL_MAX = 20       # failed logins per window from anywhere
+ADMIN_COOKIE = 'gv_admin'
+BEACON_MAX_BYTES = 4096
+BEACON_EVENTS = {'view', 'section', 'click', 'chip', 'chat', 'contact', 'leave', 'ping'}
+CONVO_IDLE_NOTIFY_S = 5 * 60      # email Gabe this long after a conversation's last message
+NOTIFY_TO = 'gabe@gabevandevere.com'
+ADMIN_URL = 'https://gabevandevere.com/admin/'

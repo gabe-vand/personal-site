@@ -76,6 +76,14 @@
 		-Server
 	}
 
+	# --- admin UI: never indexed, never cached ------------------
+	@admin path /admin /admin/*
+	header @admin {
+		X-Robots-Tag "noindex, nofollow"
+		Cache-Control "no-store"
+	}
+	redir /admin /admin/ 301
+
 	# --- caching ----------------------------------------------
 	# HTML: always revalidate, so edits show up immediately.
 	@html path *.html /

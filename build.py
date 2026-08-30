@@ -39,7 +39,7 @@ def short_hash(text: str) -> str:
 def lint_line_counts() -> int:
     """Report hand-written files over the limit. Generated files are exempt."""
     over = 0
-    for folder in (SRC, SITE / 'js', ROOT / 'api'):
+    for folder in (SRC, SITE / 'js', SITE / 'admin', ROOT / 'api'):
         for path in sorted(folder.rglob('*')):
             if not path.is_file() or path.suffix not in {'.html', '.css', '.js', '.py', '.md'}:
                 continue

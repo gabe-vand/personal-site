@@ -2,7 +2,8 @@
 // (api/mail.py). The "website" field is a honeypot: hidden from people, filled by bots.
 // On send the button folds itself into a paper plane and flies off (paperplane.js), and the
 // form gives way to a "Sent." card.
-import { launchPlane } from './paperplane.js?v=86482b3f';
+import { launchPlane } from './paperplane.js?v=cce727bd';
+import { getIds, track } from './track.js?v=cce727bd';
 
 const ADDRESS = 'gabe@gabevandevere.com';
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -51,7 +52,8 @@ export function initContact() {
         e.preventDefault();
         const body = form.elements.body.value.trim();
         if (!body || busy) return;
-        const payload = { subject: form.elements.subject.value.trim(), body, from: form.elements.from.value.trim(), website: form.elements.website.value };
+        const payload = { subject: form.elements.subject.value.trim(), body, from: form.elements.from.value.trim(), website: form.elements.website.value, vid: getIds().vid };
+        track('contact', payload.subject.slice(0, 120));
         const request = fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }).then(async (res) => {
             const data = await res.json().catch(() => ({}));
             if (!res.ok) throw new Error(data.error || 'Sending failed.');

@@ -11,6 +11,7 @@ from email.message import EmailMessage
 from email.utils import formataddr
 
 import config
+import db
 
 _EMAIL = re.compile(r'^[^@\s]{1,64}@[^@\s]{1,190}\.[a-zA-Z]{2,}$')
 
@@ -42,26 +43,37 @@ def validate(payload: dict):
     return {'subject': subject, 'body': body, 'from': reply_to}, None
 
 
-def send(clean: dict, ip: str) -> str | None:
-    """Send the message; return None on success or a short error for the visitor."""
+def send_mail(to: str, subject: str, body: str, reply_to: str = '', kind: str = 'contact', ip: str = '', vid: str = '') -> str | None:
+    """Send one plain-text email through Zoho and record it in the emails table (sent or not).
+    Returns None on success or a short error for the visitor."""
     auth = creds()
+    err = None
     if not auth:
-        return 'Mail is not set up on this board yet. Email me directly instead.'
-    user, password = auth
-    msg = EmailMessage()
-    msg['From'] = formataddr(('gabevandevere.com', user))
-    msg['To'] = config.CONTACT_TO
-    msg['Subject'] = f'[site] {clean["subject"]}'
-    if clean['from']:
-        msg['Reply-To'] = clean['from']
+        err = 'Mail is not set up on this board yet. Email me directly instead.'
+    else:
+        user, password = auth
+        msg = EmailMessage()
+        msg['From'] = formataddr(('gabevandevere.com', user))
+        msg['To'] = to
+        msg['Subject'] = subject
+        if reply_to:
+            msg['Reply-To'] = reply_to
+        msg.set_content(body)
+        try:
+            with smtplib.SMTP_SSL(config.SMTP_HOST, config.SMTP_PORT, timeout=config.SMTP_TIMEOUT_S) as smtp:
+                smtp.login(user, password)
+                smtp.send_message(msg)
+        except (smtplib.SMTPException, OSError) as exc:
+            print(f'mail FAILED {type(exc).__name__}: {exc}', flush=True)
+            err = 'Sending failed on my end. Email me directly instead.'
+    db.x('INSERT INTO emails (ts, kind, to_addr, reply_to, subject, body, ip, vid, ok, error) VALUES (?,?,?,?,?,?,?,?,?,?)',
+         (db.now(), kind, to, reply_to, subject, body, ip, vid, 0 if err else 1, err))
+    if err is None:
+        print(f'mail sent kind={kind} to={to} subj={subject[:60]!r}', flush=True)
+    return err
+
+
+def send(clean: dict, ip: str, vid: str = '') -> str | None:
+    """Contact-form message -> Gabe, with the visitor's address as Reply-To."""
     footer = f'\n\n--\nfrom: {clean["from"] or "(no address given)"}\nip: {ip}\nsent: {time.strftime("%Y-%m-%d %H:%M:%S %Z")}'
-    msg.set_content(clean['body'] + footer)
-    try:
-        with smtplib.SMTP_SSL(config.SMTP_HOST, config.SMTP_PORT, timeout=config.SMTP_TIMEOUT_S) as smtp:
-            smtp.login(user, password)
-            smtp.send_message(msg)
-    except (smtplib.SMTPException, OSError) as exc:
-        print(f'mail FAILED {type(exc).__name__}: {exc}', flush=True)
-        return 'Sending failed on my end. Email me directly instead.'
-    print(f'mail sent from={clean["from"] or "-"} subj={clean["subject"][:60]!r}', flush=True)
-    return None
+    return send_mail(config.CONTACT_TO, f'[site] {clean["subject"]}', clean['body'] + footer, reply_to=clean['from'], kind='contact', ip=ip, vid=vid)
