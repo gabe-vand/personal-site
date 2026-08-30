@@ -42,6 +42,6 @@ nav hold in `10-nav.html` plus the import in `main.js`.
 ## Deferred
 
 - Contact form sending: code is live (`POST /api/contact` → `api/mail.py` → Zoho SMTP), but
-  it sends only once `/etc/site-api/smtp` exists (SMTP_USER + SMTP_PASS = Zoho app password).
+  it sends only once `~/.config/site-api/smtp` exists (SMTP_USER + SMTP_PASS = Zoho app password).
   Until then the form shows "Mail is not set up on this board yet" with the address.
 - Cloudflare cache purge on deploy (images are edge-cached for a day).

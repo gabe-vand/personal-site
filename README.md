@@ -88,7 +88,7 @@ Caddy forwards `/api/*` to `api/server.py` and strips the prefix.
 - `GET /api/status` — board telemetry: temperatures, INA3221 power rails, GPU load,
   memory, uptime, llama.cpp token counters, model info. Cached 2 s.
 - `POST /api/contact` — `{"subject","body","from"?}` → emails Gabe via Zoho SMTP (`api/mail.py`);
-  creds in `/etc/site-api/smtp`; 3 per IP per hour, 40 per day.
+  creds in `~/.config/site-api/smtp`; 3 per IP per hour, 40 per day.
 - `POST /api/chat` — `{"messages":[{"role":"user","content":"..."}]}` → server-sent
   events (`status`, `token`…, `done` with real tokens/s). The system prompt from
   `persona.py` is added server-side; it is about Gabe, not the hardware (the panel shows that).

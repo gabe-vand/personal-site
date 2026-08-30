@@ -39,11 +39,11 @@ HOSTNAME = 'orin'
 BOARD = 'NVIDIA Jetson Orin Nano Super (8 GB)'
 
 # Contact form (api/mail.py). Zoho SMTP with the site's own mailbox; secret file is
-# KEY=VALUE lines (SMTP_USER, SMTP_PASS), owned root:oracle-llm 640 like the LLM key.
+# KEY=VALUE lines (SMTP_USER, SMTP_PASS), mode 600 in ~/.config/site-api.
 SMTP_HOST = 'smtp.zoho.com'
 SMTP_PORT = 465
 SMTP_TIMEOUT_S = 20
-SMTP_SECRET_PATH = '/etc/site-api/smtp'
+SMTP_SECRET_PATH = '/home/gabevandevere/.config/site-api/smtp'
 CONTACT_TO = 'gabe@gabevandevere.com'
 CONTACT_MAX_SUBJECT = 120
 CONTACT_MAX_BODY = 2000
