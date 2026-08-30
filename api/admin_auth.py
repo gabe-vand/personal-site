@@ -54,7 +54,11 @@ def login(email: str, password: str, code: str, ip: str, ua: str):
     """Returns (token, None) on success or (None, error). Always takes >= 0.5 s on failure."""
     started = time.monotonic()
     sec = _secret()
-    ok = bool(sec) and not locked(ip)
+    if locked(ip):
+        # Do NOT record this as another failure: a lockout must expire on its own, not renew itself while the user retries.
+        time.sleep(0.5)
+        return None, 'Too many attempts. Try again in 15 minutes.'
+    ok = bool(sec)
     if ok:
         want_email = sec.get('ADMIN_EMAIL', '')
         ok = hmac.compare_digest(email.strip().lower().encode(), want_email.lower().encode())
