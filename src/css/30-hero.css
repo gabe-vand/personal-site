@@ -7,7 +7,7 @@
 .hero-line { display: block; }
 .hero-line:nth-child(2) { font-style: italic; padding-left: 0.08em; color: var(--chalk); }
 .hero-lede { max-width: 38rem; font-size: clamp(1.15rem, 1rem + 0.8vw, 1.5rem); line-height: 1.38; margin: 0 0 2.5rem; }
-.hero-lede em { font-family: var(--serif); font-style: italic; font-size: 1.3em; line-height: 0; color: var(--tape); }
+.hero-lede em { font-family: var(--serif); font-style: italic; font-size: 1.3em; line-height: 0; color: var(--tape); white-space: nowrap; }
 .hero-cue { margin: 0; }
 .hero-cue a { text-decoration: none; color: var(--chalk-dim); display: inline-flex; align-items: center; gap: 0.6rem; }
 .hero-cue a:hover { color: var(--chalk); }
