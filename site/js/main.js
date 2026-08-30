@@ -1,13 +1,13 @@
 // Entry point. Every feature is its own module and guards its own DOM, so deleting a
 // section from src/page/ never breaks the rest of the page.
-import { initTelemetry } from './telemetry.js?v=711b71ca';
-import { initContour } from './contour.js?v=711b71ca';
-import { initTopo } from './topo.js?v=711b71ca';
-import { initTicker } from './ticker.js?v=711b71ca';
-import { initChat } from './chat.js?v=711b71ca';
-import { initChalk } from './chalk.js?v=711b71ca';
-import { initReveal, initKonami } from './reveal.js?v=711b71ca';
-import { initContact } from './contact.js?v=711b71ca';
+import { initTelemetry } from './telemetry.js?v=f6ac9f60';
+import { initContour } from './contour.js?v=f6ac9f60';
+import { initTopo } from './topo.js?v=f6ac9f60';
+import { initTicker } from './ticker.js?v=f6ac9f60';
+import { initChat } from './chat.js?v=f6ac9f60';
+import { initChalk } from './chalk.js?v=f6ac9f60';
+import { initReveal, initKonami } from './reveal.js?v=f6ac9f60';
+import { initContact } from './contact.js?v=f6ac9f60';
 
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 document.documentElement.classList.add('has-js');

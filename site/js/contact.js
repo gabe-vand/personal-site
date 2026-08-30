@@ -1,8 +1,8 @@
 // Contact form. POSTs to /api/contact; the board emails Gabe through its own mailbox
 // (api/mail.py). The "website" field is a honeypot: hidden from people, filled by bots.
 // On send the button folds itself into a paper plane (fold.js) which then flies off (plane.js).
-import { foldButton, unfoldButton } from './fold.js?v=711b71ca';
-import { flyPlane } from './plane.js?v=711b71ca';
+import { foldButton, unfoldButton } from './fold.js?v=f6ac9f60';
+import { flyPlane } from './plane.js?v=f6ac9f60';
 
 const ADDRESS = 'gabe@gabevandevere.com';
 const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -23,9 +23,9 @@ export function initContact() {
     async function takeOff() {
         if (reduced()) return;
         await foldButton(button);
-        const dart = button.querySelector('.send-plane i'); // where the folded plane actually is (rotation + hop)
+        // Launch from where the folded dart actually is (rotation + hop) BEFORE hiding it: flyPlane measures on call.
+        flyPlane(button.querySelector('.send-plane i'), -45);
         button.classList.add('is-away');
-        flyPlane(dart, -45);
         await wait(1600);
     }
     // Dev only: run the fold + flight without sending anything.
