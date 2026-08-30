@@ -4,6 +4,8 @@ Gabe once a conversation has been idle for CONVO_IDLE_NOTIFY_S, with the whole t
 link to it in the admin UI, at most once per conversation."""
 import threading
 import time
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 import bots
 import config
@@ -40,10 +42,10 @@ def _notify(c: dict):
     sess = db.one('SELECT * FROM sessions WHERE sid=?', (c['sid'],)) if c['sid'] else None
     vis = db.one('SELECT * FROM visitors WHERE vid=?', (c['vid'],)) if c['vid'] else None
     first = db.one('SELECT content FROM messages WHERE conv_id=? AND role=? ORDER BY id LIMIT 1', (c['id'], 'user'))
-    when = time.strftime('%Y-%m-%d %H:%M', time.localtime(c['start_ts']))
+    when = datetime.fromtimestamp(c['start_ts'], ZoneInfo('America/New_York')).strftime('%a %b %-d, %Y %-I:%M %p %Z')
     info = [
         f"When: {when} ({c['turns']} exchange{'s' if c['turns'] != 1 else ''})",
-        f"From: {c.get('loc') or c['country'] or '?'} · {c['ip'] or '?'} · {bots.describe(c['ua'])}",
+        f"From: {c.get('loc') or c['country'] or '?'} · {bots.describe(c['ua'])}",  # IP stays in the dashboard, not in mail
     ]
     if vis:
         info.append(f"Visitor: seen {vis['sessions']} session(s) since {time.strftime('%Y-%m-%d', time.localtime(vis['first_ts']))}")

@@ -9,6 +9,8 @@ import re
 import smtplib
 import threading
 import time
+from datetime import datetime
+from zoneinfo import ZoneInfo
 from email.message import EmailMessage
 from email.utils import formataddr, make_msgid
 
@@ -100,7 +102,12 @@ def _tidy_sent(user: str, password: str, msgid: str):
             return
 
 
+def eastern_now() -> str:
+    return datetime.now(ZoneInfo('America/New_York')).strftime('%a %b %-d, %Y %-I:%M %p %Z')
+
+
 def send(clean: dict, ip: str, vid: str = '') -> str | None:
     """Contact-form message -> Gabe, with the visitor's address as Reply-To."""
-    footer = f'\n\n--\nfrom: {clean["from"] or "(no address given)"}\nip: {ip}\nsent: {time.strftime("%Y-%m-%d %H:%M:%S %Z")}'
+    # No IP here: it would ride along in every reply. The admin's Emails tab keeps it.
+    footer = f'\n\n--\nreply to: {clean["from"] or "(no address given)"}\nsent: {eastern_now()}'
     return send_mail(config.CONTACT_TO, f'[site] {clean["subject"]}', clean['body'] + footer, reply_to=clean['from'], kind='contact', ip=ip, vid=vid)
