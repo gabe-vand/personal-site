@@ -15,13 +15,13 @@
 <link rel="preload" href="/fonts/instrument-serif-normal-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/instrument-serif-italic-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/instrument-sans-normal-400-700.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/style.css?v=38fb59b4">
+<link rel="stylesheet" href="/style.css?v=664c061b">
 <meta property="og:title" content="Gabe Vandevere">
 <meta property="og:description" content="Writes code. Runs a language model on a board the size of a paperback, and that board is serving this page.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://gabevandevere.com/">
 <meta property="og:image" content="https://gabevandevere.com/favicon-512.png">
-<script type="module" src="/js/main.js?v=38fb59b4"></script>
+<script type="module" src="/js/main.js?v=664c061b"></script>
 </head>
 <body>
 <a class="skip" href="#machine">Skip to content</a>
@@ -150,6 +150,14 @@
     <p id="contact-note" class="contact-note mono" role="status" hidden></p>
     <button type="button" id="test-plane" class="btn btn-dev">test plane (dev)</button>
   </form>
+
+  <!-- Shown in place of the form once a message has gone through (js/contact.js). -->
+  <div class="contact-sent" id="contact-sent" hidden>
+    <svg class="sent-check" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="21"/><path d="M14 25 L21 32 L34 17"/></svg>
+    <h3 class="sent-title">Sent.</h3>
+    <p class="sent-body">It just landed in my inbox<span id="sent-reply"></span>. I read everything &mdash; I&rsquo;ll write back.</p>
+    <button type="button" class="btn" id="sent-again">Send another &rarr;</button>
+  </div>
 
   <p class="contact-alt">Or the plain way: <a href="mailto:gabe@gabevandevere.com">gabe@gabevandevere.com</a> &middot; <a href="https://www.linkedin.com/in/gabe-vandevere-96aa1628b/" rel="me noopener" target="_blank">LinkedIn</a></p>
 </section>

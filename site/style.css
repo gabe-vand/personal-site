@@ -251,6 +251,17 @@ p { margin: 0 0 1.1em; max-width: var(--measure); }
 .btn-dev { justify-self: start; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.1em; opacity: 0.5; }
 .contact-note { margin: 0; color: var(--tape); font-size: 0.8rem; }
 .contact-note.is-ok { color: var(--chalk); }
+.contact-form.is-hidden { display: none; }
+.contact-sent { max-width: 40rem; padding: 1.6rem 1.8rem; border: 1px solid var(--tape); border-radius: 14px; background: var(--stone-2); display: grid; grid-template-columns: auto 1fr; gap: 0.4rem 1.2rem; align-items: center; animation: sent-in 0.6s var(--ease-out) both; }
+.sent-check { width: 3rem; height: 3rem; grid-row: 1 / 3; fill: none; stroke: var(--tape); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.sent-check circle { stroke-dasharray: 132; stroke-dashoffset: 132; animation: draw 0.7s var(--ease-out) 0.1s forwards; }
+.sent-check path { stroke-dasharray: 30; stroke-dashoffset: 30; animation: draw 0.4s var(--ease-out) 0.6s forwards; }
+.sent-title { font-family: var(--serif); font-weight: 400; font-size: 2.2rem; line-height: 1; margin: 0; }
+.sent-body { margin: 0; color: var(--chalk-dim); }
+.contact-sent .btn { grid-column: 2; justify-self: start; margin-top: 0.8rem; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes sent-in { from { opacity: 0; transform: translateY(10px); } }
+@media (prefers-reduced-motion: reduce) { .contact-sent, .sent-check circle, .sent-check path { animation: none; stroke-dashoffset: 0; } }
 .contact-alt { color: var(--chalk-dim); margin: 1.8rem 0 0; }
 
 /* Paper airplane (js/plane.js): fixed SVG overlay above everything but the grain. */

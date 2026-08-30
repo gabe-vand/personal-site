@@ -23,6 +23,14 @@
     <button type="button" id="test-plane" class="btn btn-dev">test plane (dev)</button>
   </form>
 
+  <!-- Shown in place of the form once a message has gone through (js/contact.js). -->
+  <div class="contact-sent" id="contact-sent" hidden>
+    <svg class="sent-check" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="21"/><path d="M14 25 L21 32 L34 17"/></svg>
+    <h3 class="sent-title">Sent.</h3>
+    <p class="sent-body">It just landed in my inbox<span id="sent-reply"></span>. I read everything &mdash; I&rsquo;ll write back.</p>
+    <button type="button" class="btn" id="sent-again">Send another &rarr;</button>
+  </div>
+
   <p class="contact-alt">Or the plain way: <a href="mailto:gabe@gabevandevere.com">gabe@gabevandevere.com</a> &middot; <a href="https://www.linkedin.com/in/gabe-vandevere-96aa1628b/" rel="me noopener" target="_blank">LinkedIn</a></p>
 </section>
 </main>
