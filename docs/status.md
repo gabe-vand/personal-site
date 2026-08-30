@@ -17,6 +17,7 @@ Last updated: 2026-08-29 (evening: page reduced to machine + contact).
 | Machine: streaming chat with the on-device model | `60-machine.html`, `js/chat.js`, `api/` | done; each exchange is logged (truncated) to `journalctl --user -u site-api` for review |
 | Machine: live telemetry panel with power sparkline | `js/telemetry.js`, `api/telemetry.py` | done |
 | Send it: one SVG group folds the button into a dart, morphs and flies a loop on a breeze; Sent card replaces the form; tags plane-v2-breeze / plane-v3-fold / plane-v4-svg | `site/js/paperplane.js` | done |
+| About strip (crawlable bio + facts) between ticker and machine; title lengthened for Bing; IndexNow ping in deploy.sh (key in `.indexnow-key`, file `site/<key>.txt`) | `src/page/30-about.html`, `src/css/35-about.css` | done |
 | GEO: `src/facts.json` → JSON-LD (Person, WebSite, FAQPage) in the head + `/llms.txt`, both generated at build (`build_facts.py`); nothing rendered. Keep in step with `api/persona.py` | `src/facts.json` | done |
 | Production hygiene: http→https and www→apex 301s in Caddy, HSTS, canonical, full OG/Twitter metadata with 1200×630 `og.png` (re-render: `python3 logs/shots/og.py` with `logs/shots/og.html`), sitemap lastmod, Porkbun DNS leftovers removed | `Caddyfile`, `src/page/00-head.html` | done |
 | Machine: panel speed = rolling avg of last 20 answers (persisted in `~/.local/state/site-api/tps`), seeded 10.6 tok/s | `api/speed.py` | done |

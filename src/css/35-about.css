@@ -1,0 +1,13 @@
+/* 00.5 / about: one paragraph and a fact list, sitting quietly between the ticker and the machine. */
+.about { padding-top: clamp(3rem, 7vh, 5rem); padding-bottom: clamp(1rem, 3vh, 2rem); }
+.about-grid { display: grid; grid-template-columns: minmax(0, 3fr) minmax(12rem, 1fr); gap: 2rem 4rem; align-items: start; }
+.about-lede { max-width: 44rem; font-size: clamp(1.1rem, 1rem + 0.5vw, 1.35rem); line-height: 1.5; margin: 0; color: var(--chalk-dim); }
+.about-lede strong { font-weight: 600; color: var(--chalk); }
+.about-facts { list-style: none; margin: 0.4rem 0 0; padding: 0; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--chalk-dim); }
+.about-facts li { padding: 0.55rem 0; border-top: 1px solid var(--stone-3); }
+.about-facts li:last-child { border-bottom: 1px solid var(--stone-3); }
+@media (max-width: 760px) {
+    .about-grid { grid-template-columns: minmax(0, 1fr); gap: 1.6rem; }
+    .about-facts { display: flex; flex-wrap: wrap; gap: 0.4rem 1.4rem; }
+    .about-facts li, .about-facts li:last-child { border: 0; padding: 0; }
+}

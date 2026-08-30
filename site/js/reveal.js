@@ -1,8 +1,8 @@
 // Scroll reveals (added only when JS runs, so nothing is hidden without it) and the
 // Konami code, which flips the page into MAXN_SUPER mode.
-import { burst } from './chalk.js?v=b2502c20';
+import { burst } from './chalk.js?v=7a1ec138';
 
-const REVEAL = '.pitch-head, .machine-intro, .chat, .telemetry, .contact-form, .contact-alt';
+const REVEAL = '.about-lede, .about-facts, .pitch-head, .machine-intro, .chat, .telemetry, .contact-form, .contact-alt';
 const CODE = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
 
 export function initReveal(reduced) {
