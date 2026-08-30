@@ -94,7 +94,7 @@ class Handler(BaseHTTPRequestHandler):
             return self.send_json(429, {'error': 'That is enough messages for now. Email me directly instead.'})
         err = mail.send(clean, self.client_ip())
         if err:
-            return self.send_json(502, {'error': err})
+            return self.send_json(500, {'error': err})  # not 502/503: Cloudflare replaces those bodies
         self.send_json(200, {'ok': True})
 
     def stream_answer(self, history):
