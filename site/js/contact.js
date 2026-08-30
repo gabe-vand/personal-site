@@ -1,9 +1,8 @@
 // Contact form. POSTs to /api/contact; the board emails Gabe through its own mailbox
 // (api/mail.py). The "website" field is a honeypot: hidden from people, filled by bots.
 // On send the button folds itself into a paper plane and flies off (paperplane.js), and the
-// form gives way to a "Sent." card. The dev "test plane" button runs the identical
-// success path with a fake request, so the whole experience can be checked without emailing.
-import { launchPlane } from './paperplane.js?v=cbb02902';
+// form gives way to a "Sent." card.
+import { launchPlane } from './paperplane.js?v=b2502c20';
 
 const ADDRESS = 'gabe@gabevandevere.com';
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -64,9 +63,5 @@ export function initContact() {
         form.classList.remove('is-hidden');
         label.textContent = 'Send it →';
         form.elements.subject.focus();
-    });
-    // Dev only: identical to a successful send, minus the email.
-    document.getElementById('test-plane')?.addEventListener('click', () => {
-        if (!busy) send(wait(400), form.elements.from.value.trim());
     });
 }

@@ -16,7 +16,7 @@ Last updated: 2026-08-29 (evening: page reduced to machine + contact).
 | Ticker with live uptime / GPU temp / watts / token count | `20-hero.html`, `js/ticker.js` | done |
 | Machine: streaming chat with the on-device model | `60-machine.html`, `js/chat.js`, `api/` | done; each exchange is logged (truncated) to `journalctl --user -u site-api` for review |
 | Machine: live telemetry panel with power sparkline | `js/telemetry.js`, `api/telemetry.py` | done |
-| Send it: one SVG group folds the button into a dart, morphs and flies a loop on a breeze; Sent card replaces the form; dev "test plane" button (remove later); tags plane-v2-breeze / plane-v3-fold / plane-v4-svg | `site/js/paperplane.js` | done |
+| Send it: one SVG group folds the button into a dart, morphs and flies a loop on a breeze; Sent card replaces the form; tags plane-v2-breeze / plane-v3-fold / plane-v4-svg | `site/js/paperplane.js` | done |
 | Machine: panel speed = rolling avg of last 20 answers (persisted in `~/.local/state/site-api/tps`), seeded 10.6 tok/s | `api/speed.py` | done |
 | Top out: chalk burst on reaching the contact section | `js/chalk.js` | done |
 | Contact: mailto form to gabe@gabevandevere.com | `70-contact.html`, `js/contact.js` | done |
