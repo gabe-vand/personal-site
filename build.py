@@ -13,6 +13,7 @@ over 200 lines, which is the house rule for this repo.
 """
 from pathlib import Path
 import hashlib
+import re
 import sys
 import time
 
@@ -47,14 +48,29 @@ def lint_line_counts() -> int:
     return over
 
 
+IMPORT_V = re.compile(r"(from\s+')(\./[\w-]+\.js)(?:\?v=\w+)?(')")
+
+
+def stamp_imports(js_files, version: str) -> None:
+    """Rewrite `from './x.js'` to `from './x.js?v=HASH'` in place (idempotent) so browsers and
+    Cloudflare fetch fresh modules after a change. Only main.js is versioned by the HTML."""
+    for path in js_files:
+        text = path.read_text(encoding='utf-8')
+        new = IMPORT_V.sub(rf"\1\2?v={version}\3", text)
+        if new != text:
+            path.write_text(new, encoding='utf-8')
+
+
 def main() -> int:
     pages, html = concat('page', '.html')
     css_parts, css = concat('css', '.css')
     if not pages or not css_parts:
         print('refusing to build: src/page or src/css is empty, which would blank the live site')
         return 1
-    js_text = ''.join(p.read_text(encoding='utf-8') for p in sorted((SITE / 'js').glob('*.js')))
+    js_files = sorted((SITE / 'js').glob('*.js'))
+    js_text = ''.join(IMPORT_V.sub(r"\1\2\3", p.read_text(encoding='utf-8')) for p in js_files)
     version = short_hash(css + js_text)
+    stamp_imports(js_files, version)
     html = html.replace('{{BUILD_DATE}}', time.strftime('%Y-%m-%d')).replace('{{V}}', version)
     first, _, rest = html.partition('\n')
     if first.lower().startswith('<!doctype'):
