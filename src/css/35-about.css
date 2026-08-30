@@ -1,5 +1,6 @@
 /* 00.5 / about: one paragraph and a fact list, sitting quietly between the ticker and the machine. */
-.about { padding-top: clamp(3rem, 7vh, 5rem); padding-bottom: clamp(1rem, 3vh, 2rem); }
+.about { padding-top: clamp(3rem, 7vh, 5rem); padding-bottom: 0; }
+.about + .machine { padding-top: clamp(2rem, 4vh, 3rem); }
 .about-grid { display: grid; grid-template-columns: minmax(0, 3fr) minmax(12rem, 1fr); gap: 2rem 4rem; align-items: start; }
 .about-lede { max-width: 44rem; font-size: clamp(1.1rem, 1rem + 0.5vw, 1.35rem); line-height: 1.5; margin: 0; color: var(--chalk-dim); }
 .about-lede strong { font-weight: 600; color: var(--chalk); }
