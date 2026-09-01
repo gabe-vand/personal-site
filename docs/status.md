@@ -2,7 +2,7 @@
 
 Living status page for gabevandevere.com. Updated with every change.
 
-Last updated: 2026-08-29 (evening: page reduced to machine + contact).
+Last updated: 2026-09-01 (repo scrubbed, mirrored to GitHub).
 
 ## Live
 
@@ -11,6 +11,7 @@ Last updated: 2026-08-29 (evening: page reduced to machine + contact).
 | Serving: Caddy → Cloudflare Tunnel, loopback-only, security headers, CSP | `Caddyfile` | done |
 | Build: partials → `index.html`/`style.css`, `?v=` cache busting, 200-line lint | `build.py` | done |
 | Deploy: one command, smoke-tests local + live, commits, mirrors to GitHub (`gabe-vand/personal-site`, deploy key on the orin; push failure warns, never blocks) | `deploy.sh`, skill `deploy-site` | done |
+| Public repo hygiene: history rewritten 2026-09-01 to drop infrastructure notes, logs and caches; `deploy.sh` refuses runtime files and secret-shaped text; private notes live in `logs/private/` (gitignored) | `deploy.sh`, `.gitignore` | done |
 | Hero with drifting contour field that bends around the pointer | `20-hero.html`, `js/contour.js` | done |
 | Topo-route navigation (chalk line fills with scroll; bottom bar on phones) | `10-nav.html`, `js/topo.js` | done |
 | Ticker with live uptime / GPU temp / watts / token count | `20-hero.html`, `js/ticker.js` | done |
@@ -31,15 +32,12 @@ Last updated: 2026-08-29 (evening: page reduced to machine + contact).
 
 ## Archived (built, working, not on the page)
 
-Retired on 2026-08-29 while the page is being rethought. Everything lives in `src/archive/`
-and comes back by moving the files into `src/page/`, `src/css/`, `site/js/` and re-adding a
-nav hold in `10-nav.html` plus the import in `main.js`.
-
-| Section | Files |
-|---|---|
-| Climb: V-scale ladder, send log | `page/30-climb.html`, `css/40-climb.css`, `js/ladder.js`, `img/climb-*.svg` |
-| Lift: load-the-bar barbell, presets | `page/40-lift.html`, `css/50-lift.css`, `js/barbell.js`, `img/lift-1.svg` |
-| Build: tilting project cards | `page/50-code.html`, `css/60-code.css`, `js/tilt.js`, `img/project-*.svg` |
+Climb (V-scale ladder, send log), Lift (load-the-bar barbell) and Build (tilting project cards)
+were retired on 2026-08-29 and removed from the tree on 2026-09-01 to keep the public repo lean.
+They are in history: `git log --oneline -- src/archive` finds the last commit that had them and
+`git checkout <that-commit>^ -- src/archive` restores the folder. To bring one back, move its files
+into `src/page/`, `src/css/`, `site/js/`, then re-add the nav hold in `10-nav.html` and the import
+in `main.js`.
 
 ## Placeholders waiting on Gabe
 
@@ -48,7 +46,4 @@ nav hold in `10-nav.html` plus the import in `main.js`.
 
 ## Deferred
 
-- Contact form sending: code is live (`POST /api/contact` → `api/mail.py` → Zoho SMTP), but
-  it sends only once `~/.config/site-api/smtp` exists (SMTP_USER + SMTP_PASS = Zoho app password).
-  Until then the form shows "Mail is not set up on this board yet" with the address.
 - Cloudflare cache purge on deploy (images are edge-cached for a day).

@@ -11,3 +11,14 @@ caddy/data/
 caddy/config/
 .deploy-state
 logs/
+
+# python
+__pycache__/
+*.pyc
+
+# rotated logs, databases, git bundles — runtime artefacts, never source
+*.log.gz
+access-*
+*.db
+*.sqlite*
+*.bundle

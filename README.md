@@ -1,6 +1,6 @@
 # gabevandevere.com
 
-A hand-written site served by Caddy from this machine (`orin`, a Jetson Orin
+A hand-written site served by Caddy from this machine (the orin, a Jetson Orin
 Nano Super) and reached through an outbound-only Cloudflare Tunnel. The "machine"
 section talks to the local LLM (`llama.cpp` on :8080) through a small Python proxy
 that holds the API key. No framework, no `node_modules`, no cloud AI.
@@ -27,7 +27,7 @@ gabevandevere.com/
 │   ├── config.py      <- limits, token caps, ports
 │   └── server.py, chat.py, telemetry.py, limits.py
 ├── Caddyfile          <- web server config
-└── docs/              <- status page, deployment research
+└── docs/              <- status page
 ```
 
 ## The editing loop
@@ -46,7 +46,6 @@ That's it. `deploy.sh` rebuilds, validates and reloads Caddy, restarts the API o
 |---|---|
 | The intro sentence | `src/page/20-hero.html` (the `.hero-lede` paragraph) |
 | Suggested questions for the model | `src/page/60-machine.html` (the `.chip` buttons) |
-| Bring back a retired section (climb, lift, build) | move it from `src/archive/` back into `src/page/`, `src/css/`, `site/js/` (and re-add the nav hold + `main.js` import) |
 | What the model knows / how it talks | `api/persona.py` |
 | Facts for search/answer engines (JSON-LD + /llms.txt) | `src/facts.json` — edit, rebuild; keep in step with `api/persona.py` |
 | Link-preview card (og.png) | `logs/shots/og.html` + `og.css`, render with `python3 logs/shots/og.py` (needs Caddy up) |
@@ -63,6 +62,23 @@ Every spot with placeholder content is marked `<!-- EDIT -->`.
 - No inline `style=""` attributes: the Content-Security-Policy is `style-src 'self'`.
   Styles go in `src/css/`; JS may set `el.style.x` (that's allowed).
 - Documentation lives in `docs/` and `docs/status.md` is updated with every change.
+
+## What lives outside the repo
+
+Secrets and runtime state are never committed. A working clone needs, on the box:
+
+| Path | Holds |
+|---|---|
+| `/etc/oracle-llm/api-key` | llama.cpp bearer key (readable by group `oracle-llm`) |
+| `~/.config/site-api/smtp` | `SMTP_USER` / `SMTP_PASS` for Zoho, mode 0600 |
+| `~/.config/site-api/admin` | admin login: scrypt hash, salt, TOTP secret, mode 0600 |
+| `~/.config/site-api/cf-token`, `cf-token-read` | Cloudflare API tokens (zone admin / Analytics: Read) |
+| `~/.local/state/site-api/` | SQLite analytics db and the tok/s cache |
+| `~/.ssh/id_ed25519` | deploy key with write access to the GitHub mirror |
+| `logs/` | screenshots, headless-browser scripts, private notes (gitignored) |
+
+`deploy.sh` refuses to commit logs, databases, caches, or anything shaped like a token or
+private key. Infrastructure notes go in `logs/private/`, never in `docs/`.
 
 ## Running it
 

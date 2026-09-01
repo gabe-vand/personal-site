@@ -49,6 +49,11 @@ ok "live https://gabevandevere.com"
 
 if [ "${1:-}" != "" ]; then
     git add -A
+    # The repo is public: refuse runtime artefacts and anything shaped like a credential.
+    bad=$(git diff --cached --name-only | grep -E '\.(log|gz|db|sqlite3?|pyc|bundle)$|(^|/)__pycache__/|^access-' || true)
+    [ -z "$bad" ] || fail "refusing to commit runtime files: $bad"
+    bad=$(git diff --cached -U0 | grep -E '^\+' | grep -oE 'cfut_[A-Za-z0-9]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----|(SMTP_PASS|ADMIN_HASH|ADMIN_SALT|TOTP_SECRET)=[^ "{}$]{6,}' || true)
+    [ -z "$bad" ] || fail "refusing to commit secret-looking text: $bad"
     if git diff --cached --quiet; then
         ok "nothing to commit"
     else
