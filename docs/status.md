@@ -10,7 +10,7 @@ Last updated: 2026-08-29 (evening: page reduced to machine + contact).
 |---|---|---|
 | Serving: Caddy → Cloudflare Tunnel, loopback-only, security headers, CSP | `Caddyfile` | done |
 | Build: partials → `index.html`/`style.css`, `?v=` cache busting, 200-line lint | `build.py` | done |
-| Deploy: one command, smoke-tests local + live, commits | `deploy.sh`, skill `deploy-site` | done |
+| Deploy: one command, smoke-tests local + live, commits, mirrors to GitHub (`gabe-vand/personal-site`, deploy key on the orin; push failure warns, never blocks) | `deploy.sh`, skill `deploy-site` | done |
 | Hero with drifting contour field that bends around the pointer | `20-hero.html`, `js/contour.js` | done |
 | Topo-route navigation (chalk line fills with scroll; bottom bar on phones) | `10-nav.html`, `js/topo.js` | done |
 | Ticker with live uptime / GPU temp / watts / token count | `20-hero.html`, `js/ticker.js` | done |

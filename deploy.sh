@@ -56,6 +56,16 @@ if [ "${1:-}" != "" ]; then
     fi
 fi
 
+# Mirror to GitHub. Never fails the deploy — the site is already live; a push
+# that can't reach GitHub is a warning, not a rollback.
+if git remote get-url origin >/dev/null 2>&1; then
+    if git push -q origin master 2>/dev/null; then
+        ok "pushed to github"
+    else
+        printf 'WARN  github push failed (offline, or deploy key not authorized yet)\n'
+    fi
+fi
+
 # IndexNow: tell Bing (and engines that share the protocol) the homepage changed, so it is
 # re-crawled within hours instead of whenever. The key file at site/<key>.txt proves we own
 # the domain. Never fails the deploy; a 200/202 is success.
