@@ -52,7 +52,7 @@ def _request_findings(since: float, admin_ips: set) -> list:
             a['search'] = (r['bot'], r['ua'])  # verify the first crawler name this address claimed
         elif r['klass'] == 'ai':
             a['ai'].add(r['bot'])
-    out, budget, by_bot = [], [crawler_verify.MAX_LOOKUPS_PER_CALL], defaultdict(list)
+    out, budget, by_bot, crawlers = [], [crawler_verify.MAX_LOOKUPS_PER_CALL], defaultdict(list), defaultdict(list)
     for ip, a in per_ip.items():
         if ip in admin_ips:
             continue  # the admin's own addresses: their traffic is Gabe testing, not a visitor
@@ -68,13 +68,19 @@ def _request_findings(since: float, admin_ips: set) -> list:
         if a['search']:
             verdict, host = crawler_verify.verify(ip, a['search'][1], budget)
             rule = {1: 'crawler_verified', 0: 'impostor', -1: 'crawler_unresolved', None: 'crawler_unverifiable'}[verdict]
-            out.append(_finding(rule, ip, a['where'], a['n'], a['first'], a['last'], sample=a['paths'], bot=a['search'][0], host=host))
+            if verdict in (1, None):  # genuine crawlers are summarised per vendor; suspects stay one card per address
+                crawlers[(rule, a['search'][0])].append((ip, host, a))
+            else:
+                out.append(_finding(rule, ip, a['where'], a['n'], a['first'], a['last'], sample=a['paths'], bot=a['search'][0], host=host))
         for bot in a['ai']:
             if not a['sens']:  # a scanner wearing an AI crawler's name is not an AI visit
                 by_bot[bot].append(a)
         if a['klass'] == 'tool' and ip != '127.0.0.1' and not a['search'] and not a['ai']:
             rule = 'net_scanner' if a['bot'] in _NET_SCANNERS else 'script'
             out.append(_finding(rule, ip, a['where'], a['n'], a['first'], a['last'], sample=a['paths'], bot=a['bot']))
+    for (rule, bot), hits in crawlers.items():
+        out.append(_finding(rule, bot, f"{len(hits)} address{'es' if len(hits) != 1 else ''}", sum(h[2]['n'] for h in hits), min(h[2]['first'] for h in hits),
+                            max(h[2]['last'] for h in hits), sample=[h[1] or h[0] for h in hits], bot=''))
     for bot, hits in by_bot.items():
         rule = 'ai_user_fetch' if 'user fetch' in bot else 'ai_crawler'
         out.append(_finding(rule, bot, f"{len(hits)} address{'es' if len(hits) != 1 else ''}", sum(h['n'] for h in hits),
