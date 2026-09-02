@@ -1,7 +1,7 @@
 // Security: admin login audit plus rule-based findings over the request log and chat.
 // Every finding shows the rule that fired and that rule's fixed explanation. No model anywhere.
-import { api } from './api.js?v=28c88bc3';
-import { el, table, when, num, tag, section, stat, ago } from './ui.js?v=28c88bc3';
+import { api } from './api.js?v=b09aa934';
+import { el, table, when, num, tag, section, stat, ago } from './ui.js?v=b09aa934';
 
 const SEVERITIES = ['high', 'medium', 'low', 'info'];
 const LABEL = { high: 'high', medium: 'medium', low: 'low', info: 'info · welcome' };
@@ -14,6 +14,7 @@ function card(f) {
         el('span', { class: 'actor', text: f.bot ? `${f.bot} · ${f.actor}` : f.actor }),
         el('span', { class: 'meta', text: `${f.where} · ${num(f.count)} ${f.count === 1 ? 'request' : 'requests'} · last ${ago(f.last_ts)}` }),
         f.host ? el('span', { class: 'meta', text: `rDNS ${f.host}` }) : null,
+        f.you ? el('span', { class: 'meta', text: 'this address later signed in: almost certainly you' }) : null,
         f.conv_id ? el('a', { href: `#conversation/${f.conv_id}`, class: 'back', text: 'open thread →' }) : null,
     ]);
     const sample = f.sample && f.sample.length ? el('div', { class: 'sample' }, f.sample.map((s) => el('span', { text: s }))) : null;
