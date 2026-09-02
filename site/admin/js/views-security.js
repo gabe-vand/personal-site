@@ -1,13 +1,13 @@
 // Security: admin login audit plus rule-based findings over the request log and chat.
 // Every finding shows the rule that fired and that rule's fixed explanation. No model anywhere.
-import { api } from './api.js?v=04c926f4';
-import { el, table, when, num, tag, section, stat, ago } from './ui.js?v=04c926f4';
+import { api } from './api.js?v=b09aa934';
+import { el, table, when, num, tag, section, stat, ago } from './ui.js?v=b09aa934';
 
 const SEVERITIES = ['high', 'medium', 'low', 'info'];
 const LABEL = { high: 'high', medium: 'medium', low: 'low', info: 'info · welcome' };
 let filter = 'all';
 
-function card(f, first) {
+function card(f) {
     const head = el('div', { class: 'finding-head' }, [
         el('span', { class: `sev ${f.severity}`, text: LABEL[f.severity] }),
         el('b', { text: f.title }),
@@ -18,9 +18,7 @@ function card(f, first) {
         f.conv_id ? el('a', { href: `#conversation/${f.conv_id}`, class: 'back', text: 'open thread →' }) : null,
     ]);
     const sample = f.sample && f.sample.length ? el('div', { class: 'sample' }, f.sample.map((s) => el('span', { text: s }))) : null;
-    // The rule's explanation is written out on the first card of its kind; later cards fold it behind a toggle.
-    const why = first ? el('p', { text: f.explain }) : el('details', { class: 'why' }, [el('summary', { text: 'why this matters' }), el('p', { text: f.explain })]);
-    return el('article', { class: `finding ${f.severity}` }, [head, why, sample]);
+    return el('article', { class: `finding ${f.severity}` }, [head, el('p', { text: f.explain }), sample]);
 }
 
 function filters(onChange) {
@@ -41,8 +39,7 @@ export async function security({ days }) {
     const list = el('div', { class: 'findings' });
     const draw = () => {
         const rows = d.findings.filter((f) => filter === 'all' || f.severity === filter);
-        const seen = new Set();
-        list.replaceChildren(...(rows.length ? rows.map((f) => card(f, !seen.has(f.rule) && seen.add(f.rule))) : [el('p', { class: 'muted mono', text: 'nothing in this window' })]));
+        list.replaceChildren(...(rows.length ? rows.map(card) : [el('p', { class: 'muted mono', text: 'nothing in this window' })]));
         bar.replaceWith((bar = filters(draw)));
     };
     let bar = filters(draw);

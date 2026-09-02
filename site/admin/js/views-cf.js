@@ -1,5 +1,5 @@
-import { api } from './api.js?v=04c926f4';
-import { el, table, num, bytes, section, stat, bars } from './ui.js?v=04c926f4';
+import { api } from './api.js?v=b09aa934';
+import { el, table, num, bytes, section, stat, bars } from './ui.js?v=b09aa934';
 
 export async function cloudflare({ days }) {
     const d = await api(`/cloudflare?days=${days || 90}`);
