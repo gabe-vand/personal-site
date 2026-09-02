@@ -1,13 +1,13 @@
 // Admin app: login gate + hash router. Views are modules that return a DOM node.
-import { api, AuthError } from './api.js?v=b09aa934';
-import { el } from './ui.js?v=b09aa934';
-import { overview } from './views-overview.js?v=b09aa934';
-import { humans, visitor } from './views-humans.js?v=b09aa934';
-import { ai } from './views-ai.js?v=b09aa934';
-import { conversations, conversation } from './views-convos.js?v=b09aa934';
-import { emails } from './views-emails.js?v=b09aa934';
-import { cloudflare } from './views-cf.js?v=b09aa934';
-import { security } from './views-security.js?v=b09aa934';
+import { api, AuthError } from './api.js?v=28c88bc3';
+import { el } from './ui.js?v=28c88bc3';
+import { overview } from './views-overview.js?v=28c88bc3';
+import { humans, visitor } from './views-humans.js?v=28c88bc3';
+import { ai } from './views-ai.js?v=28c88bc3';
+import { conversations, conversation } from './views-convos.js?v=28c88bc3';
+import { emails } from './views-emails.js?v=28c88bc3';
+import { cloudflare } from './views-cf.js?v=28c88bc3';
+import { security } from './views-security.js?v=28c88bc3';
 
 const $ = (id) => document.getElementById(id);
 const VIEWS = { overview, humans, visitor, ai, conversations, conversation, emails, cloudflare, security, audit: security };

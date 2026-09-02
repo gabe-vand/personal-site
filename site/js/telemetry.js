@@ -3,7 +3,7 @@
 // panel is near the viewport, every 20 s otherwise, never while the tab is hidden, and stops
 // altogether once the visitor has been idle (no pointer, key, scroll, touch) for 3 minutes;
 // the next interaction restarts it. A tab left open all day costs the board nothing.
-import { fmtUptime, fmtInt, fmtNum } from './format.js?v=b09aa934';
+import { fmtUptime, fmtInt, fmtNum } from './format.js?v=28c88bc3';
 
 const listeners = new Set();
 const power = [];

@@ -54,14 +54,12 @@ def _request_findings(since: float, admin_ips: set) -> list:
             a['ai'].add(r['bot'])
     out, budget, by_bot = [], [crawler_verify.MAX_LOOKUPS_PER_CALL], defaultdict(list)
     for ip, a in per_ip.items():
-        if ip in admin_ips:
-            continue  # the admin's own addresses: their traffic is Gabe testing, not a visitor
-        args = (ip, a['where'], a['nf'], a['first'], a['last'])
+        args = (ip, a['where'], a['n'], a['first'], a['last'])
         if a['sens']:
             out.append(_finding('scanner_exploit', *args, sample=a['sens']))
         elif a['nf'] >= 10:
             out.append(_finding('scanner_404', *args, sample=a['paths']))
-        if a['admin']:
+        if a['admin'] and ip not in admin_ips:
             out.append(_finding('admin_probe', ip, a['where'], a['admin'], a['first'], a['last'], sample=a['paths']))
         if a['limited']:
             out.append(_finding('rate_limited', ip, a['where'], len(a['limited']), a['first'], a['last'], sample=sorted(set(a['limited']))))
@@ -82,13 +80,12 @@ def _request_findings(since: float, admin_ips: set) -> list:
     return out
 
 
-def _login_findings(since: float, admin_ips: set) -> list:
+def _login_findings(since: float) -> list:
     out = []
     for r in db.q('SELECT ip, MAX(loc) AS loc, COUNT(*) AS n, MIN(ts) AS first, MAX(ts) AS last, GROUP_CONCAT(DISTINCT detail) AS emails '
                   'FROM audit WHERE action=? AND ts>? GROUP BY ip', ('login_fail', since)):
-        you = r['ip'] in admin_ips  # a typo from an address that later signed in is not an attack
-        sev = 'low' if you else 'high' if r['n'] >= 3 else 'medium'
-        out.append(_finding('login_fail', r['ip'], r['loc'] or '?', r['n'], r['first'], r['last'], sample=(r['emails'] or '').split(','), severity=sev, you=you))
+        sev = 'high' if r['n'] >= 3 else 'medium'
+        out.append(_finding('login_fail', r['ip'], r['loc'] or '?', r['n'], r['first'], r['last'], sample=(r['emails'] or '').split(','), severity=sev))
     return out
 
 
@@ -110,7 +107,7 @@ def _chat_findings(since: float) -> list:
 def report(days: int) -> dict:
     since = _since(days)
     admin_ips = {r['ip'] for r in db.q('SELECT DISTINCT ip FROM audit WHERE action=?', ('login_ok',))}
-    findings = _request_findings(since, admin_ips) + _login_findings(since, admin_ips) + _chat_findings(since)
+    findings = _request_findings(since, admin_ips) + _login_findings(since) + _chat_findings(since)
     findings.sort(key=lambda f: (R.ORDER[f['severity']], -f['last_ts']))
     counts = defaultdict(int)
     for f in findings:
