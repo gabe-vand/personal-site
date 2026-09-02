@@ -28,7 +28,6 @@ CREATE INDEX IF NOT EXISTS messages_conv ON messages(conv_id, ts);
 CREATE TABLE IF NOT EXISTS emails (id INTEGER PRIMARY KEY, ts REAL, kind TEXT, to_addr TEXT, reply_to TEXT, subject TEXT, body TEXT, ip TEXT, vid TEXT, ok INTEGER, error TEXT);
 CREATE TABLE IF NOT EXISTS admin_sessions (token_hash TEXT PRIMARY KEY, created_ts REAL, last_ts REAL, ip TEXT, ua TEXT);
 CREATE TABLE IF NOT EXISTS audit (id INTEGER PRIMARY KEY, ts REAL, ip TEXT, ua TEXT, action TEXT, detail TEXT);
-CREATE TABLE IF NOT EXISTS crawler_dns (ip TEXT PRIMARY KEY, host TEXT, verdict INTEGER, checked_ts REAL);
 """
 
 

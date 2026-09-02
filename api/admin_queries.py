@@ -97,3 +97,6 @@ def conversation(cid: int) -> dict | None:
     c['visitor'] = db.one('SELECT * FROM visitors WHERE vid=?', (c['vid'],)) if c['vid'] else None
     return c
 
+
+def audit(limit: int = 200) -> list:
+    return db.q('SELECT * FROM audit ORDER BY ts DESC LIMIT ?', (limit,))

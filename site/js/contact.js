@@ -2,8 +2,8 @@
 // (api/mail.py). The "website" field is a honeypot: hidden from people, filled by bots.
 // On send the button folds itself into a paper plane and flies off (paperplane.js), and the
 // form gives way to a "Sent." card.
-import { launchPlane } from './paperplane.js?v=28c88bc3';
-import { getIds, track } from './track.js?v=28c88bc3';
+import { launchPlane } from './paperplane.js?v=4e21be70';
+import { getIds, track } from './track.js?v=4e21be70';
 
 const ADDRESS = 'gabe@gabevandevere.com';
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));

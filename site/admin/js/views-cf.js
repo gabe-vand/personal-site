@@ -1,5 +1,5 @@
-import { api } from './api.js?v=28c88bc3';
-import { el, table, num, bytes, section, stat, bars } from './ui.js?v=28c88bc3';
+import { api } from './api.js?v=4e21be70';
+import { el, table, when, num, bytes, section, stat, bars } from './ui.js?v=4e21be70';
 
 export async function cloudflare({ days }) {
     const d = await api(`/cloudflare?days=${days || 90}`);
@@ -31,5 +31,17 @@ export async function cloudflare({ days }) {
             section('Countries (requests)', bars(d.countries)), section('Browsers (page views)', bars(d.browsers)), section('Edge status codes', bars(d.statuses)),
         ]),
         section('Per day', table(cols, d.days.slice().reverse())),
+    ]);
+}
+
+export async function audit() {
+    const d = await api('/audit');
+    const cols = [
+        { label: 'when', render: (r) => when(r.ts) }, { label: 'action', key: 'action' }, { label: 'from', render: (r) => `${r.loc || '?'} · ${r.ip}` }, { label: 'detail', key: 'detail' }, { label: 'user agent', key: 'ua' },
+    ];
+    return el('div', { class: 'view' }, [
+        el('h2', { text: 'Audit' }),
+        el('p', { class: 'muted', text: 'Every login attempt against this admin, successful or not. Five failures from one IP (or twenty from anywhere) in 15 minutes locks logins out for 15 minutes.' }),
+        section('Login attempts', table(cols, d.audit)),
     ]);
 }
