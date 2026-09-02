@@ -51,7 +51,7 @@ table.tbl { width: 100%; border-collapse: collapse; font-family: var(--mono); fo
 .tbl .tag { display: inline-block; padding: 0.1rem 0.45rem; border-radius: 999px; border: 1px solid var(--stone-4); color: var(--chalk-dim); font-size: 0.66rem; }
 .tbl .tag.ai { color: var(--ice); border-color: var(--ice); }
 .tbl .tag.search { color: var(--chalk); }
-.tbl .tag.ok { color: #4ade80; border-color: #4ade80; }
+.tbl .tag.ok { color: var(--signal); border-color: var(--signal); }
 .tbl .tag.fail { color: var(--tape); border-color: var(--tape); }
 .tbl tr.is-link { cursor: pointer; }
 .tbl tr.is-link:hover td { background: var(--stone-2); }
@@ -65,3 +65,28 @@ table.tbl { width: 100%; border-collapse: collapse; font-family: var(--mono); fo
 .kv dd { margin: 0; color: var(--chalk); overflow-wrap: anywhere; }
 pre.mail { white-space: pre-wrap; overflow-wrap: anywhere; font-family: var(--mono); font-size: 0.78rem; padding: 1rem; border: 1px solid var(--stone-3); border-radius: 12px; background: var(--stone-2); margin: 0; max-width: 60rem; }
 .back { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; color: var(--chalk-dim); text-decoration: none; }
+
+/* Security page: one card per finding, colour = severity. */
+.findings { display: grid; gap: 0.7rem; }
+.finding { display: grid; gap: 0.45rem; padding: 0.8rem 1rem; border: 1px solid var(--stone-3); border-left: 3px solid var(--stone-4); border-radius: 12px; background: var(--stone-2); }
+.finding.high { border-left-color: var(--tape); }
+.finding.medium { border-left-color: var(--plate-yellow); }
+.finding.low { border-left-color: var(--chalk-faint); }
+.finding.info { border-left-color: var(--ice); }
+.finding-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 0.9rem; font-family: var(--mono); font-size: 0.74rem; }
+.finding-head b { font-family: var(--sans); font-weight: 600; font-size: 0.92rem; color: var(--chalk); }
+.finding-head .actor { color: var(--chalk); }
+.finding-head .meta { color: var(--chalk-faint); }
+.finding p { margin: 0; font-size: 0.86rem; color: var(--chalk-dim); max-width: 70ch; }
+.finding .sample { font-family: var(--mono); font-size: 0.68rem; color: var(--chalk-faint); overflow-wrap: anywhere; }
+.finding .sample span { display: inline-block; margin-right: 1rem; }
+.sev { display: inline-block; padding: 0.1rem 0.5rem; border-radius: 999px; border: 1px solid var(--stone-4); font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--chalk-dim); }
+.sev.high { color: var(--tape); border-color: var(--tape); }
+.sev.medium { color: var(--plate-yellow); border-color: var(--plate-yellow); }
+.sev.info { color: var(--ice); border-color: var(--ice); }
+.stat.warn b { color: var(--plate-yellow); }
+.stat.ok b { color: var(--signal); }
+.rulebook { display: grid; gap: 0.5rem; font-size: 0.84rem; color: var(--chalk-dim); max-width: 80ch; }
+.rulebook b { color: var(--chalk); font-weight: 600; }
+.filters { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.filters .btn-small.is-on { border-color: var(--tape); color: var(--chalk); }

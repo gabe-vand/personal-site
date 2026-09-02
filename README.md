@@ -109,8 +109,10 @@ credentials are an scrypt hash in `~/.config/site-api/admin` (0600). To reset th
 (prints a fresh otpauth URI; set `TOTP_ENABLED=1` in that file to require an authenticator code).
 Data is SQLite at `~/.local/state/site-api/site.db`: visitors/sessions/events from the beacon,
 `requests` from the access log (bot classification in `api/bots.py`), `conversations`/`messages`,
-`emails`, `admin_sessions`, `audit`. Cloudflare edge stats appear once `~/.config/site-api/cf-token-read`
-holds a token with Zone → Analytics: Read.
+`emails`, `admin_sessions`, `audit`, `crawler_dns` (cached reverse-DNS verdicts). Cloudflare edge stats appear
+once `~/.config/site-api/cf-token-read` holds a token with Zone → Analytics: Read. The Security tab runs
+fixed rules from `api/security_rules.py` over that data (`api/security.py`); it reports, never blocks, and
+treats AI crawlers as welcome.
 
 - `GET /api/status` — board telemetry: temperatures, INA3221 power rails, GPU load,
   memory, uptime, llama.cpp token counters, model info. Cached 2 s.

@@ -8,6 +8,7 @@ import admin_auth
 import admin_queries as aq
 import cf_analytics
 import config
+import security
 
 ORIGIN = 'https://gabevandevere.com'
 NO_STORE = {'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex, nofollow'}
@@ -97,5 +98,5 @@ ROUTES = [
     ('GET', '/admin/conversations', _view(lambda p: {'conversations': aq.conversations(_days(p, 0))})),
     ('GET', '/admin/conversation', _view(lambda p: aq.conversation(_int(p, 'id')))),
     ('GET', '/admin/cloudflare', _view(lambda p: cf_analytics.fetch(_days(p, 7)))),
-    ('GET', '/admin/audit', _view(lambda p: {'audit': aq.audit()})),
+    ('GET', '/admin/security', _view(lambda p: security.report(_days(p)))),
 ]

@@ -2,7 +2,7 @@
 
 Living status page for gabevandevere.com. Updated with every change.
 
-Last updated: 2026-09-01 (repo scrubbed, mirrored to GitHub).
+Last updated: 2026-09-02 (admin Security page).
 
 ## Live
 
@@ -18,7 +18,8 @@ Last updated: 2026-09-01 (repo scrubbed, mirrored to GitHub).
 | Machine: streaming chat with the on-device model | `60-machine.html`, `js/chat.js`, `api/` | done; each exchange is logged (truncated) to `journalctl --user -u site-api` for review |
 | Machine: live telemetry panel with power sparkline | `js/telemetry.js`, `api/telemetry.py` | done |
 | Send it: one SVG group folds the button into a dart, morphs and flies a loop on a breeze; Sent card replaces the form; tags plane-v2-breeze / plane-v3-fold / plane-v4-svg | `site/js/paperplane.js` | done |
-| Admin at `/admin/` (login gabe@…; scrypt hash in `~/.config/site-api/admin`, TOTP ready): Overview, Humans (visits, time, sections, link-offs, per-visitor history), AI & bots (access-log ingest classified by UA), Conversations (CRM: every chat thread; email after 5 min idle), Emails (everything sent), Cloudflare edge (needs `~/.config/site-api/cf-token-read` with Analytics:Read), Audit (logins). SQLite at `~/.local/state/site-api/site.db` | `api/admin_*.py`, `api/track.py`, `api/convo.py`, `api/logs_ingest.py`, `site/admin/` | done |
+| Admin at `/admin/` (login gabe@…; scrypt hash in `~/.config/site-api/admin`, TOTP ready): Overview, Humans (visits, time, sections, link-offs, per-visitor history), AI & bots (access-log ingest classified by UA), Conversations (CRM: every chat thread; email after 5 min idle), Emails (everything sent), Cloudflare edge (needs `~/.config/site-api/cf-token-read` with Analytics:Read), Security (below). SQLite at `~/.local/state/site-api/site.db` | `api/admin_*.py`, `api/track.py`, `api/convo.py`, `api/logs_ingest.py`, `site/admin/` | done |
+| Admin Security page: login audit plus rule-based findings over the access log and chat (exploit scanners, path guessing, fake search crawlers via reverse+forward DNS with a month-long cache in `crawler_dns`, admin API probes, failed logins, rate-limit trips, port scanners, scripts, prompt-injection and chat floods). AI crawlers and assistant fetchers are always listed as welcome, never flagged. Deterministic: fixed rules and fixed explanations, no model. Reporting only, never blocks | `api/security.py`, `api/security_rules.py`, `api/crawler_verify.py`, `site/admin/js/views-security.js` | done |
 | First-party beacon `site/js/track.js` → `/api/beacon` (view, section, click, chat, contact, time on page; honors DNT/GPC) | `site/js/track.js` | done |
 | About strip (crawlable bio + facts) between ticker and machine; title lengthened for Bing; IndexNow ping in deploy.sh (key in `.indexnow-key`, file `site/<key>.txt`) | `src/page/30-about.html`, `src/css/35-about.css` | done |
 | GEO: `src/facts.json` → JSON-LD (Person, WebSite, FAQPage) in the head + `/llms.txt`, both generated at build (`build_facts.py`); nothing rendered. Keep in step with `api/persona.py` | `src/facts.json` | done |
