@@ -6,6 +6,7 @@ import urllib.parse
 
 import admin_auth
 import admin_queries as aq
+import edit as edit_mod
 import cf_analytics
 import config
 
@@ -87,6 +88,17 @@ def _int(p, key):
         return -1
 
 
+def save_edit(h, _path):
+    """In-page text edit. Writes into src/page/*.html and rebuilds; see api/edit.py."""
+    if not _authed(h):
+        return
+    body = h.read_json(limit=20000) or {}
+    key = str(body.get('key') or '')[:64]
+    ok, message = edit_mod.apply(key, str(body.get('html') or ''))
+    admin_auth.audit(h.client_ip(), h.ua(), 'edit' if ok else 'edit_fail', f'{key}: {message}', h.location())
+    h.send_json(200 if ok else 400, {'ok': ok, 'message': message}, NO_STORE)
+
+
 ROUTES = [
     ('POST', '/admin/login', login), ('POST', '/admin/logout', logout), ('GET', '/admin/me', me),
     ('GET', '/admin/overview', _view(lambda p: {**aq.overview(_days(p, 7)), 'sections': aq.sections(_days(p, 7)), 'clicks': aq.clicks(_days(p, 7)), 'totp': admin_auth.totp_required()})),
@@ -97,5 +109,7 @@ ROUTES = [
     ('GET', '/admin/conversations', _view(lambda p: {'conversations': aq.conversations(_days(p, 0))})),
     ('GET', '/admin/conversation', _view(lambda p: aq.conversation(_int(p, 'id')))),
     ('GET', '/admin/cloudflare', _view(lambda p: cf_analytics.fetch(_days(p, 7)))),
+    ('POST', '/admin/edit', save_edit),
+    ('GET', '/admin/edit-keys', _view(lambda p: {'keys': edit_mod.keys()})),
     ('GET', '/admin/audit', _view(lambda p: {'audit': aq.audit()})),
 ]

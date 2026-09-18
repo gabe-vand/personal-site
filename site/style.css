@@ -394,3 +394,30 @@ p { margin: 0 0 1.1em; max-width: var(--measure); }
 .pp[data-shade='2'] .pp-rb { fill: var(--chalk-faint); }
 .pp[data-shade='3'] .pp-rb { fill: var(--stone-4); }
 @media (prefers-reduced-motion: reduce) { .send-btn { transition: none; } }
+/* Admin edit mode (js/edit.js). Every rule is behind .editing on <html>, which is only added
+   after /api/admin/me confirms a session — so none of this can affect a visitor's page. */
+.editing .editable { outline: 1px dashed var(--stone-4); outline-offset: 0.35rem; border-radius: 2px; cursor: text; transition: outline-color 0.2s, background 0.2s; }
+.editing .editable:hover { outline-color: var(--chalk-faint); }
+.editing .editable:focus, .editing .editable[contenteditable='true'] { outline: 1px solid var(--tape); background: var(--tape-soft); }
+.editing .editable.is-saving { outline-color: var(--chalk-dim); opacity: 0.65; }
+.editing .editable.is-saved { outline: 1px solid var(--signal); }
+.editing .editable.is-failed { outline: 1px solid var(--plate-red); }
+
+/* The polaroid captions sit on paper, so the dashed chalk outline is invisible there. */
+.editing .polaroid .editable { outline-color: var(--steel-dark); }
+.editing .polaroid .editable:focus { outline-color: var(--tape); }
+
+.editbar { position: fixed; left: 1rem; bottom: 1rem; z-index: 80; display: flex; align-items: center; gap: 0.75rem; max-width: min(46rem, calc(100vw - 2rem)); padding: 0.6rem 0.75rem 0.6rem 0.9rem; background: var(--stone-2); border: 1px solid var(--stone-4); border-radius: 999px; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5); color: var(--chalk-dim); }
+.editbar-dot { flex: none; width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--tape); }
+.editbar[data-tone='good'] .editbar-dot { background: var(--signal); }
+.editbar[data-tone='bad'] .editbar-dot { background: var(--plate-red); }
+.editbar #editbar-msg { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.editbar-done { flex: none; border: 1px solid var(--stone-4); background: transparent; color: var(--chalk-dim); font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em; padding: 0.2rem 0.7rem; border-radius: 999px; cursor: pointer; }
+.editbar-done:hover { border-color: var(--chalk); color: var(--chalk); }
+
+@media (max-width: 760px) {
+    .editbar { bottom: 4.2rem; }   /* clear of the phone nav bar */
+}
+@media (prefers-reduced-motion: reduce) {
+    .editing .editable { transition: none; }
+}

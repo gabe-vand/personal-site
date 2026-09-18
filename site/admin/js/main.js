@@ -1,12 +1,12 @@
 // Admin app: login gate + hash router. Views are modules that return a DOM node.
-import { api, AuthError } from './api.js?v=d3533e7a';
-import { el } from './ui.js?v=d3533e7a';
-import { overview } from './views-overview.js?v=d3533e7a';
-import { humans, visitor } from './views-humans.js?v=d3533e7a';
-import { ai } from './views-ai.js?v=d3533e7a';
-import { conversations, conversation } from './views-convos.js?v=d3533e7a';
-import { emails } from './views-emails.js?v=d3533e7a';
-import { cloudflare, audit } from './views-cf.js?v=d3533e7a';
+import { api, AuthError } from './api.js?v=285180c4';
+import { el } from './ui.js?v=285180c4';
+import { overview } from './views-overview.js?v=285180c4';
+import { humans, visitor } from './views-humans.js?v=285180c4';
+import { ai } from './views-ai.js?v=285180c4';
+import { conversations, conversation } from './views-convos.js?v=285180c4';
+import { emails } from './views-emails.js?v=285180c4';
+import { cloudflare, audit } from './views-cf.js?v=285180c4';
 
 const $ = (id) => document.getElementById(id);
 const VIEWS = { overview, humans, visitor, ai, conversations, conversation, emails, cloudflare, audit };

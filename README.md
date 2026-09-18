@@ -46,6 +46,7 @@ That's it. `deploy.sh` rebuilds, validates and reloads Caddy, restarts the API o
 |---|---|
 | The intro sentence | `src/page/20-hero.html` (the `.hero-lede` paragraph) |
 | A project | `src/page/40-work.html` — one `<article class="route">` per project, self-contained |
+| Any marked text, from the live page | sign in at `/admin/`, then open `/#edit` — click a field, click away to save |
 | A photograph or its caption | `src/page/65-frames.html`; the image goes in `site/img/` |
 | Suggested questions for the model | `src/page/60-machine.html` (the `.chip` buttons) |
 | What the model knows / how it talks | `api/persona.py` |
@@ -56,6 +57,18 @@ That's it. `deploy.sh` rebuilds, validates and reloads Caddy, restarts the API o
 | Ticker items | `src/page/20-hero.html` (the `.ticker-track` list) |
 
 Every spot with placeholder content is marked `<!-- EDIT -->`.
+
+### Editing text from the page
+
+Sign in at `/admin/`, then open `https://gabevandevere.com/#edit`. Anything carrying a
+`data-edit` attribute in `src/page/` gets a dashed outline; click it, type, click away. The save
+goes to the **partial**, not to `site/index.html`, and rebuilds — so the change survives the next
+`./deploy.sh`, and shows up in `git diff` like any other edit. Nothing is committed automatically;
+your next `./deploy.sh "message"` picks it up.
+
+To make something else editable, add `data-edit="some-key"` to its tag in `src/page/`. Keys are
+lowercase, digits and hyphens. Do not mark an element that contains a link or another element of
+the same tag as itself — the allowlist would strip the link, and the matcher assumes no nesting.
 
 ### House rules for this repo
 

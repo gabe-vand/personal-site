@@ -2,7 +2,7 @@
 
 Living status page for gabevandevere.com. Updated with every change.
 
-Last updated: 2026-09-18 (work is three projects with card photographs; five frames).
+Last updated: 2026-09-18 (admin edit mode; work is three projects with card photographs).
 
 ## Live
 
@@ -18,6 +18,7 @@ Last updated: 2026-09-18 (work is three projects with card photographs; five fra
 | Machine: streaming chat with the on-device model | `60-machine.html`, `js/chat.js`, `api/` | done; each exchange is logged (truncated) to `journalctl --user -u site-api` for review |
 | Machine: live telemetry panel with power sparkline | `js/telemetry.js`, `api/telemetry.py` | done |
 | Send it: one SVG group folds the button into a dart, morphs and flies a loop on a breeze; Sent card replaces the form; tags plane-v2-breeze / plane-v3-fold / plane-v4-svg | `site/js/paperplane.js` | done |
+| Edit mode: visit `/#edit` while signed in at `/admin/` and every element carrying `data-edit` becomes editable in place. A save writes back to `src/page/*.html` and rebuilds (not to the generated `index.html`, which a deploy would overwrite); submitted markup is rebuilt from an allowlist of `strong/em/code/br` so it cannot unbalance the page, and a failed build rolls the partial back. Every save is audited. 30 fields | `api/edit.py`, `site/js/edit.js`, `src/css/90-edit.css` | done |
 | Admin at `/admin/` (login gabe@…; scrypt hash in `~/.config/site-api/admin`, TOTP ready): Overview, Humans (visits, time, sections, link-offs, per-visitor history), AI & bots (access-log ingest classified by UA), Conversations (CRM: every chat thread; email after 5 min idle), Emails (everything sent), Cloudflare edge (needs `~/.config/site-api/cf-token-read` with Analytics:Read), Audit (logins). SQLite at `~/.local/state/site-api/site.db` | `api/admin_*.py`, `api/track.py`, `api/convo.py`, `api/logs_ingest.py`, `site/admin/` | done |
 | First-party beacon `site/js/track.js` → `/api/beacon` (view, section, click, chat, contact, time on page; honors DNT/GPC) | `site/js/track.js` | done |
 | Work section: three project cards (`.route`) in one equal-height row, stacking below 1100px; each carries a 4:3 photograph that desaturates until you point at it. Three is the design — a fourth breaks the row. The site itself is deliberately NOT a card | `src/page/40-work.html`, `src/css/40-work.css` | done |
@@ -51,5 +52,7 @@ in `main.js`.
 - Anything more the model should know: `api/persona.py` (full resume detail; one line on climbing/lifting; nothing about the hardware).
 
 ## Deferred
+
+- Edit mode covers text only. Images, section order and anything structural still go through `src/` and `./deploy.sh`.
 
 - Cloudflare cache purge on deploy (images are edge-cached for a day).
