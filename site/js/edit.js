@@ -8,6 +8,10 @@
 // generated — see api/edit.py. Edits are live immediately and land in git on the next deploy.
 const API = '/api/admin';
 
+// Saves currently in flight. A reload while one is outstanding loses that edit, so the done
+// button waits on this and the browser warns before an unload.
+let pending = 0;
+
 async function call(path, body) {
     const res = await fetch(API + path, {
         method: body ? 'POST' : 'GET',
@@ -42,7 +46,13 @@ function bar(message, tone) {
         done.type = 'button';
         done.className = 'editbar-done';
         done.textContent = 'done';
-        done.addEventListener('click', () => {
+        done.addEventListener('click', async () => {
+            // Flush the field still under the cursor, then wait for saves already in flight.
+            // Reloading straight away would abandon them mid-request.
+            if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+            for (let i = 0; i < 60 && pending > 0; i += 1) {
+                await new Promise((r) => setTimeout(r, 100));
+            }
             window.location.hash = '';
             window.location.reload();
         });
@@ -80,6 +90,14 @@ function start() {
         });
         el.addEventListener('blur', () => save(el));
     }
+
+    window.addEventListener('beforeunload', (e) => {
+        const dirty = fields.some((el) => el.dataset.was !== undefined && el.innerHTML !== el.dataset.was);
+        if (pending > 0 || dirty) {
+            e.preventDefault();
+            e.returnValue = '';           // older browsers want this set to show the prompt
+        }
+    });
 }
 
 async function save(el) {
@@ -91,7 +109,9 @@ async function save(el) {
     const key = el.dataset.edit;
     el.classList.add('is-saving');
     bar(`Saving ${key}…`);
+    pending += 1;
     const res = await call('/edit', { key, html: now }).catch((e) => ({ ok: false, message: String(e) }));
+    pending -= 1;
     el.classList.remove('is-saving');
 
     if (res.ok) {

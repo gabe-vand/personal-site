@@ -125,6 +125,35 @@ def _build() -> tuple[bool, str]:
     return proc.returncode == 0, (proc.stderr or proc.stdout or '').strip()[:400]
 
 
+def _git(*args, timeout=45):
+    return subprocess.run(['git', *args], cwd=str(ROOT), capture_output=True, text=True, timeout=timeout)
+
+
+# Same shapes deploy.sh refuses. An edit is typed by a human who might paste the wrong
+# clipboard, and this repo is public.
+SECRET_RE = re.compile(
+    r'cfut_[A-Za-z0-9]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}'
+    r'|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----|sk-[A-Za-z0-9]{32,}')
+
+
+def _commit_and_push(path: Path, key: str) -> str:
+    """Commit this edit and push it. Without this an edit lives only on disk until the next
+    ./deploy.sh, which is how eight of them were lost on 2026-09-18: they were overwritten
+    ninety seconds before the deploy that would have captured them. Committing here makes an
+    edit recoverable the moment it is made. A push that cannot reach GitHub is a warning, not
+    a failure: the edit is already live and already committed locally."""
+    rel = str(path.relative_to(ROOT))
+    _git('add', '--', rel, 'site/index.html')
+    if _git('diff', '--cached', '--quiet').returncode == 0:
+        return 'nothing to commit'
+    commit = _git('commit', '-q', '-m', f'Edit {key} from the page')
+    if commit.returncode != 0:
+        return f'commit failed: {(commit.stderr or commit.stdout).strip()[:120]}'
+    sha = _git('rev-parse', '--short', 'HEAD').stdout.strip()
+    push = _git('push', '-q', 'origin', 'master')
+    return f'committed {sha}' + (' and pushed' if push.returncode == 0 else ', PUSH FAILED (still committed locally)')
+
+
 def apply(key: str, markup: str) -> tuple[bool, str]:
     """Write the sanitized markup into the partial and rebuild. -> (ok, message)."""
     if not KEY_RE.match(key or ''):
@@ -136,6 +165,8 @@ def apply(key: str, markup: str) -> tuple[bool, str]:
     clean = sanitize(markup or '')
     if not clean:
         return False, 'empty'
+    if SECRET_RE.search(clean):
+        return False, 'that looks like a credential, refusing (this repo is public)'
 
     before = path.read_text(encoding='utf-8')
     # A literal replacement string would treat a backslash or \\1 in the text as a group ref.
@@ -149,4 +180,7 @@ def apply(key: str, markup: str) -> tuple[bool, str]:
         path.write_text(before, encoding='utf-8')
         _build()
         return False, f'build failed, reverted: {detail}'
-    return True, f'saved to src/page/{path.name}'
+
+    git = _commit_and_push(path, key)
+    # The preview goes into the audit row, so the text survives even if the file is clobbered.
+    return True, f'{path.name} · {git} · "{clean[:70]}"'

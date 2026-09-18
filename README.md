@@ -62,9 +62,10 @@ Every spot with placeholder content is marked `<!-- EDIT -->`.
 
 Sign in at `/admin/`, then open `https://gabevandevere.com/#edit`. Anything carrying a
 `data-edit` attribute in `src/page/` gets a dashed outline; click it, type, click away. The save
-goes to the **partial**, not to `site/index.html`, and rebuilds — so the change survives the next
-`./deploy.sh`, and shows up in `git diff` like any other edit. Nothing is committed automatically;
-your next `./deploy.sh "message"` picks it up.
+goes to the **partial**, not to `site/index.html`, then rebuilds, commits and pushes — each edit is its
+own commit, `Edit <key> from the page`. That last part matters: an edit that only sits on disk is one
+careless `scp` away from gone, which is exactly how eight caption edits were lost on 2026-09-18.
+To undo one: `git log --oneline --grep="from the page"`, then `git revert <sha>` and `./deploy.sh`.
 
 To make something else editable, add `data-edit="some-key"` to its tag in `src/page/`. Keys are
 lowercase, digits and hyphens. Do not mark an element that contains a link or another element of
