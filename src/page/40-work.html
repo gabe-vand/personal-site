@@ -1,8 +1,8 @@
 <!-- ============================================================
      01 / WORK. Three projects, one row, deliberately three different kinds of
-     problem: a shipped product, a measured model, and the machine you are on.
+     problem: a product, a measured model, and a server that runs itself.
      Each <article class="route"> is self-contained. Keep it to three — the row
-     is the design; a fourth breaks it.
+     is the design; a fourth breaks it. Card images are 4:3, in site/img/.
      ============================================================ -->
 <section class="pitch work" id="work">
   <header class="pitch-head">
@@ -10,35 +10,49 @@
     <h2 class="pitch-title">Things I&rsquo;ve built.<span class="pitch-sub">Three of them.</span></h2>
   </header>
 
-  <p class="work-intro">In climbing a <em>project</em> is the one you haven&rsquo;t sent yet &mdash; the thing you keep coming back to until it goes. Three of mine, and on purpose they are not the same kind of problem: a product built in a weekend, a model that had to beat the one before it, and the machine currently serving you this page.</p>
+  <p class="work-intro">In climbing a <em>project</em> is the one you haven&rsquo;t sent yet &mdash; the thing you keep coming back to until it goes. Three of mine, and on purpose they are not the same kind of problem: a product built in a weekend, a pipeline that answers a clinical question nobody had automated, and a server in my house that looks after itself.</p>
 
   <div class="route-grid">
 
     <article class="route">
-      <p class="route-meta mono"><span class="route-no">01</span><span>2026</span><span class="route-flag">HenHacks</span></p>
-      <h3 class="route-name">Savor</h3>
-      <p class="route-what">A pantry that knows what you have, and what is about to go bad.</p>
-      <p class="route-body">About 38% of the US food supply goes uneaten &mdash; roughly $473&nbsp;billion a year, and the single largest category in landfill. Savor photographs your receipt, reads it with Gemini&rsquo;s vision model and turns it into an inventory; then it suggests meals built around whatever is closest to expiring, and keeps a running tally of the CO&#8322; and the money you didn&rsquo;t throw away. Built over one weekend at HenHacks 2026 with three teammates, none of whom had written a React component before Friday.</p>
-      <ul class="route-stack mono"><li>Next.js</li><li>TypeScript</li><li>Supabase</li><li>Gemini</li><li>Tailwind</li><li>DigitalOcean</li></ul>
-      <p class="route-links mono"><a href="https://devpost.com/software/savor-jby10r" rel="noopener" target="_blank">devpost &rarr;</a><a href="https://github.com/gabe-udel/Hackthon2026" rel="noopener" target="_blank">github &rarr;</a></p>
+      <figure class="route-shot">
+        <img src="/img/card-savor.jpg" width="1200" height="900" loading="lazy" alt="Gabe and his three Savor teammates in front of the HenHacks 2026 Hack the Wild West backdrop at the University of Delaware">
+      </figure>
+      <div class="route-text">
+        <p class="route-meta mono"><span class="route-no">01</span><span>2026</span><span class="route-flag">HenHacks</span></p>
+        <h3 class="route-name">Savor</h3>
+        <p class="route-what">A pantry that knows what you have, and what is about to go bad.</p>
+        <p class="route-body">About 38% of the US food supply goes uneaten &mdash; roughly $473&nbsp;billion a year, and the single largest category in landfill. Savor photographs your receipt, reads it with Gemini&rsquo;s vision model and turns it into an inventory; then it suggests meals built around whatever is closest to expiring, and keeps a running tally of the CO&#8322; and the money you didn&rsquo;t throw away. Built over one weekend with the three people in that photograph, none of whom had written a React component before Friday.</p>
+        <ul class="route-stack mono"><li>Next.js</li><li>TypeScript</li><li>Supabase</li><li>Gemini</li><li>Tailwind</li><li>DigitalOcean</li></ul>
+        <p class="route-links mono"><a href="https://devpost.com/software/savor-jby10r" rel="noopener" target="_blank">devpost &rarr;</a><a href="https://github.com/gabe-udel/Hackthon2026" rel="noopener" target="_blank">github &rarr;</a></p>
+      </div>
     </article>
 
     <article class="route">
-      <p class="route-meta mono"><span class="route-no">02</span><span>2026</span><span class="route-flag">research</span></p>
-      <h3 class="route-name">Dog keypoints, in two stages</h3>
-      <p class="route-what">39 body keypoints and 46 facial landmarks on a moving dog.</p>
-      <p class="route-body">DeepLabCut&rsquo;s published SuperAnimal-Quadruped checkpoint runs frozen and unmodified to find the body and the head; a derived face box crops to 256&times;256; a second model trained on DogFLW reads the face. What made it work is that training and inference derive that box through the same function &mdash; there is a test asserting both call sites resolve to the same object &mdash; so the face model never meets a crop distribution it wasn&rsquo;t trained on. Against the previous single unified model, on 479 held-out images: mean NME <strong>&minus;28.6%</strong>, PCK@5% <strong>71.0 &rarr; 84.1</strong>. Every facial region improved; the muzzle by 57%.</p>
-      <ul class="route-stack mono"><li>PyTorch</li><li>DeepLabCut</li><li>Python</li><li>Faster R-CNN</li></ul>
-      <p class="route-links mono"><a href="https://github.com/gabe-udel/dog-emotions" rel="noopener" target="_blank">github &rarr;</a></p>
+      <figure class="route-shot">
+        <img src="/img/card-dog.jpg" width="1200" height="900" loading="lazy" alt="A dog's head inside a dashed face box, marked with coloured landmarks on the ears, head, eyes, nose, muzzle and mouth">
+      </figure>
+      <div class="route-text">
+        <p class="route-meta mono"><span class="route-no">02</span><span>2026</span><span class="route-flag">research</span></p>
+        <h3 class="route-name">Reading a dog&rsquo;s gait</h3>
+        <p class="route-what">Point it at a video of a dog walking. It tells you whether the knee is torn.</p>
+        <p class="route-body">A cranial cruciate ligament tear is the most common orthopaedic injury in dogs and it is normally diagnosed by eye. So this is two pieces. First I built the keypointing: a two-stage cascade that tracks 39 body keypoints and 46 facial landmarks on a dog in motion, frame by frame, and it lands mean landmark error <strong>28.6% below</strong> the single-model version it replaced. Then I trained the thing that actually answers the question &mdash; those joint trajectories become gait features, and a model trained on 12&nbsp;GB of clinical video calls <strong>CCL against normal</strong>. It refuses footage that isn&rsquo;t shot side-on, and hands back a pose-overlaid copy of the video so a clinician can see what it was looking at rather than trust a number.</p>
+        <ul class="route-stack mono"><li>PyTorch</li><li>DeepLabCut</li><li>scikit-learn</li><li>OpenCV</li><li>Python</li></ul>
+        <p class="route-links mono"><a href="https://github.com/gabe-udel/dog-emotions" rel="noopener" target="_blank">keypoints &rarr;</a><a href="https://github.com/gabe-udel/cisc-442-final" rel="noopener" target="_blank">classifier &rarr;</a></p>
+      </div>
     </article>
 
     <article class="route">
-      <p class="route-meta mono"><span class="route-no">03</span><span>2026</span><span class="route-flag">this page</span></p>
-      <h3 class="route-name">gabevandevere.com</h3>
-      <p class="route-what">The site you are reading, and the computer reading it to you.</p>
-      <p class="route-body">Hand-written HTML, CSS and JavaScript &mdash; no framework, no build step but one short Python script, no <code>node_modules</code>. Caddy serves it from a Jetson Orin Nano Super on my desk through an outbound-only Cloudflare tunnel, so nothing forwards a port. The model you can talk to below is a 9-billion-parameter open model on that board&rsquo;s GPU, behind a Python proxy that holds the key, caps output and queues callers against the single inference slot. One command builds, reloads, smoke-tests local <em>and</em> live, refuses to commit anything shaped like a secret, and mirrors to GitHub.</p>
-      <ul class="route-stack mono"><li>Caddy</li><li>Cloudflare Tunnel</li><li>llama.cpp</li><li>Python</li><li>SQLite</li><li>systemd</li></ul>
-      <p class="route-links mono"><a href="https://github.com/gabe-vand/personal-site" rel="noopener" target="_blank">github &rarr;</a></p>
+      <figure class="route-shot">
+        <img src="/img/card-oracle.jpg" width="1200" height="900" loading="lazy" alt="A Minecraft world seen from high above: a flowering meadow on a ridge, rivers and forest beyond, cherry blossom to one side">
+      </figure>
+      <div class="route-text">
+        <p class="route-meta mono"><span class="route-no">03</span><span>2026</span><span class="route-flag">Raspberry Pi</span></p>
+        <h3 class="route-name">Oracle</h3>
+        <p class="route-what">A Minecraft server on a Raspberry Pi, and something living on it that has been paying attention.</p>
+        <p class="route-body">The server is a Paper instance on a Raspberry&nbsp;Pi&nbsp;4B in my house, reachable by friends over the public internet through an outbound tunnel rather than a hole in my router, and it restarts itself without ever losing the world. Oracle is the Java plugin on top. It has no command and no prefix: it reads every public chat line, scores it 0&ndash;100 on whether it is worth answering, and speaks only when a line clears the bar and it is off cooldown &mdash; the logs really do read <code>INTERJECT (interest 88)</code> and <code>SILENT (interest 12 below bar of 15)</code>. It notices deaths, advancements and slower patterns, and the model behind it swaps between Claude, Gemini and the Jetson downstairs without a restart. It is quiet most of the time. That is the design.</p>
+        <ul class="route-stack mono"><li>Java</li><li>Paper API</li><li>Raspberry Pi</li><li>systemd</li><li>Claude</li><li>llama.cpp</li></ul>
+      </div>
     </article>
 
   </div>

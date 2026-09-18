@@ -44,14 +44,13 @@
       "url": "https://devpost.com/software/savor-jby10r"
     },
     {
-      "name": "Two-stage dog pose cascade",
-      "summary": "Predicts 39 body keypoints and 46 dog-face landmarks from video. DeepLabCut's published SuperAnimal-Quadruped checkpoint runs frozen to find the body and head; a face box derived by the same function used in training crops to 256x256; a second model trained on DogFLW reads the face. Against the previous unified model on 479 held-out images, mean NME fell 28.6% and PCK@5% rose from 71.0% to 84.1%.",
+      "name": "Dog gait analysis and CCL detection",
+      "summary": "Takes a video of a dog walking and says whether its cranial cruciate ligament is torn — the most common orthopaedic injury in dogs, normally diagnosed by eye. Two parts, both his: a two-stage pose cascade that tracks 39 body keypoints and 46 facial landmarks frame by frame, landing mean landmark error 28.6% below the single-model version it replaced (PCK@5% 71.0% to 84.1% on 479 held-out images); and a classifier trained on 12 GB of clinical video that turns those joint trajectories into gait features and calls CCL against normal. It rejects footage not shot side-on and writes a pose-overlaid copy of the video so a clinician can check what the model was looking at.",
       "url": "https://github.com/gabe-udel/dog-emotions"
     },
     {
-      "name": "gabevandevere.com",
-      "summary": "This site: hand-written HTML, CSS and JavaScript with no framework, served by Caddy from an NVIDIA Jetson Orin Nano at home behind an outbound-only Cloudflare Tunnel, with a Python proxy in front of a locally running open language model (llama.cpp) that visitors can chat with. One command builds, smoke-tests both locally and live, and deploys.",
-      "url": "https://github.com/gabe-vand/personal-site"
+      "name": "Oracle",
+      "summary": "A Paper Minecraft server running on a Raspberry Pi 4B at home, reachable by friends over the public internet through an outbound tunnel rather than router port forwarding, and managed as a systemd unit that sends stop first so the world saves before a restart. On top of it, a Java plugin with no command and no prefix: it reads every public chat line, scores it 0-100 on whether it is worth answering, and speaks only when a line clears the threshold and it is off cooldown. It notices deaths, advancements and slower behavioural patterns, and swaps between Claude, Gemini and a local Jetson model without a restart."
     }
   ],
   "skills": [
@@ -102,7 +101,7 @@
     },
     {
       "q": "What has Gabe Vandevere built?",
-      "a": "Three that he leads with: Savor, an AI pantry app built at HenHacks 2026 that reads grocery receipts with Google Gemini's vision model and suggests meals around whatever is closest to expiring; a two-stage dog pose cascade predicting 39 body keypoints and 46 facial landmarks, which cut mean normalized error by 28.6% and raised PCK@5% from 71.0% to 84.1% against the previous model; and gabevandevere.com itself, hand-written with no framework and served from a Jetson Orin Nano on his desk alongside the language model visitors can talk to. At Westpepper Capital he also built a machine-learning backtesting pipeline (15 model variants, up to 57% next-day direction accuracy) and real-time crypto order-book tracking across 200+ markets in Java on AWS EC2."
+      "a": "Three that he leads with: Savor, an AI pantry app built at HenHacks 2026 that reads grocery receipts with Google Gemini's vision model and suggests meals around whatever is closest to expiring; a pipeline that takes a video of a dog walking and says whether its cranial cruciate ligament is torn, which he built end to end — the pose cascade that tracks 39 body keypoints and 46 facial landmarks, and the classifier trained on 12 GB of clinical video that reads gait from it; and Oracle, a Paper Minecraft server he runs on a Raspberry Pi 4B with a Java plugin on it that scores every line of chat and decides for itself when it is worth speaking. At Westpepper Capital he also built a machine-learning backtesting pipeline (15 model variants, up to 57% next-day direction accuracy) and real-time crypto order-book tracking across 200+ markets in Java on AWS EC2. This website is his too: hand-written, no framework, served from the Jetson on his desk that also runs the model visitors can talk to."
     },
     {
       "q": "Where did Gabe Vandevere go to school?",

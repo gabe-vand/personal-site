@@ -2,7 +2,7 @@
 
 Living status page for gabevandevere.com. Updated with every change.
 
-Last updated: 2026-09-18 (work cut to three projects in one row; six photographs).
+Last updated: 2026-09-18 (work is three projects with card photographs; five frames).
 
 ## Live
 
@@ -20,8 +20,8 @@ Last updated: 2026-09-18 (work cut to three projects in one row; six photographs
 | Send it: one SVG group folds the button into a dart, morphs and flies a loop on a breeze; Sent card replaces the form; tags plane-v2-breeze / plane-v3-fold / plane-v4-svg | `site/js/paperplane.js` | done |
 | Admin at `/admin/` (login gabe@…; scrypt hash in `~/.config/site-api/admin`, TOTP ready): Overview, Humans (visits, time, sections, link-offs, per-visitor history), AI & bots (access-log ingest classified by UA), Conversations (CRM: every chat thread; email after 5 min idle), Emails (everything sent), Cloudflare edge (needs `~/.config/site-api/cf-token-read` with Analytics:Read), Audit (logins). SQLite at `~/.local/state/site-api/site.db` | `api/admin_*.py`, `api/track.py`, `api/convo.py`, `api/logs_ingest.py`, `site/admin/` | done |
 | First-party beacon `site/js/track.js` → `/api/beacon` (view, section, click, chat, contact, time on page; honors DNT/GPC) | `site/js/track.js` | done |
-| Work section: three project cards (`.route`) in one equal-height row, stacking below 1100px; guidebook-entry layout, left rail fills on hover. Three is the design — a fourth breaks the row | `src/page/40-work.html`, `src/css/40-work.css` | done |
-| Off the wall: six photographs as tilted polaroids that straighten on hover, reusing the `.polaroid` component | `src/page/65-frames.html`, `src/css/65-frames.css` | done |
+| Work section: three project cards (`.route`) in one equal-height row, stacking below 1100px; each carries a 4:3 photograph that desaturates until you point at it. Three is the design — a fourth breaks the row. The site itself is deliberately NOT a card | `src/page/40-work.html`, `src/css/40-work.css` | done |
+| Off the wall: five photographs as tilted polaroids that straighten on hover, reusing the `.polaroid` component | `src/page/65-frames.html`, `src/css/65-frames.css` | done |
 | Portrait in the about strip, above the fact list | `src/page/30-about.html`, `src/css/35-about.css` | done |
 | Photographs in `site/img/` (EXIF rotation applied, long edge 1400 px, JPEG q82) | `site/img/` | done |
 | About strip (crawlable bio + facts) between ticker and machine; title lengthened for Bing; IndexNow ping in deploy.sh (key in `.indexnow-key`, file `site/<key>.txt`) | `src/page/30-about.html`, `src/css/35-about.css` | done |

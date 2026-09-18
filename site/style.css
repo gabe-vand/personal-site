@@ -222,9 +222,9 @@ p { margin: 0 0 1.1em; max-width: var(--measure); }
     .about-facts { display: flex; flex-wrap: wrap; gap: 0.4rem 1.4rem; }
     .about-facts li, .about-facts li:last-child { border: 0; padding: 0; }
 }
-/* 01 / work: three projects in one row, styled like guidebook entries — number, year,
-   name, the one-line version, then the detail. The rail down the left edge of each card
-   fills on hover, the way the topo line fills on scroll. */
+/* 01 / work: three projects in one row, styled like guidebook entries — a photograph,
+   then number, year, name, the one-line version, and the detail. The rail down the left
+   edge of each card fills on hover, the way the topo line fills on scroll. */
 .work-intro { max-width: 47rem; color: var(--chalk-dim); font-size: clamp(1.05rem, 1rem + 0.35vw, 1.22rem); line-height: 1.5; margin: 0 0 clamp(2rem, 5vh, 3rem); }
 .work-intro em { color: var(--chalk); }
 
@@ -233,20 +233,23 @@ p { margin: 0 0 1.1em; max-width: var(--measure); }
 .route-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.1rem; align-items: stretch; }
 @media (min-width: 1100px) {
     .route-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    /* Two lines' worth whether the title needs them or not, so the summary under each
-       name starts on the same baseline across the row. Only in the row layout: stacked,
-       a reserved second line is just a hole. */
-    .route-name { min-height: 2.1em; }
 }
 
 /* Flex column + margin-top:auto on the footer, so the stack and the links line up along
    the bottom of all three cards however unevenly the prose falls. The opacity transition
    is for js/reveal.js: .reveal's own loses to this rule (same specificity, later file). */
-.route { position: relative; display: flex; flex-direction: column; background: var(--stone-2); border: 1px solid var(--stone-3); padding: 1.6rem 1.5rem 1.4rem; overflow: hidden; transition: border-color 0.3s, transform 0.45s var(--ease-out), opacity 0.7s var(--ease-out); }
-.route::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--stone-4); transform: scaleY(0.1); transform-origin: top; transition: transform 0.55s var(--ease-out), background 0.3s; }
+.route { position: relative; display: flex; flex-direction: column; background: var(--stone-2); border: 1px solid var(--stone-3); overflow: hidden; transition: border-color 0.3s, transform 0.45s var(--ease-out), opacity 0.7s var(--ease-out); }
+.route::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; z-index: 1; background: var(--stone-4); transform: scaleY(0.1); transform-origin: top; transition: transform 0.55s var(--ease-out), background 0.3s; }
 .route:hover, .route:focus-within { border-color: var(--stone-4); transform: translateY(-3px); }
 .route:hover::before, .route:focus-within::before { background: var(--tape); transform: scaleY(1); }
 
+/* Held back a little so the photographs sit in the page rather than shouting off it;
+   they come up to full strength when you point at the card. */
+.route-shot { margin: 0; border-bottom: 1px solid var(--stone-3); }
+.route-shot img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; filter: saturate(0.88) brightness(0.93); transition: filter 0.45s var(--ease-out); }
+.route:hover .route-shot img, .route:focus-within .route-shot img { filter: none; }
+
+.route-text { display: flex; flex-direction: column; flex: 1 1 auto; padding: 1.45rem 1.5rem 1.4rem; }
 .route-meta { display: flex; align-items: center; gap: 0.85rem; margin: 0 0 0.85rem; color: var(--chalk-faint); text-transform: uppercase; letter-spacing: 0.14em; }
 .route-no { color: var(--tape); }
 .route-flag { margin-left: auto; border: 1px solid var(--stone-4); border-radius: 999px; padding: 0.12rem 0.6rem; letter-spacing: 0.1em; }
@@ -257,6 +260,7 @@ p { margin: 0 0 1.1em; max-width: var(--measure); }
 .route-body code { font-family: var(--mono); font-size: 0.86em; color: var(--ice); }
 
 .route-stack { list-style: none; display: flex; flex-wrap: wrap; gap: 0.35rem; margin: auto 0 0.9rem; padding: 0; }
+.route-stack:last-child { margin-bottom: 0; }  /* a card with no links ends on its chips */
 .route-stack li { border: 1px solid var(--stone-3); border-radius: 2px; padding: 0.16rem 0.5rem; color: var(--chalk-faint); font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.06em; }
 
 .route-links { display: flex; flex-wrap: wrap; gap: 1.1rem; margin: 0; }
@@ -264,7 +268,7 @@ p { margin: 0 0 1.1em; max-width: var(--measure); }
 .route-links a:hover { color: var(--tape); border-color: var(--tape); }
 
 @media (prefers-reduced-motion: reduce) {
-    .route, .route::before { transition: none; }
+    .route, .route::before, .route-shot img { transition: none; }
     .route:hover, .route:focus-within { transform: none; }
     .route::before { transform: scaleY(1); }
 }
