@@ -11,12 +11,12 @@
 
 ## Education
 
-- Bachelor of Science in Computer Science, University of Delaware, expected 2027, GPA 3.87
+- Bachelor of Science in Computer Science, minor in Mathematics, University of Delaware, expected 2027, GPA 3.87
 
 ## Experience
 
-- **QA and Operations Intern, The RxAssistant** (remote; 2026-05 to present): Develops and deploys AI-powered solutions for pharmaceutical clients across more than ten brands: client-facing conversational-AI prototypes and production demos, ambient listening and workflow automation, conversational AI over regulated product, access, affordability and patient-support content. Assists QA and UAT for client releases (authored and executed 100+ test cases, validated AI responses, supported deployments from staging through production). Contributes to product infrastructure including React Native setup and AWS Bedrock integration.
-- **Research and Development Intern, Westpepper Capital** (Radnor, Pennsylvania; 2025-06 to 2026-02): Built an end-to-end machine-learning modeling and backtesting pipeline over earnings, guidance and analyst-estimate data (15 model variants, up to 57% next-day direction accuracy in historical tests). Designed and deployed real-time crypto order-book tracking in Java on AWS EC2 via the Kraken API across 200+ markets. Developed trading strategies, one promoted to production. Built a Python analytics pipeline and dashboard (P&L and volume aggregation, Matplotlib) used daily.
+- **AI Product QA / Operations Consultant, The RxAssistant** (remote; 2026-05 to present): Authored 69,000+ surviving lines of code, roughly half of a 137,000-line production codebase, across 200+ commits to an internal React and TypeScript platform covering conversation analytics, safety review, journey mapping, automated review documents and live multi-brand configuration. Led development and enterprise demonstrations of an AI field-intelligence platform for field reimbursement teams. Delivered 10+ client-facing AI prototypes and demos across 10+ pharmaceutical brands. Authored and executed 100+ UAT and adversarial test cases for regulated conversational AI, covering adverse-event detection, emergency routing, off-label and hallucination boundaries and PII handling.
+- **Research and Development Intern, Westpepper Capital** (Radnor, Pennsylvania; 2025-06 to 2026-02): Built an end-to-end machine-learning and backtesting pipeline over earnings, guidance and analyst-estimate data from REST APIs (15 model variants, up to 57% next-day direction accuracy in historical tests). Deployed Java services on AWS EC2 capturing real-time Kraken order books across 200+ cryptocurrency markets. Developed proprietary trading strategies in Java, C++, Excel and VBA, one of which advanced to production. Built a Python analytics pipeline and dashboard used daily for P&L and volume reporting.
 
 ## Projects
 
@@ -40,7 +40,7 @@ A senior computer science student at the University of Delaware (expected spring
 
 ### Where does Gabe Vandevere work?
 
-At The RxAssistant (remote) as a QA and Operations Intern since May 2026, building and testing AI-powered solutions for pharmaceutical clients. Before that he was a Research and Development Intern at Westpepper Capital in Radnor, Pennsylvania (June-August 2025 and December 2025-February 2026).
+At The RxAssistant (remote) as an AI Product QA / Operations Consultant since May 2026, building and testing AI products for pharmaceutical clients. Before that he was a Research and Development Intern at Westpepper Capital in Radnor, Pennsylvania (June-August 2025 and December 2025-February 2026). His full resume is at https://gabevandevere.com/resume
 
 ### What is Gabe Vandevere's technical stack?
 

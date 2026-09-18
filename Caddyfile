@@ -42,6 +42,9 @@
 	@www host www.gabevandevere.com
 	redir @www https://gabevandevere.com{uri} 301
 
+	# A short, sayable URL for the CV. 302 so the filename can change later.
+	redir /resume /gabe-vandevere-resume.pdf 302
+
 	# Compress text, but NOT text/event-stream: the LLM answers arrive as a
 	# live stream and a compressor in the middle would buffer the words.
 	encode zstd gzip {
