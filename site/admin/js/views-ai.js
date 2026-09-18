@@ -1,5 +1,5 @@
-import { api } from './api.js?v=375ce06f';
-import { el, table, when, num, tag, section, bars, ago } from './ui.js?v=375ce06f';
+import { api } from './api.js?v=d3533e7a';
+import { el, table, when, num, tag, section, bars, ago } from './ui.js?v=d3533e7a';
 
 const KLASS = { ai: 'AI crawler', search: 'search engine', preview: 'link preview', tool: 'tool / scanner' };
 

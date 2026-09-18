@@ -210,7 +210,8 @@ p { margin: 0 0 1.1em; max-width: var(--measure); }
 /* The portrait is tilted, so the gap has to clear its dropped corner, not its box. */
 .about-side { display: grid; gap: 2rem; justify-items: start; }
 .about-shot { width: auto; max-width: 100%; margin: 0; padding: 0.5rem 0.5rem 0.75rem; }
-.about-shot img { aspect-ratio: 3 / 4; object-fit: cover; object-position: center 12%; }
+/* Square, which is both what the source is and what a polaroid frame actually looks like. */
+.about-shot img { aspect-ratio: 1 / 1; object-fit: cover; }
 .about-shot figcaption { font-family: var(--serif); font-style: italic; font-size: 0.98rem; line-height: 1.3; margin-top: 0.6rem; }
 .about-facts { list-style: none; margin: 0; padding: 0; width: 100%; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--chalk-dim); }
 .about-facts li { padding: 0.55rem 0; border-top: 1px solid var(--stone-3); }

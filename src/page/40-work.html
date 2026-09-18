@@ -1,10 +1,11 @@
 <!-- ============================================================
-     01 / WORK. Three projects, one row, deliberately three different kinds of
-     problem: a product, a measured model, and a server that runs itself.
-     Each <article class="route"> is self-contained. Keep it to three — the row
-     is the design; a fourth breaks it. Card images are 4:3, in site/img/.
-     HOUSE RULE for this section: three sentences per project, near enough the
-     same length across all three. Detail belongs in the repo, not on the card.
+     01 / WORK. Three projects, one row. Each <article class="route"> is
+     self-contained. Keep it to three — the row is the design; a fourth breaks it.
+     Card images are 4:3, in site/img/.
+     HOUSE RULE for the copy in here: these are technical descriptions. Plain
+     register, three sentences, near enough the same length across all three.
+     State what it is and what it does. No jokes, no rhetorical beats, no voice.
+     The section heading and intro carry the site's tone; the cards do not.
      ============================================================ -->
 <section class="pitch work" id="work">
   <header class="pitch-head">
@@ -23,8 +24,8 @@
       <div class="route-text">
         <p class="route-meta mono"><span class="route-no">01</span><span>2026</span><span class="route-flag">HenHacks</span></p>
         <h3 class="route-name">Savor</h3>
-        <p class="route-what">A pantry that knows what you have, and what is about to go bad.</p>
-        <p class="route-body">About 38% of the US food supply goes uneaten &mdash; the largest single category in landfill. Savor photographs your receipt, reads it with Gemini&rsquo;s vision model, and turns it into a pantry that suggests meals around whatever is closest to expiring. Built in one weekend with the three people in that photograph, none of whom had written a React component before Friday.</p>
+        <p class="route-what">Receipt-scanning pantry tracker that surfaces food before it expires.</p>
+        <p class="route-body">Next.js and TypeScript on Supabase, with Google Gemini&rsquo;s vision model handling receipt OCR. Scanned items become a typed inventory with expiry dates; recipes are ranked by what is closest to expiring, and the app tracks cumulative waste avoided in dollars and CO&#8322;. Built by a team of four over one weekend at HenHacks 2026 and deployed on DigitalOcean.</p>
         <ul class="route-stack mono"><li>Next.js</li><li>TypeScript</li><li>Supabase</li><li>Gemini</li><li>Tailwind</li><li>DigitalOcean</li></ul>
         <p class="route-links mono"><a href="https://devpost.com/software/savor-jby10r" rel="noopener" target="_blank">devpost &rarr;</a><a href="https://github.com/gabe-udel/Hackthon2026" rel="noopener" target="_blank">github &rarr;</a></p>
       </div>
@@ -36,9 +37,9 @@
       </figure>
       <div class="route-text">
         <p class="route-meta mono"><span class="route-no">02</span><span>2026</span><span class="route-flag">research</span></p>
-        <h3 class="route-name">Reading a dog&rsquo;s gait</h3>
-        <p class="route-what">Point it at a video of a dog walking. It tells you whether the knee is torn.</p>
-        <p class="route-body">A torn cranial cruciate ligament is the most common orthopaedic injury in dogs, and it is normally called by eye. I built the keypointing first &mdash; a two-stage cascade that tracks the dog frame by frame, <strong>28.6% more accurately</strong> than the model it replaced &mdash; then trained the classifier that reads gait from it on <strong>12&nbsp;GB of clinical video</strong>. It hands back a pose-overlaid copy of your video, so a vet can check its work.</p>
+        <h3 class="route-name">Dog gait analysis</h3>
+        <p class="route-what">Detects cranial cruciate ligament injury from video of a dog walking.</p>
+        <p class="route-body">Two stages: a pose cascade tracks 39 body keypoints and 46 facial landmarks per frame, cutting mean normalised landmark error <strong>28.6%</strong> against the previous single-model approach (PCK@5% 71.0% to 84.1%, 479 held-out images). Those joint trajectories become gait features for a random-forest classifier trained on <strong>12&nbsp;GB of clinical video</strong>. Output is a CCL probability and a pose-overlaid render of the input for review.</p>
         <ul class="route-stack mono"><li>PyTorch</li><li>DeepLabCut</li><li>scikit-learn</li><li>OpenCV</li><li>Python</li></ul>
         <p class="route-links mono"><a href="https://github.com/gabe-udel/dog-emotions" rel="noopener" target="_blank">keypoints &rarr;</a><a href="https://github.com/gabe-udel/cisc-442-final" rel="noopener" target="_blank">classifier &rarr;</a></p>
       </div>
@@ -51,8 +52,8 @@
       <div class="route-text">
         <p class="route-meta mono"><span class="route-no">03</span><span>2026</span><span class="route-flag">Raspberry Pi</span></p>
         <h3 class="route-name">Oracle</h3>
-        <p class="route-what">A Minecraft server on a Raspberry Pi, and something living on it that listens.</p>
-        <p class="route-body">A Paper server running on a Raspberry&nbsp;Pi&nbsp;4B in my house, open to friends over an outbound tunnel rather than a hole in my router. Oracle is the Java plugin on top: it reads every line of chat, scores it <strong>0&ndash;100</strong> on whether it is worth answering, and speaks only when one clears the bar &mdash; with Claude, Gemini or the Jetson downstairs behind it. It is quiet most of the time. That is the design.</p>
+        <p class="route-what">Minecraft server on a Raspberry Pi with an autonomous chat agent.</p>
+        <p class="route-body">Paper server on a Raspberry&nbsp;Pi&nbsp;4B, exposed over an outbound tunnel rather than port forwarding and managed by systemd so the world saves before a restart. Oracle is a Java plugin that reads all public chat with no command prefix: an interest scorer rates every message <strong>0&ndash;100</strong>, and it replies only when the score clears a threshold and a cooldown has elapsed. The inference provider &mdash; Claude, Gemini, or llama.cpp on the Jetson &mdash; is switchable at runtime.</p>
         <ul class="route-stack mono"><li>Java</li><li>Paper API</li><li>Raspberry Pi</li><li>systemd</li><li>Claude</li><li>llama.cpp</li></ul>
       </div>
     </article>
