@@ -19,7 +19,7 @@ gabevandevere.com/
 │   ├── index.html     <- GENERATED. Do not edit; edit src/page/ and run ./deploy.sh
 │   ├── style.css      <- GENERATED from src/css/
 │   ├── js/            <- ES modules, one per feature (hand-written, served as-is)
-│   ├── img/           <- placeholder art; drop real photos here with the same names
+│   ├── img/           <- photographs used by the work and off-the-wall sections
 │   ├── fonts/         <- Instrument Serif / Instrument Sans / JetBrains Mono (self-hosted)
 │   └── 404.html, favicon.*, site.webmanifest, robots.txt, sitemap.xml
 ├── api/               <- the LLM proxy + telemetry (Python stdlib, runs as site-api.service)
@@ -45,6 +45,8 @@ That's it. `deploy.sh` rebuilds, validates and reloads Caddy, restarts the API o
 | You want to change | Edit |
 |---|---|
 | The intro sentence | `src/page/20-hero.html` (the `.hero-lede` paragraph) |
+| A project | `src/page/40-work.html` — one `<article class="route">` per project, self-contained |
+| A photograph or its caption | `src/page/65-frames.html`; the image goes in `site/img/` |
 | Suggested questions for the model | `src/page/60-machine.html` (the `.chip` buttons) |
 | What the model knows / how it talks | `api/persona.py` |
 | Facts for search/answer engines (JSON-LD + /llms.txt) | `src/facts.json` — edit, rebuild; keep in step with `api/persona.py` |

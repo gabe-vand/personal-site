@@ -5,13 +5,15 @@
 
 <!-- Navigation is a route topo: one hold per section, a chalk line that fills as you scroll.
      js/topo.js draws the line and moves the "you are here" marker. Plain anchor links underneath,
-     so it works with no JavaScript at all. -->
+     so it works with no JavaScript at all. One <li> per section, in page order. -->
 <nav class="topo" aria-label="Sections">
   <svg class="topo-line" aria-hidden="true"><path class="topo-track" d=""/><path class="topo-progress" d=""/></svg>
   <ol class="topo-holds">
     <li><a class="hold" href="#base"><span class="hold-dot"></span><span class="hold-label"><b>00</b>Base</span></a></li>
-    <li><a class="hold" href="#machine"><span class="hold-dot"></span><span class="hold-label"><b>01</b>Machine</span></a></li>
-    <li><a class="hold" href="#contact"><span class="hold-dot"></span><span class="hold-label"><b>02</b>Send it</span></a></li>
+    <li><a class="hold" href="#work"><span class="hold-dot"></span><span class="hold-label"><b>01</b>Work</span></a></li>
+    <li><a class="hold" href="#machine"><span class="hold-dot"></span><span class="hold-label"><b>02</b>Machine</span></a></li>
+    <li><a class="hold" href="#frames"><span class="hold-dot"></span><span class="hold-label"><b>03</b>Off the wall</span></a></li>
+    <li><a class="hold" href="#contact"><span class="hold-dot"></span><span class="hold-label"><b>04</b>Send it</span></a></li>
   </ol>
 </nav>
 
