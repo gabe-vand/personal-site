@@ -93,6 +93,10 @@
 	header @images Cache-Control "public, max-age=86400"
 	@fonts path *.woff2
 	header @fonts Cache-Control "public, max-age=31536000, immutable"
+	# The resume gets replaced in place and people share the URL, so it must never go stale.
+	# Cloudflare caches .pdf by default; no-cache makes it revalidate every time.
+	@pdf path *.pdf
+	header @pdf Cache-Control "no-cache"
 	# Admin UI: never indexed, never cached (after the rules above so no-store wins for its css/js).
 	@admin path /admin /admin/*
 	header @admin {
