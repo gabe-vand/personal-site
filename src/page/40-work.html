@@ -3,6 +3,8 @@
      problem: a product, a measured model, and a server that runs itself.
      Each <article class="route"> is self-contained. Keep it to three — the row
      is the design; a fourth breaks it. Card images are 4:3, in site/img/.
+     HOUSE RULE for this section: three sentences per project, near enough the
+     same length across all three. Detail belongs in the repo, not on the card.
      ============================================================ -->
 <section class="pitch work" id="work">
   <header class="pitch-head">
@@ -10,7 +12,7 @@
     <h2 class="pitch-title">Things I&rsquo;ve built.<span class="pitch-sub">Three of them.</span></h2>
   </header>
 
-  <p class="work-intro">In climbing a <em>project</em> is the one you haven&rsquo;t sent yet &mdash; the thing you keep coming back to until it goes. Three of mine, and on purpose they are not the same kind of problem: a product built in a weekend, a pipeline that answers a clinical question nobody had automated, and a server in my house that looks after itself.</p>
+  <p class="work-intro">In climbing a <em>project</em> is the one you haven&rsquo;t sent yet &mdash; the thing you keep coming back to until it goes. Three of mine, and on purpose no two are the same kind of problem.</p>
 
   <div class="route-grid">
 
@@ -22,7 +24,7 @@
         <p class="route-meta mono"><span class="route-no">01</span><span>2026</span><span class="route-flag">HenHacks</span></p>
         <h3 class="route-name">Savor</h3>
         <p class="route-what">A pantry that knows what you have, and what is about to go bad.</p>
-        <p class="route-body">About 38% of the US food supply goes uneaten &mdash; roughly $473&nbsp;billion a year, and the single largest category in landfill. Savor photographs your receipt, reads it with Gemini&rsquo;s vision model and turns it into an inventory; then it suggests meals built around whatever is closest to expiring, and keeps a running tally of the CO&#8322; and the money you didn&rsquo;t throw away. Built over one weekend with the three people in that photograph, none of whom had written a React component before Friday.</p>
+        <p class="route-body">About 38% of the US food supply goes uneaten &mdash; the largest single category in landfill. Savor photographs your receipt, reads it with Gemini&rsquo;s vision model, and turns it into a pantry that suggests meals around whatever is closest to expiring. Built in one weekend with the three people in that photograph, none of whom had written a React component before Friday.</p>
         <ul class="route-stack mono"><li>Next.js</li><li>TypeScript</li><li>Supabase</li><li>Gemini</li><li>Tailwind</li><li>DigitalOcean</li></ul>
         <p class="route-links mono"><a href="https://devpost.com/software/savor-jby10r" rel="noopener" target="_blank">devpost &rarr;</a><a href="https://github.com/gabe-udel/Hackthon2026" rel="noopener" target="_blank">github &rarr;</a></p>
       </div>
@@ -36,7 +38,7 @@
         <p class="route-meta mono"><span class="route-no">02</span><span>2026</span><span class="route-flag">research</span></p>
         <h3 class="route-name">Reading a dog&rsquo;s gait</h3>
         <p class="route-what">Point it at a video of a dog walking. It tells you whether the knee is torn.</p>
-        <p class="route-body">A cranial cruciate ligament tear is the most common orthopaedic injury in dogs and it is normally diagnosed by eye. So this is two pieces. First I built the keypointing: a two-stage cascade that tracks 39 body keypoints and 46 facial landmarks on a dog in motion, frame by frame, and it lands mean landmark error <strong>28.6% below</strong> the single-model version it replaced. Then I trained the thing that actually answers the question &mdash; those joint trajectories become gait features, and a model trained on 12&nbsp;GB of clinical video calls <strong>CCL against normal</strong>. It refuses footage that isn&rsquo;t shot side-on, and hands back a pose-overlaid copy of the video so a clinician can see what it was looking at rather than trust a number.</p>
+        <p class="route-body">A torn cranial cruciate ligament is the most common orthopaedic injury in dogs, and it is normally called by eye. I built the keypointing first &mdash; a two-stage cascade that tracks the dog frame by frame, <strong>28.6% more accurately</strong> than the model it replaced &mdash; then trained the classifier that reads gait from it on <strong>12&nbsp;GB of clinical video</strong>. It hands back a pose-overlaid copy of your video, so a vet can check its work.</p>
         <ul class="route-stack mono"><li>PyTorch</li><li>DeepLabCut</li><li>scikit-learn</li><li>OpenCV</li><li>Python</li></ul>
         <p class="route-links mono"><a href="https://github.com/gabe-udel/dog-emotions" rel="noopener" target="_blank">keypoints &rarr;</a><a href="https://github.com/gabe-udel/cisc-442-final" rel="noopener" target="_blank">classifier &rarr;</a></p>
       </div>
@@ -49,8 +51,8 @@
       <div class="route-text">
         <p class="route-meta mono"><span class="route-no">03</span><span>2026</span><span class="route-flag">Raspberry Pi</span></p>
         <h3 class="route-name">Oracle</h3>
-        <p class="route-what">A Minecraft server on a Raspberry Pi, and something living on it that has been paying attention.</p>
-        <p class="route-body">The server is a Paper instance on a Raspberry&nbsp;Pi&nbsp;4B in my house, reachable by friends over the public internet through an outbound tunnel rather than a hole in my router, and it restarts itself without ever losing the world. Oracle is the Java plugin on top. It has no command and no prefix: it reads every public chat line, scores it 0&ndash;100 on whether it is worth answering, and speaks only when a line clears the bar and it is off cooldown &mdash; the logs really do read <code>INTERJECT (interest 88)</code> and <code>SILENT (interest 12 below bar of 15)</code>. It notices deaths, advancements and slower patterns, and the model behind it swaps between Claude, Gemini and the Jetson downstairs without a restart. It is quiet most of the time. That is the design.</p>
+        <p class="route-what">A Minecraft server on a Raspberry Pi, and something living on it that listens.</p>
+        <p class="route-body">A Paper server running on a Raspberry&nbsp;Pi&nbsp;4B in my house, open to friends over an outbound tunnel rather than a hole in my router. Oracle is the Java plugin on top: it reads every line of chat, scores it <strong>0&ndash;100</strong> on whether it is worth answering, and speaks only when one clears the bar &mdash; with Claude, Gemini or the Jetson downstairs behind it. It is quiet most of the time. That is the design.</p>
         <ul class="route-stack mono"><li>Java</li><li>Paper API</li><li>Raspberry Pi</li><li>systemd</li><li>Claude</li><li>llama.cpp</li></ul>
       </div>
     </article>
