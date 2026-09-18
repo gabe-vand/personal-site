@@ -1,12 +1,24 @@
-/* 01 / work: the project list. A "route" is one project, styled like a guidebook
-   entry — number, year, name, the one-line version, then the detail. The rail down
-   the left edge of each card fills on hover, the way the topo line fills on scroll. */
+/* 01 / work: three projects in one row, styled like guidebook entries — number, year,
+   name, the one-line version, then the detail. The rail down the left edge of each card
+   fills on hover, the way the topo line fills on scroll. */
 .work-intro { max-width: 47rem; color: var(--chalk-dim); font-size: clamp(1.05rem, 1rem + 0.35vw, 1.22rem); line-height: 1.5; margin: 0 0 clamp(2rem, 5vh, 3rem); }
 .work-intro em { color: var(--chalk); }
 
-/* The opacity here is for js/reveal.js: .reveal's own transition loses to this rule
-   (same specificity, later file), so the fade has to be declared alongside the lift. */
-.route { position: relative; background: var(--stone-2); border: 1px solid var(--stone-3); padding: 1.5rem 1.5rem 1.35rem; overflow: hidden; transition: border-color 0.3s, transform 0.45s var(--ease-out), opacity 0.7s var(--ease-out); }
+/* One row of equal-height cards. Below the breakpoint they stack: three columns of this
+   much prose gets unreadably narrow before it gets short. */
+.route-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.1rem; align-items: stretch; }
+@media (min-width: 1100px) {
+    .route-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    /* Two lines' worth whether the title needs them or not, so the summary under each
+       name starts on the same baseline across the row. Only in the row layout: stacked,
+       a reserved second line is just a hole. */
+    .route-name { min-height: 2.1em; }
+}
+
+/* Flex column + margin-top:auto on the footer, so the stack and the links line up along
+   the bottom of all three cards however unevenly the prose falls. The opacity transition
+   is for js/reveal.js: .reveal's own loses to this rule (same specificity, later file). */
+.route { position: relative; display: flex; flex-direction: column; background: var(--stone-2); border: 1px solid var(--stone-3); padding: 1.6rem 1.5rem 1.4rem; overflow: hidden; transition: border-color 0.3s, transform 0.45s var(--ease-out), opacity 0.7s var(--ease-out); }
 .route::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--stone-4); transform: scaleY(0.1); transform-origin: top; transition: transform 0.55s var(--ease-out), background 0.3s; }
 .route:hover, .route:focus-within { border-color: var(--stone-4); transform: translateY(-3px); }
 .route:hover::before, .route:focus-within::before { background: var(--tape); transform: scaleY(1); }
@@ -14,35 +26,18 @@
 .route-meta { display: flex; align-items: center; gap: 0.85rem; margin: 0 0 0.85rem; color: var(--chalk-faint); text-transform: uppercase; letter-spacing: 0.14em; }
 .route-no { color: var(--tape); }
 .route-flag { margin-left: auto; border: 1px solid var(--stone-4); border-radius: 999px; padding: 0.12rem 0.6rem; letter-spacing: 0.1em; }
-.route-name { font-family: var(--serif); font-weight: 400; font-size: clamp(1.7rem, 1.4rem + 1vw, 2.3rem); line-height: 1.05; letter-spacing: -0.01em; margin: 0 0 0.5rem; text-wrap: balance; }
-.route-what { color: var(--chalk); font-size: 1.02rem; line-height: 1.4; margin: 0 0 0.8rem; max-width: 42ch; text-wrap: balance; }
-.route-body { color: var(--chalk-dim); font-size: 0.93rem; line-height: 1.6; margin: 0 0 1.1rem; max-width: none; }
+.route-name { font-family: var(--serif); font-weight: 400; font-size: clamp(1.75rem, 1.4rem + 1vw, 2.35rem); line-height: 1.05; letter-spacing: -0.01em; margin: 0 0 0.55rem; text-wrap: balance; }
+.route-what { color: var(--chalk); font-size: 1.04rem; line-height: 1.4; margin: 0 0 0.85rem; max-width: 42ch; text-wrap: balance; }
+.route-body { color: var(--chalk-dim); font-size: 0.93rem; line-height: 1.62; margin: 0 0 1.3rem; max-width: none; }
 .route-body strong { color: var(--chalk); font-weight: 600; }
 .route-body code { font-family: var(--mono); font-size: 0.86em; color: var(--ice); }
 
-.route-stack { list-style: none; display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0 0 0.9rem; padding: 0; }
+.route-stack { list-style: none; display: flex; flex-wrap: wrap; gap: 0.35rem; margin: auto 0 0.9rem; padding: 0; }
 .route-stack li { border: 1px solid var(--stone-3); border-radius: 2px; padding: 0.16rem 0.5rem; color: var(--chalk-faint); font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.06em; }
 
 .route-links { display: flex; flex-wrap: wrap; gap: 1.1rem; margin: 0; }
 .route-links a { color: var(--chalk-dim); text-decoration: none; border-bottom: 1px solid var(--stone-4); padding-bottom: 1px; transition: color 0.2s, border-color 0.2s; }
 .route-links a:hover { color: var(--tape); border-color: var(--tape); }
-
-/* The lead route gets the photograph and the full width. */
-.route-lead { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.75fr); gap: 0 2.2rem; padding: 0; margin-bottom: 1.1rem; }
-/* Absolute, so the photograph never sets the card's height: the text does, and the
-   picture crops to whatever that turns out to be. */
-.route-shot { position: relative; margin: 0; min-height: 21rem; }
-.route-shot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 22%; filter: saturate(0.9) contrast(1.02); }
-.route-text { padding: 1.6rem 1.6rem 1.45rem 0; }
-
-.route-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(23rem, 100%), 1fr)); gap: 1.1rem; align-items: start; }
-
-@media (max-width: 860px) {
-    .route-lead { grid-template-columns: minmax(0, 1fr); gap: 0; }
-    .route-shot { position: static; min-height: 0; }
-    .route-shot img { position: static; height: auto; max-height: 58vh; object-position: center 18%; }
-    .route-text { padding: 1.4rem 1.4rem 1.3rem; }
-}
 
 @media (prefers-reduced-motion: reduce) {
     .route, .route::before { transition: none; }
