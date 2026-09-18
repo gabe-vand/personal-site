@@ -1,8 +1,12 @@
 <!-- ============================================================
      03 / OFF THE WALL. Photographs, pinned up as polaroids. They straighten
      when you point at one. EDIT: captions are mine to get wrong; the images
-     live in site/img/ and a frame is one <figure>, safe to delete. Five of
-     them fills a row of three and a row of two on a wide screen.
+     live in site/img/ and a frame is one <figure>, safe to delete.
+     ORDER MATTERS: the two photographs with my dad sit first and last, which
+     is the only arrangement that keeps them apart at three columns, at two,
+     and stacked on a phone. Moving one means re-checking all three.
+     The data-edit keys belong to the caption, not the slot: they travel with
+     their <figure> if these get reordered again (see api/edit.py).
      ============================================================ -->
 <section class="pitch frames" id="frames">
   <header class="pitch-head">
@@ -11,6 +15,11 @@
   </header>
 
   <div class="frames-grid">
+
+    <figure class="polaroid frame">
+      <img src="/img/ski.jpg" width="1050" height="1400" loading="lazy" alt="Gabe on a snowboard pointing at the camera in heavy snow while his dad takes the photo">
+      <figcaption data-edit="cap-ski">Snowing sideways, flat light, my dad behind the camera. He skis, I ride, and we have never settled it.</figcaption>
+    </figure>
 
     <figure class="polaroid frame">
       <img src="/img/boulder-woods.jpg" width="1050" height="1400" loading="lazy" alt="Gabe reaching high on a steep boulder in summer woods, crash pads and a spotter below">
@@ -28,18 +37,13 @@
     </figure>
 
     <figure class="polaroid frame">
-      <img src="/img/ski.jpg" width="1050" height="1400" loading="lazy" alt="Gabe on a snowboard pointing at the camera in heavy snow while his dad takes the photo">
-      <figcaption data-edit="cap-ski">Snowing sideways, flat light, my dad behind the camera. He skis, I ride, and we have never settled it.</figcaption>
+      <img src="/img/henhacks-team.jpg" width="1050" height="1400" loading="lazy" alt="Gabe and his three teammates in front of the HenHacks 2026 Hack the Wild West backdrop at the University of Delaware">
+      <figcaption data-edit="cap-henhacks">HenHacks 2026, somewhere in hour thirty. Four of us, no web experience between us on the Friday, one working app by Sunday.</figcaption>
     </figure>
 
     <figure class="polaroid frame">
       <img src="/img/golf.jpg" width="1050" height="1400" loading="lazy" alt="Gabe and his dad in a golf cart on a wooded course on a bright day">
       <figcaption data-edit="cap-golf">Nine holes with my dad. The cart has GPS, a yardage book and a scorecard, and I still put it in the trees.</figcaption>
-    </figure>
-
-    <figure class="polaroid frame">
-      <img src="/img/henhacks-team.jpg" width="1050" height="1400" loading="lazy" alt="Gabe and his three teammates in front of the HenHacks 2026 Hack the Wild West backdrop at the University of Delaware">
-      <figcaption data-edit="cap-henhacks">HenHacks 2026, somewhere in hour thirty. Four of us, no web experience between us on the Friday, one working app by Sunday.</figcaption>
     </figure>
 
   </div>
