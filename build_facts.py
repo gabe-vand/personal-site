@@ -22,8 +22,28 @@ def jsonld(f: dict) -> str:
     }
     site = {'@type': 'WebSite', '@id': f['url'] + '#site', 'url': f['url'], 'name': f['name'], 'about': {'@id': f['url'] + '#me'}}
     faq = {'@type': 'FAQPage', 'mainEntity': [{'@type': 'Question', 'name': q['q'], 'acceptedAnswer': {'@type': 'Answer', 'text': q['a']}} for q in f['faq']]}
-    graph = {'@context': 'https://schema.org', '@graph': [person, site, faq]}
+    graph = {'@context': 'https://schema.org', '@graph': [person, site, faq] + works(f)}
     return '<script type="application/ld+json">' + json.dumps(graph, ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/') + '</script>'
+
+
+
+def works(f: dict) -> list:
+    """Each project as its own node, pointing back at the Person through `author`. That edge
+    is how search and answer engines attach a body of work to someone."""
+    out = []
+    for i, p in enumerate(f.get('projects', []), 1):
+        url = p.get('url', '')
+        node = {
+            '@type': 'SoftwareSourceCode' if 'github.com' in url else 'CreativeWork',
+            '@id': f['url'] + f'#project-{i}', 'name': p['name'], 'description': p['summary'],
+            'author': {'@id': f['url'] + '#me'}, 'creator': {'@id': f['url'] + '#me'},
+        }
+        if url:
+            node['url'] = url
+            if 'github.com' in url:
+                node['codeRepository'] = url
+        out.append(node)
+    return out
 
 
 def llms_txt(f: dict, date: str) -> str:
@@ -33,7 +53,10 @@ def llms_txt(f: dict, date: str) -> str:
              f"- {f['education']['degree']}, {f['education']['school']}, expected {f['education']['expected']}, GPA {f['education']['gpa']}", '', '## Experience', '']
     for r in f['roles']:
         lines += [f"- **{r['title']}, {r['org']}** ({r['where']}; {r['from']} to {r['to'] or 'present'}): {r['summary']}"]
-    lines += ['', '## Projects', ''] + [f"- **{p['name']}**: {p['summary']}" for p in f['projects']]
+    lines += ['', '## Projects', ''] + [
+        f"- **{p['name']}**: {p['summary']}" + (f" Source: {p['url']}" if p.get('url') else '')
+        for p in f['projects']
+    ]
     lines += ['', '## Skills', '', ', '.join(f['skills']), '', '## Personal', '', f['personal'], '', '## FAQ', '']
     for q in f['faq']:
         lines += [f"### {q['q']}", '', q['a'], '']
