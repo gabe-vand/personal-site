@@ -11,7 +11,7 @@
     "area": "Philadelphia area"
   },
   "title": "Computer science student and AI product builder",
-  "summary": "Gabe Vandevere is a senior computer science student at the University of Delaware (expected spring 2027, GPA 3.87, Dean's List every semester) based in Wayne, Pennsylvania, in the Philadelphia area. He is a QA and Operations Intern at The RxAssistant, where he builds and tests AI-powered solutions for pharmaceutical clients, and previously a Research and Development Intern at Westpepper Capital, where he built machine-learning backtesting pipelines and real-time crypto market-data systems. His own projects run from clinical computer vision to systems programming in C. His website is served from a Jetson Orin Nano on his desk, which also runs the language model visitors can talk to.",
+  "summary": "Gabe Vandevere is a senior computer science student at the University of Delaware (expected spring 2027, GPA 3.87, Dean's List every semester) based in Wayne, Pennsylvania, in the Philadelphia area. He is a QA and Operations Intern at The RxAssistant, where he builds and tests AI-powered solutions for pharmaceutical clients, and previously a Quantitative R&D Intern at Westpepper Capital, where he built machine-learning backtesting pipelines and real-time crypto market-data systems. His own projects run from clinical computer vision to systems programming in C. His website is served from a Jetson Orin Nano on his desk, which also runs the language model visitors can talk to.",
   "education": {
     "degree": "Bachelor of Science in Computer Science, minor in Mathematics",
     "school": "University of Delaware",
@@ -26,15 +26,15 @@
       "where": "remote",
       "from": "2026-05",
       "to": null,
-      "summary": "Authored 69,000+ surviving lines of code, roughly half of a 137,000-line production codebase, across 200+ commits to an internal React and TypeScript platform covering conversation analytics, safety review, journey mapping, automated review documents and live multi-brand configuration. Led demo development and enterprise demonstrations of an AI field-intelligence platform for field reimbursement teams. Delivered 10+ client-facing AI prototypes and demos across 10+ pharmaceutical brands. Authored and executed 100+ UAT and adversarial test cases for regulated conversational AI, covering adverse-event detection, emergency routing, off-label and hallucination boundaries and PII handling."
+      "summary": "Authored 69,000+ surviving lines of code, roughly half of a 137,000-line production codebase, across 200+ commits to an internal React and TypeScript platform covering safety review, automated MLR submission documents and live multi-brand configuration, and supporting the migration off the old codebase. Led demo development and enterprise demonstrations of an AI field-intelligence platform for field reimbursement teams. Delivered 10+ client-facing AI prototypes and demos across 10+ pharmaceutical brands. Authored and executed 100+ UAT and adversarial test cases for regulated conversational AI, covering adverse-event detection, emergency routing, off-label and hallucination boundaries and PII handling."
     },
     {
-      "title": "Research and Development Intern",
+      "title": "Quantitative R&D Intern",
       "org": "Westpepper Capital",
       "where": "Radnor, Pennsylvania",
       "from": "2025-06",
       "to": "2026-02",
-      "summary": "Built an end-to-end machine-learning and backtesting pipeline over earnings, guidance and analyst-estimate data from REST APIs (15 model variants, up to 57% next-day direction accuracy in historical tests). Deployed Java services on AWS EC2 capturing real-time Kraken order books across 200+ cryptocurrency markets. Developed proprietary trading strategies in Java, C++, Excel and VBA, one of which advanced to production. Built a Python analytics pipeline and dashboard used daily for P&L and volume reporting."
+      "summary": "Built an end-to-end machine-learning and backtesting pipeline over earnings, guidance and analyst-estimate data from REST APIs (15 model variants, up to 57% next-day direction accuracy in historical tests). Deployed Java services on AWS EC2 capturing real-time Kraken order books across 200+ cryptocurrency markets. Developed and backtested proprietary trading strategies in Java, C++, Excel and VBA, spanning arbitrage, high-frequency, price-taking and market-making, one build of which advanced to production. Built a Python analytics pipeline and dashboard used daily for P&L and volume reporting."
     }
   ],
   "projects": [
@@ -93,7 +93,7 @@
     },
     {
       "q": "Where does Gabe Vandevere work?",
-      "a": "At The RxAssistant (remote) as an AI Product QA / Operations Consultant since May 2026, building and testing AI products for pharmaceutical clients. Before that he was a Research and Development Intern at Westpepper Capital in Radnor, Pennsylvania (June-August 2025 and December 2025-February 2026). His full resume is at https://gabevandevere.com/resume"
+      "a": "At The RxAssistant (remote) as an AI Product QA / Operations Consultant since May 2026, building and testing AI products for pharmaceutical clients. Before that he was a Quantitative R&D Intern at Westpepper Capital in Radnor, Pennsylvania (June-August 2025 and December 2025-February 2026). His full resume is at https://gabevandevere.com/resume"
     },
     {
       "q": "What is Gabe Vandevere's technical stack?",
