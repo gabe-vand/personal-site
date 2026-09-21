@@ -1,6 +1,6 @@
 # Gabe Vandevere
 
-> Gabe Vandevere is a senior computer science student at the University of Delaware (expected spring 2027, GPA 3.87, Dean's List every semester) based in Wayne, Pennsylvania, in the Philadelphia area. He is a QA and Operations Intern at The RxAssistant, where he builds and tests AI-powered solutions for pharmaceutical clients, and previously a Quantitative R&D Intern at Westpepper Capital, where he built machine-learning backtesting pipelines and real-time crypto market-data systems. His own projects run from clinical computer vision to systems programming in C. His website is served from a Jetson Orin Nano on his desk, which also runs the language model visitors can talk to.
+> Gabe Vandevere is a senior computer science student at the University of Delaware (expected spring 2027, GPA 3.87, Dean's List every semester) based in Wayne, Pennsylvania, in the Philadelphia area. He is an AI Product QA / Operations Consultant at The RxAssistant, where he builds and tests AI-powered solutions for pharmaceutical clients, and previously a Quantitative R&D Intern at Westpepper Capital, where he built machine-learning backtesting pipelines and real-time crypto market-data systems. His own projects run from clinical computer vision to systems programming in C. His website is served from a Jetson Orin Nano on his desk, which also runs the language model visitors can talk to.
 
 - Site: https://gabevandevere.com/
 - Email: gabe@gabevandevere.com
@@ -36,7 +36,7 @@ Boulderer (climbs V9, training for V10) and weightlifter. Also snowboards and pl
 
 ### Who is Gabe Vandevere?
 
-A senior computer science student at the University of Delaware (expected spring 2027) from Wayne, Pennsylvania, who builds AI products. He is a QA and Operations Intern at The RxAssistant and was previously an R&D Intern at Westpepper Capital.
+A senior computer science student at the University of Delaware (expected spring 2027) from Wayne, Pennsylvania, who builds AI products. He is an AI Product QA / Operations Consultant at The RxAssistant and was previously a Quantitative R&D Intern at Westpepper Capital.
 
 ### Where does Gabe Vandevere work?
 
