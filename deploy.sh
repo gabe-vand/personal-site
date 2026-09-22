@@ -39,15 +39,21 @@ code=$(curl -s -o /dev/null -w '%{http_code}' -m 5 http://127.0.0.1:8081/admin/)
 [ "$code" = "404" ] || fail "public listener serves /admin/ ($code); it must be tailnet-only"
 code=$(curl -s -o /dev/null -w '%{http_code}' -m 5 http://127.0.0.1:8082/admin/)
 [ "$code" = "200" ] || fail "tailnet listener (8082) /admin/ returned $code"
-ok "local 8081 + api; admin only on 8082"
+code=$(curl -s -o /dev/null -w '%{http_code}' -m 5 --resolve gabevandevere.com:8443:127.0.0.1 https://gabevandevere.com:8443/admin/)
+[ "$code" = "200" ] || fail "tailnet TLS listener (8443) /admin/ returned $code (certificate? journalctl --user -u caddy -n 30)"
+ok "local 8081 + api; admin only on 8443/8082"
 
 # Fetch the plain URL (no cache-buster) and require this build's version hash in it, so a stale
 # copy anywhere between here and the visitor fails the deploy instead of going unnoticed.
+# This node resolves gabevandevere.com to its own tailnet listener (split DNS), so ask a
+# public resolver for Cloudflare's address and pin it: the live check must go through the edge.
 v=$(grep -o 'style.css?v=[0-9a-f]*' site/index.html | head -1 | cut -d= -f2)
-live=$(curl -s -m 15 https://gabevandevere.com/) || fail "live site unreachable (systemctl --user status cloudflared)"
+edge=$(dig +short +time=3 @1.1.1.1 gabevandevere.com A | head -1)
+[ -n "$edge" ] || fail "could not resolve gabevandevere.com via 1.1.1.1"
+live=$(curl -s -m 15 --resolve "gabevandevere.com:443:$edge" https://gabevandevere.com/) || fail "live site unreachable (systemctl --user status cloudflared)"
 printf '%s' "$live" | grep -q "style.css?v=$v" || fail "live site is serving a stale build (expected v=$v)"
 printf '%s' "$live" | grep -q 'id="about"' || fail "live HTML is missing the about section"
-code=$(curl -s -o /dev/null -w '%{http_code}' -m 15 https://gabevandevere.com/api/status)
+code=$(curl -s -o /dev/null -w '%{http_code}' -m 15 --resolve "gabevandevere.com:443:$edge" https://gabevandevere.com/api/status)
 [ "$code" = "200" ] || fail "live /api/status returned $code"
 ok "live https://gabevandevere.com"
 

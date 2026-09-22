@@ -1,0 +1,49 @@
+# ============================================================
+#  Tailnet listeners -- imported by Caddyfile. Only devices on the tailnet
+#  can reach any of these; the internet never does.
+#
+#  Tailnet devices resolve gabevandevere.com to this node's tailnet address
+#  (split DNS: a dnsmasq bound to that address, set up once by
+#  ~/.config/site-api/tailnet-dns-setup.sh). `tailscale serve` forwards raw
+#  TCP from the tailnet address :443 to 127.0.0.1:8443 with PROXY protocol,
+#  so Caddy terminates TLS itself -- a real certificate for gabevandevere.com
+#  via ACME DNS-01 on the Cloudflare API -- and still sees the caller's
+#  tailnet IP. Same URL as the public site; this ingress additionally serves
+#  /admin/ and edit mode. Public DNS still points at Cloudflare's tunnel,
+#  which lands on :8081, where /admin does not exist.
+#
+#    :8443  TLS, tailnet  -- https://gabevandevere.com from any tailnet device
+#    :8082  plain http    -- fallback: ssh -L 8082:127.0.0.1:8082, then
+#                            http://127.0.0.1:8082/admin/
+# ============================================================
+(tailnet) {
+	redir /admin /admin/ 301
+	request_header X-Site-Ingress tailnet
+	import site
+	log {
+		output file /home/gabevandevere/gabevandevere.com/tailnet-access.log {
+			roll_size 2MiB
+			roll_keep 2
+		}
+		format console
+	}
+}
+
+gabevandevere.com:8443 {
+	bind 127.0.0.1
+	tls {
+		dns cloudflare {file./home/gabevandevere/.config/site-api/cf-token}
+		# Propagation checks must ask public resolvers: this node's own DNS
+		# answers gabevandevere.com with the tailnet address.
+		resolvers 1.1.1.1 1.0.0.1
+	}
+	import tailnet
+}
+
+:8082 {
+	bind 127.0.0.1
+	import tailnet
+}
+
+# The node's own ts.net name (kept out of the public repo) also lands on :8443.
+import /home/gabevandevere/.config/site-api/caddy-*.caddyfile

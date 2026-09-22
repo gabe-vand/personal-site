@@ -2,20 +2,19 @@
 #  Caddyfile for gabevandevere.com
 #  Docs: https://caddyserver.com/docs/caddyfile
 #
-#  Two listeners, both bound to loopback, sharing the (site) snippet:
+#  Listeners, all bound to loopback, sharing the (site) snippet:
 #    :8081  public  -- cloudflared carries internet traffic here over an
-#                      outbound-only tunnel. /admin and /api/admin do NOT
-#                      exist on this listener (they 404 like any other path).
-#    :8082  tailnet -- `tailscale serve` (HTTPS on the machine's ts.net name)
-#                      proxies here. Only devices on the tailnet can reach it,
-#                      and it is the only way into /admin/ and edit mode.
-#  TLS is terminated upstream in both cases (Cloudflare's edge / tailscaled),
-#  so neither port is reachable from any network -- not even the LAN.
+#                      outbound-only tunnel; Cloudflare terminates TLS.
+#                      /admin and /api/admin do NOT exist on this listener
+#                      (they 404 like any other path).
+#    :8443  tailnet -- TLS, gabevandevere.com as seen from the tailnet
+#                      (see Caddyfile.tailnet). The only way into /admin/.
+#    :8082  tailnet -- plain-http fallback for the same, via an ssh tunnel.
 #
 #  Ports on this machine:
 #    8080  llama.cpp (oracle-llm.service)  -- do not touch
 #    8000  reserved                        -- do not touch
-#    8081  public site        8082  tailnet site
+#    8081  public site     8443 / 8082  tailnet site
 #    8002  site API (api/server.py, site-api.service) -- loopback only
 # ============================================================
 {
@@ -23,8 +22,19 @@
 	# can reach it, but `caddy reload` still works for zero-downtime
 	# config changes. File permissions are the access control.
 	admin unix//home/gabevandevere/.local/share/caddy/admin.sock
-	# TLS is handled upstream; don't try to get certificates.
-	auto_https off
+	# Certificates are managed only for :8443 (named sites); never open :80.
+	auto_https disable_redirects
+	# `tailscale serve` forwards the tailnet's :443 here as raw TCP with a
+	# PROXY header, so the real caller's tailnet IP reaches logs and the
+	# admin API's lockout. Only loopback may send that header.
+	servers 127.0.0.1:8443 {
+		listener_wrappers {
+			proxy_protocol {
+				allow 127.0.0.1/32
+			}
+			tls
+		}
+	}
 }
 
 # Everything both listeners have in common. Directives are sorted by Caddy's
@@ -139,14 +149,14 @@
 	@www host www.gabevandevere.com
 	redir @www https://gabevandevere.com{uri} 301
 
-	# The admin portal is tailnet-only (see :8082). From the internet it does
+	# The admin portal is tailnet-only (Caddyfile.tailnet). From the internet it does
 	# not exist: same 404 page as any other missing path, decided here before
 	# the /api/* proxy in the snippet ever sees the request.
 	@adminish path /admin /admin/* /api/admin /api/admin/*
 	handle @adminish {
 		error 404
 	}
-	# Only :8082 may vouch for the tailnet; nothing from the internet can.
+	# Only the tailnet listeners may vouch for the tailnet; nothing from the internet can.
 	request_header -X-Site-Ingress
 
 	import site
@@ -160,23 +170,5 @@
 	}
 }
 
-# --- tailnet: `tailscale serve --bg --https=443 http://127.0.0.1:8082` -------
-# tailscaled terminates TLS with the node's ts.net certificate and proxies here
-# with X-Forwarded-For set to the caller's tailnet IP. Serves the whole site
-# (edit mode needs the page itself) plus /admin/. Separate log, not ingested
-# into analytics; the beacon is also ignored for this ingress.
-:8082 {
-	bind 127.0.0.1
-	redir /admin /admin/ 301
-	request_header X-Site-Ingress tailnet
-
-	import site
-
-	log {
-		output file /home/gabevandevere/gabevandevere.com/tailnet-access.log {
-			roll_size 2MiB
-			roll_keep 2
-		}
-		format console
-	}
-}
+# --- tailnet: gabevandevere.com resolved to this node, plus /admin/ ----------
+import Caddyfile.tailnet
