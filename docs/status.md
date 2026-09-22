@@ -2,13 +2,14 @@
 
 Living status page for gabevandevere.com. Updated with every change.
 
-Last updated: 2026-09-18 (admin edit mode; work is three projects with card photographs).
+Last updated: 2026-09-22 (admin portal is tailnet-only).
 
 ## Live
 
 | Feature | Where | State |
 |---|---|---|
 | Serving: Caddy → Cloudflare Tunnel, loopback-only, security headers, CSP | `Caddyfile` | done |
+| Admin is tailnet-only: the public listener (:8081) answers `/admin*` and `/api/admin*` with the normal 404 and strips the `X-Site-Ingress` header; a second loopback listener (:8082) sets that header and is fed by `tailscale serve --bg --https=443 http://127.0.0.1:8082`, so `/admin/` and `/#edit` live at the node's ts.net name (interim: `ssh -L 8082:127.0.0.1:8082`, then `http://127.0.0.1:8082/admin/`). The API accepts `.ts.net`/loopback origins only on that ingress and ignores beacons from it; `deploy.sh` fails if :8081 ever serves `/admin/` | `Caddyfile`, `api/admin_api.py`, `api/public_routes.py`, `deploy.sh` | done; needs Serve + HTTPS enabled once in the Tailscale admin console |
 | Build: partials → `index.html`/`style.css`, `?v=` cache busting, 200-line lint | `build.py` | done |
 | Deploy: one command, smoke-tests local + live, commits, mirrors to GitHub (`gabe-vand/personal-site`, deploy key on the orin; push failure warns, never blocks) | `deploy.sh`, skill `deploy-site` | done |
 | Public repo hygiene: history rewritten 2026-09-01 to drop infrastructure notes, logs and caches; `deploy.sh` refuses runtime files and secret-shaped text; private notes live in `logs/private/` (gitignored) | `deploy.sh`, `.gitignore` | done |

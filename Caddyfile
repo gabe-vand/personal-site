@@ -2,15 +2,20 @@
 #  Caddyfile for gabevandevere.com
 #  Docs: https://caddyserver.com/docs/caddyfile
 #
-#  Listens on 127.0.0.1:8081 (plain HTTP). Cloudflare terminates TLS
-#  at its edge and cloudflared carries traffic here over an outbound-only
-#  tunnel, so this port is not reachable from any network -- not even
-#  the LAN. To let Caddy own TLS itself, see the block at the bottom.
+#  Two listeners, both bound to loopback, sharing the (site) snippet:
+#    :8081  public  -- cloudflared carries internet traffic here over an
+#                      outbound-only tunnel. /admin and /api/admin do NOT
+#                      exist on this listener (they 404 like any other path).
+#    :8082  tailnet -- `tailscale serve` (HTTPS on the machine's ts.net name)
+#                      proxies here. Only devices on the tailnet can reach it,
+#                      and it is the only way into /admin/ and edit mode.
+#  TLS is terminated upstream in both cases (Cloudflare's edge / tailscaled),
+#  so neither port is reachable from any network -- not even the LAN.
 #
 #  Ports on this machine:
 #    8080  llama.cpp (oracle-llm.service)  -- do not touch
 #    8000  reserved                        -- do not touch
-#    8081  this server
+#    8081  public site        8082  tailnet site
 #    8002  site API (api/server.py, site-api.service) -- loopback only
 # ============================================================
 {
@@ -22,25 +27,12 @@
 	auto_https off
 }
 
-:8081 {
-	# Bind to loopback only. NOTE: writing the site address as
-	# `127.0.0.1:8081` does NOT do this -- Caddy reads the host part as a
-	# Host-header matcher, still listens on all interfaces, and then 400s
-	# every request whose Host doesn't literally equal 127.0.0.1.
-	# `bind` is the directive that controls the listening interface.
-	bind 127.0.0.1
-
+# Everything both listeners have in common. Directives are sorted by Caddy's
+# fixed order, not by position, EXCEPT handle/handle_path blocks, which run in
+# the order written -- so a handle placed before `import site` wins over the
+# /api/* proxy below.
+(site) {
 	root * /home/gabevandevere/gabevandevere.com/site
-
-	# --- one canonical origin ----------------------------------
-	# Cloudflare terminates TLS and tells us the visitor's scheme in
-	# X-Forwarded-Proto. Plain-http visits and the www host both 301 to
-	# https://gabevandevere.com so there is exactly one URL for every page
-	# (search engines and link previews otherwise see two copies).
-	@insecure header X-Forwarded-Proto http
-	redir @insecure https://gabevandevere.com{uri} 301
-	@www host www.gabevandevere.com
-	redir @www https://gabevandevere.com{uri} 301
 
 	# A short, sayable URL for the CV. 302 so the filename can change later.
 	redir /resume /gabe-vandevere-resume.pdf 302
@@ -62,20 +54,15 @@
 
 	# --- security headers -------------------------------------
 	header {
-		# Browsers remember to use https for a year (Cloudflare serves the TLS).
+		# Browsers remember to use https for a year (TLS is upstream).
 		Strict-Transport-Security "max-age=31536000; includeSubDomains"
-		# Don't let other sites frame this one.
 		X-Frame-Options "SAMEORIGIN"
-		# Don't guess content types.
 		X-Content-Type-Options "nosniff"
-		# Don't leak full URLs to sites you link to.
 		Referrer-Policy "strict-origin-when-cross-origin"
-		# Turn off browser APIs the site never uses.
 		Permissions-Policy "geolocation=(), microphone=(), camera=(), interest-cohort=()"
 		# Everything loads from this origin only. If you ever add an
 		# embed (YouTube, a font CDN), you must widen this or it breaks.
 		Content-Security-Policy "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self'"
-		# Don't advertise the server software.
 		-Server
 	}
 
@@ -83,18 +70,15 @@
 	# HTML: always revalidate, so edits show up immediately.
 	@html path *.html /
 	header @html Cache-Control "no-cache"
-
 	# CSS/JS: ten minutes. index.html links them with a ?v= hash from build.py,
 	# so a fresh build is picked up on the next page load anyway.
 	@code path *.css *.js
 	header @code Cache-Control "public, max-age=600"
-	# Images and fonts: a day / a year. Fonts never change; images rarely.
 	@images path *.svg *.png *.jpg *.webp *.ico
 	header @images Cache-Control "public, max-age=86400"
 	@fonts path *.woff2
 	header @fonts Cache-Control "public, max-age=31536000, immutable"
-	# The resume gets replaced in place and people share the URL, so it must never go stale.
-	# Cloudflare caches .pdf by default; no-cache makes it revalidate every time.
+	# The resume gets replaced in place and people share the URL: never stale.
 	@pdf path *.pdf
 	header @pdf Cache-Control "no-cache"
 	# Admin UI: never indexed, never cached (after the rules above so no-store wins for its css/js).
@@ -103,21 +87,15 @@
 		X-Robots-Tag "noindex, nofollow"
 		Cache-Control "no-store"
 	}
-	redir /admin /admin/ 301
 	# Go's mime table does not know .webmanifest.
 	@manifest path /site.webmanifest
 	header @manifest Content-Type "application/manifest+json"
 
 	# --- site API: local LLM proxy + board telemetry ------------
-	# The page's "machine" section talks to /api/*. This is NOT :8080
-	# directly: that would put an unmetered LLM on the public internet
-	# and the API key would have to live where the browser can read it.
-	# api/server.py (site-api.service) holds the key, fixes the system
-	# prompt, caps tokens, rate-limits, and queues for the single slot.
-	#
-	# handle_path strips the /api prefix, so the backend sees /chat and
-	# /status. flush_interval -1 pushes each streamed token through
-	# immediately instead of buffering the response.
+	# /api/* goes to api/server.py (site-api.service), which holds the LLM key,
+	# fixes the system prompt, caps tokens and rate-limits. Never proxy :8080
+	# directly. handle_path strips the /api prefix; flush_interval -1 pushes
+	# each streamed token through immediately instead of buffering.
 	handle_path /api/* {
 		reverse_proxy 127.0.0.1:8002 {
 			flush_interval -1
@@ -127,14 +105,11 @@
 		}
 	}
 
-	# --- static files -----------------------------------------
 	file_server
 
 	# --- pretty 404 -------------------------------------------
 	handle_errors {
-		# handle_errors runs as its own route, so it does NOT inherit the
-		# `header` block above. Repeat the important bits here or error
-		# pages ship without the security headers.
+		# Its own route, so it does NOT inherit the `header` block above.
 		header {
 			X-Frame-Options "SAMEORIGIN"
 			X-Content-Type-Options "nosniff"
@@ -149,6 +124,32 @@
 		}
 		respond "{err.status_code} {err.status_text}"
 	}
+}
+
+# --- public: the internet, via Cloudflare Tunnel -----------------------------
+:8081 {
+	# `bind` controls the interface. Writing `127.0.0.1:8081` as the site
+	# address would NOT: Caddy reads that as a Host matcher.
+	bind 127.0.0.1
+
+	# One canonical origin: plain-http visits (Cloudflare tells us the scheme
+	# in X-Forwarded-Proto) and the www host both 301 to the apex.
+	@insecure header X-Forwarded-Proto http
+	redir @insecure https://gabevandevere.com{uri} 301
+	@www host www.gabevandevere.com
+	redir @www https://gabevandevere.com{uri} 301
+
+	# The admin portal is tailnet-only (see :8082). From the internet it does
+	# not exist: same 404 page as any other missing path, decided here before
+	# the /api/* proxy in the snippet ever sees the request.
+	@adminish path /admin /admin/* /api/admin /api/admin/*
+	handle @adminish {
+		error 404
+	}
+	# Only :8082 may vouch for the tailnet; nothing from the internet can.
+	request_header -X-Site-Ingress
+
+	import site
 
 	log {
 		output file /home/gabevandevere/gabevandevere.com/access.log {
@@ -159,15 +160,23 @@
 	}
 }
 
-# ============================================================
-#  ALTERNATIVE: let Caddy terminate TLS itself.
-#  Only works if inbound :80 and :443 reach this machine
-#  (router port-forwarding). Replace the ":8081 {" block above
-#  with this, then Caddy gets a Let's Encrypt cert automatically.
-#
-#  gabevandevere.com, www.gabevandevere.com {
-#  	root * /home/gabevandevere/gabevandevere.com/site
-#  	encode zstd gzip
-#  	file_server
-#  }
-# ============================================================
+# --- tailnet: `tailscale serve --bg --https=443 http://127.0.0.1:8082` -------
+# tailscaled terminates TLS with the node's ts.net certificate and proxies here
+# with X-Forwarded-For set to the caller's tailnet IP. Serves the whole site
+# (edit mode needs the page itself) plus /admin/. Separate log, not ingested
+# into analytics; the beacon is also ignored for this ingress.
+:8082 {
+	bind 127.0.0.1
+	redir /admin /admin/ 301
+	request_header X-Site-Ingress tailnet
+
+	import site
+
+	log {
+		output file /home/gabevandevere/gabevandevere.com/tailnet-access.log {
+			roll_size 2MiB
+			roll_keep 2
+		}
+		format console
+	}
+}

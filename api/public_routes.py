@@ -22,6 +22,8 @@ def health(h, _path):
 
 def beacon(h, _path):
     payload = h.read_json(config.BEACON_MAX_BYTES)
+    if h.headers.get('X-Site-Ingress') == 'tailnet':  # Gabe on the tailnet listener (edit mode) is not a visitor
+        return h.send_json(200, {'ok': True})
     ok = track.record(payload, h.client_ip(), h.country(), h.ua(), h.location())
     h.send_json(200 if ok else 400, {'ok': ok})
 

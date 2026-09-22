@@ -35,7 +35,11 @@ code=$(curl -s -o /dev/null -w '%{http_code}' -m 5 http://127.0.0.1:8081/)
 [ "$code" = "200" ] || fail "local index returned $code"
 code=$(curl -s -o /dev/null -w '%{http_code}' -m 5 http://127.0.0.1:8081/api/health)
 [ "$code" = "200" ] || fail "local /api/health returned $code (journalctl --user -u site-api -n 30)"
-ok "local 8081 + api"
+code=$(curl -s -o /dev/null -w '%{http_code}' -m 5 http://127.0.0.1:8081/admin/)
+[ "$code" = "404" ] || fail "public listener serves /admin/ ($code); it must be tailnet-only"
+code=$(curl -s -o /dev/null -w '%{http_code}' -m 5 http://127.0.0.1:8082/admin/)
+[ "$code" = "200" ] || fail "tailnet listener (8082) /admin/ returned $code"
+ok "local 8081 + api; admin only on 8082"
 
 # Fetch the plain URL (no cache-buster) and require this build's version hash in it, so a stale
 # copy anywhere between here and the visitor fails the deploy instead of going unnoticed.

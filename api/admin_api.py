@@ -1,7 +1,12 @@
 """Admin endpoints under /admin/*. Everything except login requires a valid session cookie AND
 the X-Admin header (a custom header cannot be sent cross-site without a CORS preflight, which
 this server never answers, so this doubles as CSRF protection alongside SameSite=Strict). Any
-request carrying an Origin that is not the site is refused outright."""
+request carrying an Origin that is not the site is refused outright.
+
+Reachability: Caddy only routes /api/admin/* from its tailnet listener (:8082, fed by
+`tailscale serve`), which marks requests with X-Site-Ingress: tailnet; the public listener
+404s the path and strips that header. On that ingress the page origin is the node's ts.net
+name (or a loopback port through an ssh tunnel), so those origins are accepted too."""
 import urllib.parse
 
 import admin_auth
@@ -14,9 +19,18 @@ ORIGIN = 'https://gabevandevere.com'
 NO_STORE = {'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex, nofollow'}
 
 
+def _origin_ok(h, origin: str) -> bool:
+    if origin == ORIGIN:
+        return True
+    if h.headers.get('X-Site-Ingress') != 'tailnet':
+        return False
+    host = urllib.parse.urlsplit(origin).hostname or ''
+    return host.endswith('.ts.net') or host in ('127.0.0.1', 'localhost')
+
+
 def _guard(h) -> bool:
     origin = h.headers.get('Origin')
-    if origin and origin != ORIGIN:
+    if origin and not _origin_ok(h, origin):
         h.send_json(403, {'error': 'forbidden'}, NO_STORE)
         return False
     if h.headers.get('X-Admin') != '1':

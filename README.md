@@ -119,7 +119,10 @@ Three `systemctl --user` units (no `sudo` needed; lingering is enabled so they s
 
 Caddy forwards `/api/*` to `api/server.py` and strips the prefix.
 
-**Admin** lives at `/admin/` (static SPA in `site/admin/`, API under `/api/admin/*`). One account;
+**Admin** lives at `/admin/` (static SPA in `site/admin/`, API under `/api/admin/*`) and is reachable
+**only from the tailnet**: Caddy's public listener 404s `/admin` and `/api/admin`, and a second loopback
+listener (:8082) behind `tailscale serve` is the only way in (`https://<node>.<tailnet>.ts.net/admin/`,
+or `ssh -L 8082:127.0.0.1:8082` then `http://127.0.0.1:8082/admin/`). Edit mode lives there too. One account;
 credentials are an scrypt hash in `~/.config/site-api/admin` (0600). To reset the password:
 `cd api && python3 -c "import admin_auth; print(admin_auth.make_secret_file('gabe@gabevandevere.com', 'NEW-PASSWORD'))"`
 (prints a fresh otpauth URI; set `TOTP_ENABLED=1` in that file to require an authenticator code).
