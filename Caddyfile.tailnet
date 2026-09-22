@@ -40,6 +40,17 @@ gabevandevere.com:8443 {
 	import tailnet
 }
 
+# The tailnet resolver answers www too (it never forwards the domain), so
+# give it a certificate and send it to the apex like the public listener does.
+www.gabevandevere.com:8443 {
+	bind 127.0.0.1
+	tls {
+		dns cloudflare {file./home/gabevandevere/.config/site-api/cf-token}
+		resolvers 1.1.1.1 1.0.0.1
+	}
+	redir https://gabevandevere.com{uri} 301
+}
+
 :8082 {
 	bind 127.0.0.1
 	import tailnet
