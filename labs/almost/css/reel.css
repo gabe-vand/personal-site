@@ -1,0 +1,52 @@
+/* The reel: the word unrolls into its candidates, the chosen one exactly where the word was. */
+.reel {
+    position: absolute;
+    z-index: 40;
+    min-width: 16rem;
+    max-width: min(24rem, calc(100vw - 16px));
+    padding: 0.35rem;
+    background: var(--paper-2);
+    border: 1px solid var(--ink);
+    box-shadow: 0 1px 0 var(--ink), 0 18px 40px -18px rgba(40, 25, 10, 0.45);
+}
+.reel[hidden] { display: none; }
+.reel-head, .reel-foot { margin: 0; padding: 0.3rem 0.45rem; color: var(--ink-3); }
+.reel-foot { color: var(--rubric); border-top: 1px solid var(--rule); margin-top: 0.25rem; padding-top: 0.45rem; }
+.reel-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 4.5rem 2.9rem;
+    align-items: center;
+    column-gap: 0.6rem;
+    width: 100%;
+    padding: 0.3rem 0.45rem;
+    border: 0;
+    border-radius: 2px;
+    background: transparent;
+    color: var(--ink);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+.reel-row:hover, .reel-row:focus-visible { background: var(--rubric-soft); outline: none; box-shadow: inset 2px 0 0 var(--rubric); }
+.rr-t { font: 400 1.45rem/1.15 var(--serif); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rr-bar { height: 5px; background: var(--paper-3); position: relative; }
+.rr-bar i { position: absolute; inset: 0 auto 0 0; background: var(--ink-2); }
+.rr-p { text-align: right; color: var(--ink-3); }
+.rr-tag { grid-column: 1 / -1; color: var(--rubric); text-transform: uppercase; font-size: 0.6rem; margin-top: 0.1rem; }
+.reel-row.is-chosen { background: var(--ink); color: var(--paper-2); cursor: default; }
+.reel-row.is-chosen .rr-bar { background: #4b453d; }
+.reel-row.is-chosen .rr-bar i { background: var(--paper-2); }
+.reel-row.is-chosen .rr-p { color: var(--paper-3); }
+.reel-row.is-chosen .rr-tag { color: #ff9a7a; }
+.reel-row.is-chosen:hover { box-shadow: none; }
+
+.reel.is-in .reel-row { animation: unroll 0.34s cubic-bezier(0.2, 0.9, 0.3, 1.15) both; }
+.reel.is-in .reel-row:nth-of-type(2) { animation-delay: 20ms; }
+.reel.is-in .reel-row:nth-of-type(3) { animation-delay: 40ms; }
+.reel.is-in .reel-row:nth-of-type(4) { animation-delay: 60ms; }
+.reel.is-in .reel-row:nth-of-type(5) { animation-delay: 80ms; }
+.reel.is-in .reel-row:nth-of-type(6) { animation-delay: 100ms; }
+.reel.is-in { animation: reel-in 0.2s ease-out both; }
+@keyframes unroll { from { transform: translateY(var(--from, 0)); opacity: 0; } }
+@keyframes reel-in { from { box-shadow: none; border-color: transparent; background-color: transparent; } }
+@media (prefers-reduced-motion: reduce) { .reel.is-in .reel-row, .reel.is-in { animation: none; } }
