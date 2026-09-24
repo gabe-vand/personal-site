@@ -20,6 +20,22 @@ def health(h, _path):
     h.send_json(200, {'ok': True})
 
 
+def whereami(h, _path):
+    """Where this request came from, per Cloudflare's visitor-location headers, and which edge
+    it entered through (the CF-Ray suffix). Nothing stored; used by the labs' zoom frontend."""
+    def num(name):
+        try:
+            return round(float(h.headers.get(name, '')), 2)
+        except ValueError:
+            return None
+    ray = h.headers.get('CF-Ray') or ''
+    h.send_json(200, {
+        'city': (h.headers.get('CF-IPCity') or '')[:60], 'region': (h.headers.get('CF-Region') or '')[:60],
+        'country': h.country(), 'lat': num('CF-IPLatitude'), 'lon': num('CF-IPLongitude'),
+        'colo': ray.rpartition('-')[2][:4] if '-' in ray else '',
+    })
+
+
 def beacon(h, _path):
     payload = h.read_json(config.BEACON_MAX_BYTES)
     if h.headers.get('X-Site-Ingress') == 'tailnet':  # Gabe on the tailnet listener (edit mode) is not a visitor
@@ -46,6 +62,7 @@ def chat_route(h, _path):
     payload = h.read_json()
     try:
         history = chat.clean_history(payload.get('messages'))
+        alts, prefix = chat.clean_extras(payload)
     except (ValueError, AttributeError):
         return h.send_json(400, {'error': 'Bad request or message too long.'})
     ids = {k: (payload.get(k) if isinstance(payload.get(k), str) else '')[:32] for k in ('vid', 'sid')}
@@ -58,12 +75,12 @@ def chat_route(h, _path):
     if not limits.try_enter_queue():
         return h.send_json(503, {'error': 'Two people are already waiting on the one slot. Try again in a minute.'})
     try:
-        _stream(h, history, meta)
+        _stream(h, history, meta, alts, prefix)
     finally:
         limits.leave_queue()
 
 
-def _stream(h, history, meta):
+def _stream(h, history, meta, alts=0, prefix=''):
     h.send_response(200)
     for key, value in SSE_HEADERS.items():
         h.send_header(key, value)
@@ -72,7 +89,7 @@ def _stream(h, history, meta):
         h.write(chat.sse('error', {'message': 'Still busy after a long wait. Try again shortly.'}))
         return
     try:
-        for event in chat.stream(history, meta):
+        for event in chat.stream(history, meta, alts, prefix):
             if not h.write(event):
                 break  # visitor left; dropping the upstream connection cancels generation
     finally:
@@ -92,6 +109,6 @@ def _wait_for_slot(h):
 
 
 ROUTES = [
-    ('GET', '/status', status), ('GET', '/health', health),
+    ('GET', '/status', status), ('GET', '/health', health), ('GET', '/whereami', whereami),
     ('POST', '/chat', chat_route), ('POST', '/contact', contact), ('POST', '/beacon', beacon),
 ]

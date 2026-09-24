@@ -5,7 +5,14 @@ the output length, forwards tokens as they arrive, and reports timing at
 the end so the page can show real tokens-per-second.
 
 Events, in order:  status -> token* -> done      (or error at any point)
+
+Two optional extras, used by the labs frontends:
+  alts   -- 1..5: each token event also carries its probability `p` and the `alts` the model
+            weighed at that position ([{t, p}], most likely first). llama.cpp's logprobs.
+  prefix -- text the answer must start with (a "fork": the visitor picked another word and the
+            model carries on from there). Sent as an assistant prefill; never echoed back.
 """
+import math
 import json
 import time
 import urllib.error
@@ -41,14 +48,30 @@ def sse(event, payload):
     return f'event: {event}\ndata: {json.dumps(payload, ensure_ascii=False)}\n\n'.encode('utf-8')
 
 
-def _request(history):
-    body = json.dumps({
+def clean_extras(payload):
+    """Validate the optional alts/prefix fields. Returns (alts, prefix) or raises ValueError."""
+    alts, prefix = payload.get('alts', 0), payload.get('prefix', '')
+    if not isinstance(alts, int) or not 0 <= alts <= 5:
+        raise ValueError('alts must be 0-5')
+    if not isinstance(prefix, str) or len(prefix) > config.MAX_PREFIX_CHARS:
+        raise ValueError('prefix too long')
+    return alts, prefix
+
+
+def _request(history, alts=0, prefix=''):
+    messages = [{'role': 'system', 'content': persona.SYSTEM_PROMPT}] + history
+    if prefix:
+        messages.append({'role': 'assistant', 'content': prefix})
+    req = {
         'model': config.MODEL_ALIAS,
         'stream': True,
         'max_tokens': config.MAX_TOKENS,
         'temperature': config.TEMPERATURE,
-        'messages': [{'role': 'system', 'content': persona.SYSTEM_PROMPT}] + history,
-    }).encode('utf-8')
+        'messages': messages,
+    }
+    if alts:
+        req.update(logprobs=True, top_logprobs=alts)
+    body = json.dumps(req).encode('utf-8')
     headers = {'Authorization': 'Bearer ' + telemetry.api_key(), 'Content-Type': 'application/json'}
     return urllib.request.Request(config.UPSTREAM + '/v1/chat/completions', data=body, method='POST', headers=headers)
 
@@ -76,15 +99,31 @@ def _log(question, answer, timings, meta):
         print(f'convo record error: {type(exc).__name__}: {exc}', flush=True)
 
 
-def stream(history, meta=None):
+def _prob(logprob):
+    return round(math.exp(logprob), 4) if isinstance(logprob, (int, float)) else None
+
+
+def _token_event(text, choice, alts):
+    """One token event; with alts, attach p and the alternatives from llama.cpp's logprobs."""
+    payload = {'t': text}
+    entries = ((choice.get('logprobs') or {}).get('content') or []) if alts else []
+    if entries:
+        last = entries[-1]
+        payload['p'] = _prob(last.get('logprob'))
+        payload['alts'] = [{'t': a.get('token', ''), 'p': _prob(a.get('logprob'))} for a in last.get('top_logprobs') or []]
+    return sse('token', payload)
+
+
+def stream(history, meta=None, alts=0, prefix=''):
     """Yield SSE byte strings for one exchange. Closing the generator early cancels generation upstream.
     meta: {vid, sid, ip, country, ua} for the conversation record."""
     meta = meta or {}
     started = time.monotonic()
     pieces = 0
-    answer = []
+    answer = [prefix] if prefix else []
+    echo = prefix  # llama.cpp repeats the prefill at the start of the first delta; drop it once
     try:
-        with urllib.request.urlopen(_request(history), timeout=config.UPSTREAM_READ_S) as resp:
+        with urllib.request.urlopen(_request(history, alts, prefix), timeout=config.UPSTREAM_READ_S) as resp:
             yield sse('status', {'state': 'thinking'})
             for raw in resp:
                 line = raw.decode('utf-8', 'replace').strip()
@@ -96,10 +135,12 @@ def stream(history, meta=None):
                 chunk = json.loads(data)
                 choice = (chunk.get('choices') or [{}])[0]
                 text = (choice.get('delta') or {}).get('content')
+                if text and echo:
+                    text, echo = (text[len(echo):] if text.startswith(echo) else text), ''
                 if text:
                     pieces += 1
                     answer.append(text)
-                    yield sse('token', {'t': text})
+                    yield _token_event(text, choice, alts)
                 if chunk.get('timings'):
                     chunk['timings']['ms'] = int((time.monotonic() - started) * 1000)
                     _log(history[-1]['content'], ''.join(answer), chunk['timings'], meta)

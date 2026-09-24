@@ -19,6 +19,7 @@ TEMPERATURE = 0.7
 MAX_MESSAGE_CHARS = 500     # per message, either role
 MAX_HISTORY = 6             # messages kept from the client (system prompt is added here)
 MAX_BODY_BYTES = 8192
+MAX_PREFIX_CHARS = 1200    # a fork's assistant prefill (labs): the answer so far plus the swapped word
 
 # Queueing: the model serves one request at a time. Let a couple of people
 # wait behind it, turn everyone else away quickly with a clear message.
