@@ -1,0 +1,56 @@
+/* Things that sit on the glass, not the wall: the altimeter, the route topo, the beta callout, tape labels. */
+html.wall-on .hud { display: flex; position: fixed; top: 16px; left: 18px; z-index: 6; gap: 14px; align-items: baseline; pointer-events: none; }
+.hud p { margin: 0; }
+.hud-mark { font: 700 15px var(--sans); letter-spacing: 0.06em; color: var(--ink); background: var(--paper); padding: 6px 10px; border-radius: 4px; box-shadow: var(--shadow); }
+.hud-grade { color: #fff; background: var(--route); padding: 2px 6px; border-radius: 3px; margin-left: 4px; }
+.hud-alt { font-size: 12px; color: var(--ink-2); background: rgba(251, 250, 246, 0.82); padding: 5px 9px; border-radius: 4px; backdrop-filter: blur(4px); }
+.hud-sep { color: var(--ink-3); margin: 0 3px; }
+html.is-dark .hud-alt { background: rgba(16, 20, 26, 0.7); color: #d7dde3; }
+
+/* The route topo: a side profile of the wall with every section as a clickable stop. */
+html.wall-on .topo { position: fixed; right: 14px; top: 50%; transform: translateY(-50%); z-index: 6; width: 116px; height: min(70vh, 560px); }
+html.wall-on .topo-svg { display: block; position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+html.wall-on .topo-list { position: absolute; inset: 0; padding: 0; display: block; }
+html.wall-on .topo-list li { position: absolute; right: 30px; transform: translateY(-50%); }
+html.wall-on .topo-list a {
+    display: block; font: 500 10.5px var(--mono); letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-3);
+    text-decoration: none; padding: 3px 6px; border-radius: 3px; background: rgba(251, 250, 246, 0.75); white-space: nowrap;
+}
+html.wall-on .topo-list a:hover, html.wall-on .topo-list a.is-here { color: #fff; background: var(--route); }
+.topo-wall { fill: none; stroke: var(--ink-3); stroke-width: 2; stroke-linejoin: round; }
+.topo-done { fill: none; stroke: var(--route); stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
+.topo-tick { fill: var(--paper); stroke: var(--ink-3); stroke-width: 1.5; }
+.topo-me { fill: var(--shirt); stroke: #fff; stroke-width: 2; }
+.topo-floor { stroke: var(--ink-3); stroke-width: 2; stroke-dasharray: 3 3; }
+
+/* Beta callout: what a friend on the mats would be shouting. */
+html.wall-on .beta {
+    display: block; position: fixed; left: 0; top: 0; z-index: 5; margin: 0; pointer-events: none;
+    font: 600 13px var(--mono); color: var(--ink); background: var(--paper); padding: 5px 9px; border-radius: 4px;
+    box-shadow: var(--shadow); opacity: 0; transition: opacity 0.25s; white-space: nowrap; will-change: transform;
+}
+html.wall-on .beta.is-on { opacity: 1; }
+html.wall-on .beta.is-big { font: 400 30px/1 var(--serif); padding: 6px 12px 8px; color: #fff; background: var(--shirt); }
+html.wall-on .cue {
+    display: block; position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); z-index: 6; margin: 0;
+    font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); background: var(--paper);
+    padding: 8px 14px; border-radius: 99px; box-shadow: var(--shadow); transition: opacity 0.4s; pointer-events: none;
+}
+html.wall-on .cue::after { content: ' \2193'; }
+html.wall-on .cue.is-gone { opacity: 0; }
+
+/* Tape labels stuck next to holds and volumes (positioned by js/labels.js). */
+.tape-label {
+    position: absolute; transform: translate(-50%, 50%) rotate(var(--r, -3deg)); padding: 3px 9px 2px;
+    font: 700 11px var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: #fff; background: var(--route);
+    clip-path: polygon(2% 6%, 98% 0, 100% 50%, 97% 96%, 3% 100%, 0 48%); white-space: nowrap;
+}
+.tape-label.is-plain { background: var(--tape); color: var(--ink-2); }
+
+html.wall-on.is-mobile .topo { right: 4px; width: 22px; height: 62vh; }
+html.wall-on.is-mobile .topo-list a { font-size: 0; width: 18px; height: 18px; padding: 0; background: transparent; }
+html.wall-on.is-mobile .topo-list li { right: 2px; }
+html.wall-on.is-mobile .hud { top: 10px; left: 10px; }
+@media (prefers-reduced-motion: reduce) {
+    html.wall-on .beta, html.wall-on .cue { transition: none; }
+}

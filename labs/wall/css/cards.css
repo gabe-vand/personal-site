@@ -1,0 +1,63 @@
+/* Paper on the wall: the route tag, topo cards for each job, project cards.
+   Every card is taped up (two strips of masking tape, drawn with pseudo-elements). */
+.card {
+    position: relative; background: var(--paper); color: var(--ink); border-radius: 3px;
+    padding: 22px 24px 20px; box-shadow: var(--shadow);
+}
+.card::before, .card::after, .polaroid::before {
+    content: ''; position: absolute; top: -11px; width: 74px; height: 22px; background: var(--tape);
+    opacity: 0.88; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+    clip-path: polygon(3% 0, 97% 4%, 100% 50%, 96% 100%, 4% 96%, 0 55%);
+}
+.card::before { left: 18px; transform: rotate(-4deg); }
+.card::after { right: 18px; transform: rotate(3deg); }
+
+.card-kicker { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 14px; margin: 0 0 10px; font-size: 11.5px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-3); }
+.card-kicker span:first-child { color: var(--route-deep); font-weight: 600; }
+.card-org { margin: 0; font: 400 clamp(30px, 3.3vw, 42px)/1.02 var(--serif); letter-spacing: -0.01em; }
+.card-role { margin: 6px 0 12px; font-weight: 600; font-size: 15.5px; color: var(--ink-2); }
+.card-body { margin: 0 0 10px; font-size: 14.5px; color: var(--ink-2); }
+.card-points { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; font-size: 14.2px; line-height: 1.5; color: var(--ink-2); }
+.card-points li { position: relative; padding-left: 22px; }
+.card-points li::before {
+    content: ''; position: absolute; left: 2px; top: 0.42em; width: 11px; height: 9px; background: var(--route);
+    border-radius: 55% 45% 50% 40% / 60% 55% 45% 40%; box-shadow: inset -2px -2px 0 rgba(0, 0, 0, 0.18);
+}
+.card-points strong, .card-body strong, .note strong { color: var(--ink); font-weight: 650; }
+.card-links { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 14px 0 0; font-size: 12.5px; }
+.crux { border-top: 5px solid var(--route); }
+
+/* The route tag: what a setter hangs at the start of a problem. */
+.tag { padding: 0 0 18px; overflow: visible; }
+.tag-strip { display: flex; align-items: center; gap: 14px; margin: 0 0 16px; padding: 10px 24px; background: var(--route); color: #fff; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 3px 3px 0 0; }
+.tag-grade { font: 700 22px/1 var(--sans); letter-spacing: 0; background: #fff; color: var(--route-deep); padding: 4px 8px 3px; border-radius: 3px; }
+.tag-name { margin: 0 24px; font: 400 clamp(46px, 5.6vw, 76px)/0.95 var(--serif); letter-spacing: -0.02em; }
+.tag-lede { margin: 10px 24px 14px; font-size: 18px; color: var(--ink-2); }
+.tag-facts { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 24px 14px; padding: 0; list-style: none; font-size: 11.5px; }
+.tag-facts li { border: 1px solid #d9d3c8; border-radius: 99px; padding: 3px 9px; color: var(--ink-2); }
+.tag-setter { margin: 0 24px; font-size: 11.5px; color: var(--ink-3); }
+.note p { margin: 0; font: 400 19px/1.45 var(--serif); color: var(--ink); }
+.note p strong { font-weight: 400; font-style: italic; }
+
+/* Projects: photograph + text side by side on a wide column, stacked on narrow ones. */
+.project { display: grid; grid-template-columns: 38% 1fr; gap: 20px; padding: 18px; }
+.project img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 2px; filter: saturate(0.9); }
+.project .card-org { font-size: clamp(28px, 2.6vw, 36px); }
+.project .card-body { font-size: 13.6px; }
+@media (max-width: 759px) {
+    .card { padding: 18px 16px 16px; }
+    .project { grid-template-columns: 1fr; gap: 12px; padding: 14px; }
+    .project img { aspect-ratio: 16 / 7; }
+    .card-points { font-size: 13.4px; gap: 7px; }
+    .card-body, .project .card-body { font-size: 13.4px; }
+    .tag-strip { padding: 9px 16px; }
+    .tag-name, .tag-lede, .tag-facts, .tag-setter { margin-left: 16px; margin-right: 16px; }
+    .note p { font-size: 17px; }
+}
+
+/* Polaroids (headshot, the photo board). */
+.polaroid { position: relative; margin: 0; background: #fff; padding: 9px 9px 0; box-shadow: var(--shadow); }
+.polaroid::before { left: 50%; margin-left: -37px; transform: rotate(-2deg); }
+.polaroid img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; }
+.polaroid figcaption { font: italic 400 15px/1.25 var(--serif); color: var(--ink-2); padding: 9px 3px 12px; }
+.tilt-r { transform: rotate(2.2deg); }

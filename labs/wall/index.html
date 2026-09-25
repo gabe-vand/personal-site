@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gabe Vandevere &mdash; V9, set 2026</title>
+<meta name="description" content="Gabe Vandevere's portfolio, set as a boulder problem. Scroll to climb it: experience, projects, photographs, and a top-out where you can send him a message.">
+<meta name="theme-color" content="#e9e5dd">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/fonts/instrument-serif-normal-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/instrument-sans-normal-400-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/cards.css">
+<link rel="stylesheet" href="css/board.css">
+<link rel="stylesheet" href="css/hud.css">
+<script type="module" src="js/main.js"></script>
+</head>
+<body>
+<a class="skip" href="#b-top">Skip to the top-out (contact)</a>
+<canvas id="wall" class="scene" aria-hidden="true"></canvas>
+<canvas id="climber" class="scene scene-climber" aria-hidden="true"></canvas>
+<div id="spacer" class="spacer" aria-hidden="true"></div>
+
+<header class="hud" aria-hidden="true">
+  <p class="hud-mark">GV <span class="hud-grade">V9</span></p>
+  <p class="hud-alt mono"><span id="hud-height">0.0</span> m <span class="hud-sep">/</span> move <span id="hud-move">0</span>&thinsp;of&thinsp;<span id="hud-moves">&mdash;</span></p>
+</header>
+
+<nav class="topo" id="topo" aria-label="The route">
+  <svg class="topo-svg" id="topo-svg" aria-hidden="true"></svg>
+  <ol class="topo-list" id="topo-list">
+    <li><a href="#b-start" data-band="start">Start</a></li>
+    <li><a href="#b-edu" data-band="edu">Slab</a></li>
+    <li><a href="#b-westpepper" data-band="westpepper">Westpepper</a></li>
+    <li><a href="#b-rx" data-band="rx">Crux</a></li>
+    <li><a href="#b-projects" data-band="projects">Volumes</a></li>
+    <li><a href="#b-photos" data-band="photos">Photo board</a></li>
+    <li><a href="#b-machine" data-band="machine">Roof</a></li>
+    <li><a href="#b-top" data-band="top">Top out</a></li>
+  </ol>
+</nav>
+<p class="beta" id="beta" aria-hidden="true"></p>
+<p class="cue mono" id="cue" aria-hidden="true">scroll down to climb up</p>
+
+<main class="world" id="world">
+
+<section class="band" id="b-start" data-band="start" data-type="start" aria-label="The route and who set it">
+  <article class="item card tag" data-item>
+    <p class="tag-strip mono"><span class="tag-grade">V9</span><span>set 2026</span><span>stand start &middot; top out</span></p>
+    <h1 class="tag-name">Gabe Vandevere</h1>
+    <p class="tag-lede">Senior CS major at the University of Delaware</p>
+    <ul class="tag-facts mono">
+      <li>Delaware CS &rsquo;27</li><li>3.87 GPA &middot; Dean&rsquo;s List</li><li>Wayne, PA</li>
+      <li>C++ &middot; React &middot; Python &middot; Java</li><li>AWS &middot; Linux &middot; Postgres</li><li>V9 boulderer</li>
+    </ul>
+    <p class="tag-setter mono">setter&rsquo;s note: the holds are real, and so is the r&eacute;sum&eacute;. <a href="/gabe-vandevere-resume.pdf" download>PDF &darr;</a></p>
+  </article>
+  <article class="item card note" data-item>
+    <p>I&rsquo;m <strong>Gabe Vandevere,</strong> a senior studying Computer Science at the University of Delaware, living in Wayne, Pennsylvania, just outside Philadelphia. Concurrently, I work part-time at The RxAssistant, building and testing conversational-AI products for pharmaceutical clients. Before that I did R&amp;D at Westpepper Capital: backtesting pipelines, real-time crypto market data on AWS, and a trading strategy that made it to production. I&rsquo;m highly interested in the future of AI and its application to streamlining everyday flows.</p>
+  </article>
+  <figure class="item polaroid tilt-r" data-item data-side="left" data-maxw="280">
+    <img src="/img/headshot.jpg" width="800" height="800" alt="Head-and-shoulders portrait of Gabe Vandevere in a jacket, in an office with a window behind him">
+    <figcaption>That&rsquo;s me. The hair does what it wants.</figcaption>
+  </figure>
+</section>
+
+<section class="band" id="b-edu" data-band="edu" data-type="slab" aria-labelledby="h-edu">
+  <article class="item card topo-card" data-item>
+    <p class="card-kicker mono"><span>01 &middot; the slab</span><span>expected spring 2027</span></p>
+    <h2 class="card-org" id="h-edu">University of Delaware</h2>
+    <p class="card-role">BS Computer Science, minor in Mathematics</p>
+    <p class="card-body">Expected spring 2027, GPA 3.87, Dean&rsquo;s List six semesters.</p>
+  </article>
+</section>
+
+<section class="band" id="b-westpepper" data-band="westpepper" data-type="vertical" aria-labelledby="h-wp">
+  <article class="item card topo-card" data-item>
+    <p class="card-kicker mono"><span>02 &middot; vertical, crimps</span><span>Jun&ndash;Aug 2025 &middot; Dec 2025&ndash;Feb 2026 &middot; Radnor, PA</span></p>
+    <h2 class="card-org" id="h-wp">Westpepper Capital</h2>
+    <p class="card-role">Quantitative R&amp;D Intern</p>
+    <ul class="card-points">
+      <li>Built an end-to-end machine-learning and backtesting pipeline over earnings, guidance and analyst-estimate data from REST APIs; trained and evaluated <strong>15 model variants</strong>, reaching <strong>57% next-day direction accuracy</strong> in historical tests.</li>
+      <li>Deployed Java services on AWS EC2 capturing real-time Kraken order books and maintaining history across <strong>200+ cryptocurrency markets</strong>.</li>
+      <li>Developed and backtested proprietary trading strategies in Java, C++, Excel and VBA &mdash; arbitrage, high-frequency, price-taking and market-making; <strong>one build advanced to production</strong> after sustained performance.</li>
+      <li>Built a Python analytics pipeline and dashboard used daily, automating email ingestion, P&amp;L and volume aggregation, Excel exports and Matplotlib reporting.</li>
+    </ul>
+  </article>
+</section>
+
+<section class="band" id="b-rx" data-band="rx" data-type="overhang" aria-labelledby="h-rx">
+  <article class="item card topo-card crux" data-item>
+    <p class="card-kicker mono"><span>03 &middot; the crux, overhung</span><span>May 2026 &mdash; present &middot; remote</span></p>
+    <h2 class="card-org" id="h-rx">The RxAssistant</h2>
+    <p class="card-role">AI Product QA / Operations Consultant</p>
+    <ul class="card-points">
+      <li>Authored <strong>69,000+ surviving lines</strong> &mdash; 50.5% of a 137,000-line production codebase &mdash; across 200+ commits to an internal React and TypeScript platform, covering safety review, automated MLR submission documents and live multi-brand configuration, and supporting the migration off the old codebase.</li>
+      <li>Led demo development and enterprise demonstrations of an AI field-intelligence platform for field reimbursement teams: approved-document search, patient-data lookup, ambient visit analysis and AI role-play training.</li>
+      <li>Delivered <strong>10+ client-facing AI prototypes and demos across 10+ pharmaceutical brands</strong>, working from requirements through technical implementation to staging and release.</li>
+      <li>Authored and executed <strong>100+ UAT and adversarial test cases</strong> for regulated conversational AI: adverse-event and product-complaint detection, emergency routing, off-label and hallucination boundaries, PII handling and multilingual input.</li>
+    </ul>
+    <p class="card-links mono"><a href="/gabe-vandevere-resume.pdf" download>r&eacute;sum&eacute; &mdash; PDF &darr;</a><a href="https://www.linkedin.com/in/gabe-vandevere-96aa1628b/" rel="me noopener" target="_blank">LinkedIn &rarr;</a></p>
+  </article>
+</section>
+
+<section class="band" id="b-projects" data-band="projects" data-type="volumes" aria-labelledby="h-projects">
+  <h2 class="visually-hidden" id="h-projects">Things I&rsquo;ve built</h2>
+  <article class="item card project" data-item data-volume="Savor">
+    <img src="/img/card-savor-logo.jpg" width="1200" height="900" loading="lazy" alt="The Savor logo: a blue hen with one wing wrapped around the Earth">
+    <div class="project-text">
+      <p class="card-kicker mono"><span>volume 01 &middot; 2026</span><span>HenHacks</span></p>
+      <h3 class="card-org">Savor</h3>
+      <p class="card-role">Receipt-scanning pantry tracker that surfaces food before it expires.</p>
+      <p class="card-body">Next.js and TypeScript on Supabase, with Google Gemini&rsquo;s vision model handling receipt OCR. Scanned items become a typed inventory with expiry dates; recipes are ranked by what is closest to expiring, and the app tracks cumulative waste avoided in dollars and CO&#8322;. Built by a team of four over one weekend at HenHacks 2026 and deployed on DigitalOcean.</p>
+      <p class="card-links mono"><a href="https://devpost.com/software/savor-jby10r" rel="noopener" target="_blank">devpost &rarr;</a><a href="https://github.com/gabe-udel/Hackthon2026" rel="noopener" target="_blank">github &rarr;</a></p>
+    </div>
+  </article>
+  <article class="item card project" data-item data-volume="Dog gait">
+    <img src="/img/card-dog.jpg" width="1200" height="900" loading="lazy" alt="A dog's head inside a dashed face box, marked with coloured landmarks on the ears, head, eyes, nose, muzzle and mouth">
+    <div class="project-text">
+      <p class="card-kicker mono"><span>volume 02 &middot; 2026</span><span>research</span></p>
+      <h3 class="card-org">Dog gait analysis</h3>
+      <p class="card-role">Detects cranial cruciate ligament injury from video of a dog walking.</p>
+      <p class="card-body">Two stages: a pose cascade tracks 39 body keypoints and 46 facial landmarks per frame, cutting mean normalised landmark error <strong>28.6%</strong> against the previous single-model approach (PCK@5% 71.0% to 84.1%, 479 held-out images). Those joint trajectories become gait features for a random-forest classifier trained on <strong>12&nbsp;GB of clinical video</strong>. Output is a CCL probability and a pose-overlaid render of the input for review.</p>
+      <p class="card-links mono"><a href="https://github.com/gabe-udel/dog-emotions" rel="noopener" target="_blank">keypoints &rarr;</a><a href="https://github.com/gabe-udel/cisc-442-final" rel="noopener" target="_blank">classifier &rarr;</a></p>
+    </div>
+  </article>
+  <article class="item card project" data-item data-volume="Oracle">
+    <img src="/img/card-oracle-dawn.jpg" width="1200" height="900" loading="lazy" alt="A Minecraft spruce forest at low sun, mist along the valley floor and stars still out overhead">
+    <div class="project-text">
+      <p class="card-kicker mono"><span>volume 03 &middot; 2026</span><span>Raspberry Pi</span></p>
+      <h3 class="card-org">Oracle</h3>
+      <p class="card-role">Minecraft server on a Raspberry Pi with an autonomous chat agent.</p>
+      <p class="card-body">Paper server on a Raspberry&nbsp;Pi&nbsp;4B, exposed over an outbound tunnel rather than port forwarding and managed by systemd so the world saves before a restart. Oracle is a Java plugin that reads all public chat with no command prefix: an interest scorer rates every message <strong>0&ndash;100</strong>, and it replies only when the score clears a threshold and a cooldown has elapsed. The inference provider &mdash; Claude, Gemini, or llama.cpp on the Jetson &mdash; is switchable at runtime.</p>
+    </div>
+  </article>
+</section>
+
+<section class="band" id="b-photos" data-band="photos" data-type="board" aria-labelledby="h-photos">
+  <div class="item photo-board" data-item>
+    <h2 class="board-title" id="h-photos">Off the wall.<span>Where I am when I&rsquo;m not here.</span></h2>
+    <figure class="polaroid"><img src="/img/ski.jpg" width="1050" height="1400" loading="lazy" alt="Gabe on a snowboard pointing at the camera in heavy snow while his dad takes the photo"><figcaption>Snowboarding trip to VA with the old man</figcaption></figure>
+    <figure class="polaroid"><img src="/img/boulder-woods.jpg" width="1050" height="1400" loading="lazy" alt="Gabe reaching high on a steep boulder in summer woods, crash pads and a spotter below"><figcaption>Local climbing in DE</figcaption></figure>
+    <figure class="polaroid"><img src="/img/horseback.jpg" width="1050" height="1400" loading="lazy" alt="View from horseback along a juniper trail, reins in hand, another rider ahead in a straw hat"><figcaption>Touching grass! Backpacking in AZ.</figcaption></figure>
+    <figure class="polaroid"><img src="/img/gecko.jpg" width="1050" height="1400" loading="lazy" alt="A crested gecko climbing a branch in its enclosure, crest raised, one eye on the camera"><figcaption>Crook, my crested gecko, doing the most athletic thing he has done all month.</figcaption></figure>
+    <figure class="polaroid"><img src="/img/henhacks-team.jpg" width="1050" height="1400" loading="lazy" alt="Gabe and his three teammates in front of the HenHacks 2026 Hack the Wild West backdrop at the University of Delaware"><figcaption>The HenHacks 2026 team</figcaption></figure>
+    <figure class="polaroid"><img src="/img/golf.jpg" width="1050" height="1400" loading="lazy" alt="Gabe and his dad in a golf cart on a wooded course on a bright day"><figcaption>Golf - made lots of charitable ball donations to ponds, brush, and roads</figcaption></figure>
+  </div>
+</section>
+
+<section class="band" id="b-machine" data-band="machine" data-type="roof" aria-labelledby="h-machine">
+  <article class="item card lcd" data-item>
+    <p class="lcd-head mono"><span class="lcd-dot" id="lcd-dot"></span><span id="lcd-state">conditions: connecting&hellip;</span></p>
+    <h2 class="lcd-title" id="h-machine">This wall runs on a board on my desk.</h2>
+    <p class="lcd-body">The page you&rsquo;re climbing came off a Jetson Orin Nano in Wayne, PA, and the same board runs a 9-billion-parameter language model. Ask it about me. Nothing leaves the board.</p>
+    <dl class="lcd-rows mono">
+      <div><dt>gpu</dt><dd><span id="lcd-gpu">&mdash;</span>&deg;C</dd></div>
+      <div><dt>power</dt><dd><span id="lcd-watts">&mdash;</span> W</dd></div>
+      <div><dt>model</dt><dd id="lcd-model">&mdash;</dd></div>
+      <div><dt>speed</dt><dd><span id="lcd-tps">&mdash;</span> tok/s</dd></div>
+    </dl>
+    <form class="lcd-form" id="lcd-form" autocomplete="off">
+      <label class="visually-hidden" for="lcd-input">Ask the machine</label>
+      <input id="lcd-input" type="text" maxlength="500" placeholder="What was his crux at work?" required>
+      <button type="submit" id="lcd-send">Ask</button>
+    </form>
+    <p class="lcd-answer" id="lcd-answer" aria-live="polite"></p>
+  </article>
+</section>
+
+<section class="band" id="b-top" data-band="top" data-type="top" aria-labelledby="h-top">
+  <article class="item card register" data-item>
+    <p class="card-kicker mono"><span>top-out register</span><span>sign it</span></p>
+    <h2 class="register-title" id="h-top">Send it.</h2>
+    <p class="register-sub">You topped out. Leave a line in the register and it lands in my inbox.</p>
+    <form class="register-form" id="register-form">
+      <label class="visually-hidden" for="r-subject">Subject</label>
+      <input id="r-subject" name="subject" type="text" placeholder="Subject" maxlength="120">
+      <label class="visually-hidden" for="r-from">Your email (optional, so I can reply)</label>
+      <input id="r-from" name="from" type="email" placeholder="Your email (optional, so I can reply)" maxlength="254" autocomplete="email">
+      <label class="visually-hidden" for="r-body">Message</label>
+      <textarea id="r-body" name="body" rows="4" placeholder="Say something&hellip;" maxlength="2000" required></textarea>
+      <button type="submit" class="send">Send it &rarr;</button>
+      <p class="register-note mono" id="register-note" role="status" hidden></p>
+    </form>
+    <div class="register-sent" id="register-sent" hidden>
+      <p class="sent-big">Sent.</p>
+      <p>It just landed in my inbox. I read everything &mdash; I&rsquo;ll write back.</p>
+      <button type="button" id="register-again">Send another &rarr;</button>
+    </div>
+    <p class="register-alt">Or the plain way: <a href="mailto:gabe@gabevandevere.com">gabe@gabevandevere.com</a> &middot; <a href="https://www.linkedin.com/in/gabe-vandevere-96aa1628b/" rel="me noopener" target="_blank">LinkedIn</a> &middot; <a href="/gabe-vandevere-resume.pdf" download>r&eacute;sum&eacute;</a></p>
+  </article>
+</section>
+
+</main>
+<div class="labels" id="labels" aria-hidden="true"></div>
+</body>
+</html>

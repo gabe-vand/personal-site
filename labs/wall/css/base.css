@@ -1,0 +1,62 @@
+/* The Wall: tokens, fonts, and the two layouts.
+   Without html.wall-on (no JS yet, or JS failed) the page is a plain column on wall paint.
+   With it, main.js pins everything to the scene and the document is only a scroll spacer. */
+@font-face { font-family: 'Instrument Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/instrument-serif-normal-400.woff2') format('woff2'); }
+@font-face { font-family: 'Instrument Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('/fonts/instrument-serif-italic-400.woff2') format('woff2'); }
+@font-face { font-family: 'Instrument Sans'; font-style: normal; font-weight: 400 700; font-display: swap; src: url('/fonts/instrument-sans-normal-400-700.woff2') format('woff2'); }
+@font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 400 600; font-display: swap; src: url('/fonts/jetbrains-mono-normal-400-600.woff2') format('woff2'); }
+
+:root {
+    color-scheme: light;
+    --paint: #e9e5dd;           /* wall paint */
+    --paper: #fbfaf6;           /* route tags, cards */
+    --ink: #1d1b19;
+    --ink-2: #4c4843;
+    --ink-3: #7d776f;
+    --route: #6a3df0;           /* the problem's hold colour (ultraviolet) */
+    --route-deep: #4a22c4;
+    --route-soft: rgba(106, 61, 240, 0.12);
+    --tape: #f1e6c8;            /* masking tape */
+    --shirt: #ff5a1f;           /* the climber's tee, also the send button */
+    --lcd: #10161c;
+    --lcd-ink: #9ff2c3;
+    --serif: 'Instrument Serif', 'Iowan Old Style', Georgia, serif;
+    --sans: 'Instrument Sans', 'Helvetica Neue', Arial, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+    --shadow: 0 1px 1px rgba(40, 30, 20, 0.08), 0 8px 18px -6px rgba(40, 30, 20, 0.28), 0 22px 40px -18px rgba(40, 30, 20, 0.3);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { background: var(--paint); color: var(--ink); font: 400 16px/1.5 var(--sans); -webkit-text-size-adjust: 100%; }
+body { margin: 0; }
+img { display: block; max-width: 100%; height: auto; }
+a { color: var(--route-deep); text-underline-offset: 0.18em; }
+a:hover { color: var(--route); }
+:focus-visible { outline: 3px solid var(--route); outline-offset: 3px; border-radius: 3px; }
+.mono { font-family: var(--mono); }
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.skip { position: fixed; left: 12px; top: -60px; z-index: 50; background: var(--ink); color: var(--paper); padding: 8px 14px; border-radius: 6px; }
+.skip:focus { top: 12px; color: var(--paper); }
+
+/* ---------- fallback: a plain column ---------- */
+.scene, .spacer, .hud, .beta, .cue, .labels, .topo-svg { display: none; }
+.world { max-width: 720px; margin: 0 auto; padding: 32px 16px 80px; }
+.band { margin-bottom: 48px; }
+.item { margin-bottom: 20px; }
+.topo-list { display: flex; flex-wrap: wrap; gap: 6px 14px; list-style: none; padding: 16px; margin: 0; font: 500 13px var(--mono); }
+
+/* ---------- the wall ---------- */
+html.wall-on .scene { display: block; position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+html.wall-on .scene-climber { z-index: 3; }
+html.wall-on .spacer { display: block; width: 1px; }
+html.wall-on .world, html.wall-on .labels {
+    display: block; position: fixed; left: 0; bottom: 0; width: 100%; height: 0; max-width: none;
+    margin: 0; padding: 0; z-index: 2; will-change: transform;
+}
+html.wall-on .labels { z-index: 2; pointer-events: none; }
+html.wall-on .band { margin: 0; }
+html.wall-on .item { position: absolute; margin: 0; }
+html.wall-on.is-mobile .scene-climber { z-index: 1; }
+html.wall-on.is-mobile .world { z-index: 2; }
+html.wall-on.is-mobile .labels { z-index: 1; }
