@@ -4,6 +4,7 @@ import time
 
 import chat
 import config
+import forks
 import limits
 import mail
 import telemetry
@@ -62,9 +63,16 @@ def chat_route(h, _path):
     payload = h.read_json()
     try:
         history = chat.clean_history(payload.get('messages'))
-        alts, prefix = chat.clean_extras(payload)
-    except (ValueError, AttributeError):
+        alts = chat.clean_alts(payload)
+        fork = forks.resolve(payload['fork']) if payload.get('fork') is not None else None
+    except ValueError as err:
+        return h.send_json(400, {'error': str(err) if payload and payload.get('fork') is not None else 'Bad request or message too long.'})
+    except AttributeError:
         return h.send_json(400, {'error': 'Bad request or message too long.'})
+    prefix, head = '', []
+    if fork:  # the question and the words so far come from the server's own copy, not the browser
+        question, prefix, head = fork
+        history = [{'role': 'user', 'content': question}]
     ids = {k: (payload.get(k) if isinstance(payload.get(k), str) else '')[:32] for k in ('vid', 'sid')}
     meta = {**ids, 'ip': h.client_ip(), 'country': h.country(), 'ua': h.ua(), 'loc': h.location()}
     wait = limits.take_token(h.client_ip())
@@ -75,25 +83,30 @@ def chat_route(h, _path):
     if not limits.try_enter_queue():
         return h.send_json(503, {'error': 'Two people are already waiting on the one slot. Try again in a minute.'})
     try:
-        _stream(h, history, meta, alts, prefix)
+        _stream(h, history, meta, alts, prefix, head)
     finally:
         limits.leave_queue()
 
 
-def _stream(h, history, meta, alts=0, prefix=''):
+def _stream(h, history, meta, alts=0, prefix='', head=()):
     h.send_response(200)
     for key, value in SSE_HEADERS.items():
         h.send_header(key, value)
     h.end_headers()
+    gen_id, said = (forks.new_id(), list(head)) if alts else (None, None)
+    if gen_id:
+        h.write(chat.sse('gen', {'id': gen_id}))
     if not _wait_for_slot(h):
         h.write(chat.sse('error', {'message': 'Still busy after a long wait. Try again shortly.'}))
         return
     try:
-        for event in chat.stream(history, meta, alts, prefix):
+        for event in chat.stream(history, meta, alts, prefix, said):
             if not h.write(event):
                 break  # visitor left; dropping the upstream connection cancels generation
     finally:
         limits.release_slot()
+        if gen_id and len(said) > len(head):
+            forks.remember(gen_id, history[-1]['content'], said)
 
 
 def _wait_for_slot(h):

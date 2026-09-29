@@ -5,8 +5,7 @@ served in production: Caddy's web root is `site/`, and `labs/` sits beside it.
 
 ```
 labs/run.sh        # opens an ssh tunnel to llama.cpp on the Jetson, then serves:
-  http://localhost:5100/   the current site (site/), for comparison
-  http://localhost:5101/   almost  — the bio as the model wrote it, with every word it didn't choose
+  http://localhost:5100/   the site itself (site/) — "almost" graduated from here on 2026-09-29
   http://localhost:5102/   wall    — the page is a boulder problem; scrolling climbs it
   http://localhost:5103/   zoom    — Powers of Ten, from the visitor down to the model's weights
 ```
@@ -29,10 +28,9 @@ Each lab is a folder with its own `index.html`; missing paths fall back to `site
 ## API additions made for the labs
 
 - `POST /api/chat` accepts `alts` (1–5): each `token` event then carries `p` (its probability) and
-  `alts` (`[{t, p}]`, the alternatives llama.cpp weighed there). Also `prefix`: text the answer must
-  start with, sent as an assistant prefill and not echoed back. That is how "almost" forks an answer.
-  **Before shipping:** `prefix` lets a visitor put words in the model's mouth. It is capped at
-  `MAX_PREFIX_CHARS`, but if a lab using it goes live, consider signing the canonical text server-side.
+  `alts` (`[{t, p}]`, the alternatives llama.cpp weighed there), and a `gen` event names the answer.
+  `fork: {src, i, a}` continues a baked passage or a named answer from one of its alternatives; the
+  words so far are rebuilt server-side (`api/forks.py`), so a visitor cannot supply them.
 - `GET /api/whereami`: city/region/country/lat/lon from Cloudflare's visitor-location headers and
   the edge colo from the `CF-Ray` suffix. Stores nothing.
 

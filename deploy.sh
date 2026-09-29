@@ -47,12 +47,12 @@ ok "local 8081 + api; admin only on 8443/8082"
 # copy anywhere between here and the visitor fails the deploy instead of going unnoticed.
 # This node resolves gabevandevere.com to its own tailnet listener (split DNS), so ask a
 # public resolver for Cloudflare's address and pin it: the live check must go through the edge.
-v=$(grep -o 'style.css?v=[0-9a-f]*' site/index.html | head -1 | cut -d= -f2)
+v=$(grep -o 'main.js?v=[0-9a-f]*' site/index.html | head -1 | cut -d= -f2)
 edge=$(dig +short +time=3 @1.1.1.1 gabevandevere.com A | head -1)
 [ -n "$edge" ] || fail "could not resolve gabevandevere.com via 1.1.1.1"
 live=$(curl -s -m 15 --resolve "gabevandevere.com:443:$edge" https://gabevandevere.com/) || fail "live site unreachable (systemctl --user status cloudflared)"
-printf '%s' "$live" | grep -q "style.css?v=$v" || fail "live site is serving a stale build (expected v=$v)"
-printf '%s' "$live" | grep -q 'id="about"' || fail "live HTML is missing the about section"
+printf '%s' "$live" | grep -q "main.js?v=$v" || fail "live site is serving a stale build (expected v=$v)"
+printf '%s' "$live" | grep -q 'id="who"' || fail "live HTML is missing the first folio"
 code=$(curl -s -o /dev/null -w '%{http_code}' -m 15 --resolve "gabevandevere.com:443:$edge" https://gabevandevere.com/api/status)
 [ "$code" = "200" ] || fail "live /api/status returned $code"
 ok "live https://gabevandevere.com"

@@ -6,11 +6,11 @@ the end so the page can show real tokens-per-second.
 
 Events, in order:  status -> token* -> done      (or error at any point)
 
-Two optional extras, used by the labs frontends:
+Two optional extras, used by the homepage:
   alts   -- 1..5: each token event also carries its probability `p` and the `alts` the model
             weighed at that position ([{t, p}], most likely first). llama.cpp's logprobs.
-  prefix -- text the answer must start with (a "fork": the visitor picked another word and the
-            model carries on from there). Sent as an assistant prefill; never echoed back.
+  prefix -- text the answer must start with (a fork, see forks.py). Sent as an assistant
+            prefill and never echoed back. Never taken from the browser: forks.py builds it.
 """
 import math
 import json
@@ -48,14 +48,12 @@ def sse(event, payload):
     return f'event: {event}\ndata: {json.dumps(payload, ensure_ascii=False)}\n\n'.encode('utf-8')
 
 
-def clean_extras(payload):
-    """Validate the optional alts/prefix fields. Returns (alts, prefix) or raises ValueError."""
-    alts, prefix = payload.get('alts', 0), payload.get('prefix', '')
-    if not isinstance(alts, int) or not 0 <= alts <= 5:
+def clean_alts(payload):
+    """Validate the optional alts field (0-5). Raises ValueError."""
+    alts = payload.get('alts', 0)
+    if not isinstance(alts, int) or isinstance(alts, bool) or not 0 <= alts <= 5:
         raise ValueError('alts must be 0-5')
-    if not isinstance(prefix, str) or len(prefix) > config.MAX_PREFIX_CHARS:
-        raise ValueError('prefix too long')
-    return alts, prefix
+    return alts
 
 
 def _request(history, alts=0, prefix=''):
@@ -103,18 +101,21 @@ def _prob(logprob):
     return round(math.exp(logprob), 4) if isinstance(logprob, (int, float)) else None
 
 
-def _token_event(text, choice, alts):
-    """One token event; with alts, attach p and the alternatives from llama.cpp's logprobs."""
+def _token_event(text, choice, alts, collect=None):
+    """One token event; with alts, attach p and the alternatives from llama.cpp's logprobs.
+    collect, if given, gets (text, [alt texts]) so the answer can be forked later."""
     payload = {'t': text}
     entries = ((choice.get('logprobs') or {}).get('content') or []) if alts else []
     if entries:
         last = entries[-1]
         payload['p'] = _prob(last.get('logprob'))
         payload['alts'] = [{'t': a.get('token', ''), 'p': _prob(a.get('logprob'))} for a in last.get('top_logprobs') or []]
+    if collect is not None:
+        collect.append((text, [a['t'] for a in payload.get('alts', [])]))
     return sse('token', payload)
 
 
-def stream(history, meta=None, alts=0, prefix=''):
+def stream(history, meta=None, alts=0, prefix='', collect=None):
     """Yield SSE byte strings for one exchange. Closing the generator early cancels generation upstream.
     meta: {vid, sid, ip, country, ua} for the conversation record."""
     meta = meta or {}
@@ -140,7 +141,7 @@ def stream(history, meta=None, alts=0, prefix=''):
                 if text:
                     pieces += 1
                     answer.append(text)
-                    yield _token_event(text, choice, alts)
+                    yield _token_event(text, choice, alts, collect)
                 if chunk.get('timings'):
                     chunk['timings']['ms'] = int((time.monotonic() - started) * 1000)
                     _log(history[-1]['content'], ''.join(answer), chunk['timings'], meta)

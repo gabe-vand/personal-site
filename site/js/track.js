@@ -50,7 +50,7 @@ export function initTrack() {
             }
         }
     }, { threshold: 0.33 });
-    document.querySelectorAll('section.pitch[id]').forEach((s) => io.observe(s));
+    document.querySelectorAll('section.folio[id]').forEach((s) => io.observe(s));
     // Link-offs: any link leaving the page (other origins, mailto:).
     document.addEventListener('click', (e) => {
         const a = e.target.closest('a[href]');

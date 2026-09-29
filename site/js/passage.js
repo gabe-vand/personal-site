@@ -1,12 +1,12 @@
 // One folio's manuscript: its versions (the baked original and any forks), the replay at the
 // speed it was first written, and the fork itself — cut at a word, swap in the alternative,
 // and let the machine on the desk carry on from there, live.
-import { tokenNode, declutter } from './tokens.js';
-import { draw } from './seismo.js';
-import { drawTree, siglum } from './tree.js';
-import * as stream from './stream.js';
-import * as meter from './meter.js';
-import { wire } from './interact.js';
+import { tokenNode, declutter } from './tokens.js?v=e7bfc830';
+import { draw } from './seismo.js?v=e7bfc830';
+import { drawTree, siglum } from './tree.js?v=e7bfc830';
+import * as stream from './stream.js?v=e7bfc830';
+import * as meter from './meter.js?v=e7bfc830';
+import { wire } from './interact.js?v=e7bfc830';
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const MAX_PREFIX = 1200;
@@ -104,8 +104,9 @@ export class Passage {
         this.section.dispatchEvent(new CustomEvent('passage:ready', { bubbles: true, detail: this }));
     }
 
-    prefixOf(i, alt) {
-        return this.tokens.slice(0, i).map((t) => t.t).join('') + alt.t;
+    // The server's name for the current version: the baked passage's id, or the id it gave a live one.
+    get src() {
+        return this.current.parent == null && !this.baked.live ? this.baked.id : this.current.gen;
     }
 
     canFork(i) { return !this.whyNot(i); }
@@ -113,6 +114,7 @@ export class Passage {
     whyNot(i) {
         if (this.current.status === 'writing') return 'still writing this one — wait for the full stop';
         if (stream.isBusy()) return 'the machine is mid-sentence elsewhere — one slot, one pen';
+        if (!this.src) return 'this version broke off before the board kept a copy';
         if (this.tokens.slice(0, i).map((t) => t.t).join('').length > MAX_PREFIX - 40) return 'too deep into the passage to fork from here';
         return '';
     }
@@ -121,6 +123,7 @@ export class Passage {
         this.finishReplay();
         const base = this.current;
         const was = base.tokens[i];
+        const fork = { src: this.src, i, a: was.alts.findIndex((x) => x.t === alt.t) };
         const v = { id: this.versions.length, parent: base.id, at: i, status: 'writing', tps: null };
         v.tokens = [...base.tokens.slice(0, i), { ...alt, alts: was.alts, forked: true, was: was.t, branch: v.id % 5 }];
         this.versions.push(v);
@@ -134,18 +137,19 @@ export class Passage {
         setTimeout(() => {
             if (this.current === v) this.render();
             if (alt.t === '') return this.settle(v, 'stopped where you told it to');
-            this.write(v, this.prefixOf(i, alt));
+            this.write(v, fork);
         }, reduced ? 0 : 520 + Math.min(doomed.length * 12, 500));
     }
 
-    // Stream a continuation into version v. Also used for a visitor's own question (prefix '').
-    write(v, prefix) {
+    // Stream a continuation into version v. Also used for a visitor's own question (fork null).
+    write(v, fork) {
         this.section.classList.add('is-writing');
         meter.begin(`folio ${this.no}${v.id ? `, variant ${siglum(v.id)}` : ''}`);
         this.setMeta(' · waiting for the slot');
         stream.ask({
             question: this.q,
-            prefix,
+            fork,
+            onGen: (id) => { v.gen = id; },
             onStatus: (s) => {
                 meter.state(s.state === 'queued' ? `queued, ${s.ahead} ahead` : 'reading the prompt');
             },

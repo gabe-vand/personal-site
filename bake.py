@@ -9,7 +9,7 @@ page never touches the model on load.
     python3 labs/almost/bake.py              # every passage
     python3 labs/almost/bake.py dog oracle   # just these (re-roll one that got a fact wrong)
 
-Needs labs/run.sh running (it serves /api/chat on :5101). Sequential on purpose: the model
+Needs labs/run.sh running (it serves /api/chat on :5100). Sequential on purpose: the model
 has one slot and shares it with the Minecraft bot.
 """
 import json
@@ -18,8 +18,8 @@ import time
 import urllib.request
 from pathlib import Path
 
-API = 'http://localhost:5101/api'
-OUT = Path(__file__).resolve().parent / 'data'
+API = 'http://localhost:5100/api'
+OUT = Path(__file__).resolve().parent / 'site' / 'data'
 
 PASSAGES = {
     'who': 'Who is Gabe?',

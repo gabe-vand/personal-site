@@ -2,9 +2,18 @@
 
 Living status page for gabevandevere.com. Updated with every change.
 
-Last updated: 2026-09-22 (admin at the real URL from the tailnet: split DNS + Caddy TLS listener).
+Last updated: 2026-09-29 (the homepage is now "almost"; the previous site is retired to the tag `classic-site`).
 
 ## Live
+
+**2026-09-29: new homepage, "almost".** Every passage was written by the model on this board and is
+printed with the words it almost chose; choosing another word forks it and the model rewrites the rest
+live (`/api/chat` with `alts` and a server-resolved `fork`, `api/forks.py`). Live meter of words/s, watts
+and joules while it writes; a family tree of versions per folio; a visitor's own question becomes a
+new folio. Hard facts are hand-written in the margins (`src/index.html`). Rows below that describe the
+contour hero, topo nav, ticker, machine panel, paper plane, polaroid grid and edit mode refer to the
+retired page (tag `classic-site`); the API, admin, analytics beacon, Caddy and deploy rows still apply.
+
 
 | Feature | Where | State |
 |---|---|---|

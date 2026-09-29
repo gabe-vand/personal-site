@@ -44,7 +44,7 @@ convo.record_turn = lambda *a, **k: None   # no local database in dev
 speed.note = lambda *a, **k: None
 
 LIVE = os.environ.get('LIVE_ORIGIN', 'https://gabevandevere.com')
-LABS = {5100: ROOT / 'site', 5101: ROOT / 'labs' / 'almost', 5102: ROOT / 'labs' / 'wall', 5103: ROOT / 'labs' / 'zoom'}
+LABS = {5100: ROOT / 'site', 5102: ROOT / 'labs' / 'wall', 5103: ROOT / 'labs' / 'zoom'}
 _cache = {}
 DEV_WHERE = {'city': 'Newark', 'region': 'Delaware', 'country': 'US', 'lat': 39.68, 'lon': -75.75, 'colo': 'EWR', 'dev': True}
 

@@ -1,30 +1,80 @@
-// Entry point. Every feature is its own module and guards its own DOM, so deleting a
-// section from src/page/ never breaks the rest of the page.
-import { initTelemetry } from './telemetry.js?v=a7e8f368';
-import { initContour } from './contour.js?v=a7e8f368';
-import { initTopo } from './topo.js?v=a7e8f368';
-import { initTicker } from './ticker.js?v=a7e8f368';
-import { initChat } from './chat.js?v=a7e8f368';
-import { initChalk } from './chalk.js?v=a7e8f368';
-import { initReveal, initKonami } from './reveal.js?v=a7e8f368';
-import { initContact } from './contact.js?v=a7e8f368';
-import { initTrack } from './track.js?v=a7e8f368';
-import { initEdit } from './edit.js?v=a7e8f368';
+// Boot: load the baked passages, build a manuscript for each folio, replay each one at its
+// real speed as it scrolls into view, and fill the live readings from the board.
+import { Passage } from './passage.js?v=e7bfc830';
+import { bindReel } from './reel.js?v=e7bfc830';
+import { status } from './meter.js?v=e7bfc830';
+import { stats } from './tokens.js?v=e7bfc830';
+import { initAsk } from './ask.js?v=e7bfc830';
+import { initLetter } from './letter.js?v=e7bfc830';
+import { coach } from './coach.js?v=e7bfc830';
+import { initTrack } from './track.js?v=e7bfc830';
 
-const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-document.documentElement.classList.add('has-js');
-document.querySelectorAll('#year').forEach((el) => {
-    el.textContent = String(new Date().getFullYear());
-});
+export const passages = [];
 
-initTelemetry();
-initContour(reduced);
-initTopo();
-initTicker(reduced);
-initChat();
-initChalk(reduced);
-initReveal(reduced);
-initKonami();
-initContact();
-initTrack();
-initEdit();
+async function load(section) {
+    const res = await fetch(`/data/${section.dataset.passage}.json`);
+    if (!res.ok) throw new Error(section.dataset.passage);
+    return res.json();
+}
+
+function paintStats() {
+    const s = stats(passages.map((p) => p.versions[0].tokens));
+    const dd = document.querySelectorAll('#stats dd');
+    [s.words, s.contested, s.odds].forEach((n, k) => { if (dd[k]) dd[k].textContent = n.toLocaleString(); });
+}
+
+const fmtUp = (s) => {
+    const d = Math.floor(s / 86400), h = Math.floor((s % 86400) / 3600);
+    return d ? `${d} days, ${h} hours` : `${h} hours, ${Math.floor((s % 3600) / 60)} minutes`;
+};
+
+async function live() {
+    try {
+        const s = await status();
+        const mast = document.getElementById('mast-live');
+        if (mast) mast.textContent = `written on the Jetson on his desk · drawing ${s.power_w.total.toFixed(1)} W right now`;
+        const set = (k, v) => { const el = document.querySelector(`#scribe [data-s="${k}"]`); if (el) el.textContent = v; };
+        set('board', s.board);
+        set('model', `${s.model.name}, ${s.model.quant} · ${s.model.size_gb} GB`);
+        set('watts', `${s.power_w.total.toFixed(1)} W`);
+        set('gpu', `${Math.round(s.temps.gpu)} °C · ${Math.min(100, Math.round(s.gpu_load))}% busy`);
+        set('tokens', s.llm.tokens_generated.toLocaleString());
+        set('up', fmtUp(s.uptime_s));
+    } catch { /* the page reads fine without it */ }
+}
+
+async function boot() {
+    bindReel();
+    const sections = [...document.querySelectorAll('.folio[data-passage]')];
+    const datas = await Promise.all(sections.map((s) => load(s).catch(() => null)));
+    const io = new IntersectionObserver((entries) => {
+        for (const e of entries) {
+            if (!e.isIntersecting) continue;
+            const p = passages.find((x) => x.section === e.target);
+            if (p) p.replay();
+            io.unobserve(e.target);
+        }
+    }, { threshold: 0.2 });
+    sections.forEach((s, k) => {
+        if (!datas[k]) return;
+        const p = new Passage(s, datas[k]);
+        passages.push(p);
+        io.observe(s);
+        s.addEventListener('dblclick', () => p.finishReplay());
+    });
+    const ro = new ResizeObserver((entries) => {
+        for (const e of entries) passages.find((p) => p.ms === e.target)?.redraw();
+    });
+    passages.forEach((p) => ro.observe(p.ms));
+    paintStats();
+    if (passages[0]) coach(passages[0]);
+    live();
+    initAsk(passages, ro);
+    initLetter();
+    initTrack();
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') passages.forEach((p) => p.finishReplay());
+    });
+}
+
+boot();

@@ -2,7 +2,7 @@
 // critics draw of a manuscript's copies). A is the baked original; B, C... are the visitor's
 // forks, each branching off its parent at the word that was changed. Buttons do the work;
 // the drawing is decoration.
-import { show } from './tokens.js';
+import { show } from './tokens.js?v=e7bfc830';
 
 const NS = 'http://www.w3.org/2000/svg';
 const SIGLA = 'ABCDEFGHJKLMNPQRSTUVWXYZ';

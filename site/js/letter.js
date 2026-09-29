@@ -1,4 +1,5 @@
 // The letter to Gabe: POST /api/contact. No model involved.
+import { getIds, track } from './track.js?v=e7bfc830';
 export function initLetter() {
     const form = document.getElementById('letter');
     if (!form) return;
@@ -13,10 +14,11 @@ export function initLetter() {
             const res = await fetch('/api/contact', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ subject: data.subject || '', body: data.body || '', from: data.from || '' }),
+                body: JSON.stringify({ subject: data.subject || '', body: data.body || '', from: data.from || '', vid: getIds().vid }),
             });
             const out = await res.json().catch(() => ({}));
             if (!res.ok) throw new Error(out.error || 'It did not go through.');
+            track('contact', 'sent');
             form.reset();
             note.textContent = 'Sent. It is in his inbox; he reads everything.';
             form.classList.add('is-sent');

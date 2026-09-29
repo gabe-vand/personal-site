@@ -1,6 +1,6 @@
 // A visitor's own question becomes a new folio, written live with alternatives like the rest.
-import { Passage } from './passage.js';
-import { isBusy } from './stream.js';
+import { Passage } from './passage.js?v=e7bfc830';
+import { isBusy } from './stream.js?v=e7bfc830';
 
 const ROMAN = [[10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']];
 const roman = (n) => ROMAN.reduce((s, [v, r]) => { while (n >= v) { s += r; n -= v; } return s; }, '');
@@ -33,6 +33,6 @@ export function initAsk(passages, ro) {
         ro.observe(p.ms);
         input.value = '';
         section.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
-        p.write(p.versions[0], '');
+        p.write(p.versions[0], null);
     });
 }

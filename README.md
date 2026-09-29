@@ -11,24 +11,50 @@ Docs live in `docs/`. The feature list and what is still placeholder is in
 ```
 gabevandevere.com/
 ├── deploy.sh          <- THE command. Build, reload, restart API if changed, smoke test, commit.
-├── build.py           <- assembles site/index.html + site/style.css from src/
+├── build.py           <- fills src/index.html's placeholders (?v= hash, JSON-LD) into site/index.html
+├── bake.py            <- regenerates the baked passages in site/data/ from the model (see below)
 ├── src/
-│   ├── page/          <- one HTML file per section, in order (00-head ... 90-tail)
-│   └── css/           <- one stylesheet per concern; 00-tokens.css holds colors + fonts
+│   ├── index.html     <- THE PAGE. Folios, the hand-written record in each margin, the letter.
+│   ├── facts.json     <- JSON-LD + /llms.txt source
+│   └── admin/         <- admin page template
 ├── site/              <- the public web root (Caddy serves this directory as-is)
-│   ├── index.html     <- GENERATED. Do not edit; edit src/page/ and run ./deploy.sh
-│   ├── style.css      <- GENERATED from src/css/
+│   ├── index.html     <- GENERATED. Do not edit; edit src/index.html and run ./deploy.sh
+│   ├── css/           <- stylesheets, served as-is
 │   ├── js/            <- ES modules, one per feature (hand-written, served as-is)
-│   ├── img/           <- photographs used by the work and off-the-wall sections
-│   ├── fonts/         <- Instrument Serif / Instrument Sans / JetBrains Mono (self-hosted)
+│   ├── data/          <- baked passages: every token the model wrote, with its alternatives
+│   ├── img/, fonts/   <- photographs and self-hosted fonts
 │   └── 404.html, favicon.*, site.webmanifest, robots.txt, sitemap.xml
 ├── api/               <- the LLM proxy + telemetry (Python stdlib, runs as site-api.service)
 │   ├── persona.py     <- what the model knows about you. EDIT THIS to teach it more.
+│   ├── forks.py       <- rebuilds a fork's words-so-far server-side (never trusts the browser)
 │   ├── config.py      <- limits, token caps, ports
 │   └── server.py, chat.py, telemetry.py, limits.py
+├── labs/              <- frontend experiments + local dev server (not served in production)
 ├── Caddyfile          <- web server config
 └── docs/              <- status page
 ```
+
+## The page: "almost"
+
+Since 2026-09-29 the homepage is **almost**: the folio written word by word by the model on this
+board, with the words it almost chose printed above the line. Pointing at a word shows the five
+candidates it weighed; choosing another forks the passage and the model rewrites the rest live.
+The facts that matter (roles, numbers, links) are hand-written in each folio's margin in
+`src/index.html`, never model output.
+
+The previous site (dark stone, contour hero, edit-in-place) is retired. It lives in git as the
+tag `classic-site`: `git checkout classic-site -- src/page src/css site/js site/style.css` brings
+its sources back. Edit mode (`/#edit`) belonged to that page and does nothing on this one.
+
+**Re-baking the passages** (after changing `api/persona.py`, or to refresh the wording): on a
+machine running `labs/run.sh`, `python3 bake.py` asks the model each folio's question again and
+rewrites `site/data/*.json`. Read what comes back before deploying: it is printed on the homepage.
+
+**Forks are safe by construction.** `/api/chat` takes `fork: {src, i, a}` — a baked passage or a
+recent live answer, a word position, and one of the alternatives the model listed there — and
+`api/forks.py` rebuilds the prefix from its own copy. There is no way to send the model arbitrary
+words to continue from.
+
 
 ## The editing loop
 
@@ -44,32 +70,15 @@ That's it. `deploy.sh` rebuilds, validates and reloads Caddy, restarts the API o
 
 | You want to change | Edit |
 |---|---|
-| The intro sentence | `src/page/20-hero.html` (the `.hero-lede` paragraph) |
-| A project | `src/page/40-work.html` — one `<article class="route">` per project, self-contained |
-| Any marked text, from the live page | sign in at `/admin/`, then open `/#edit` — click a field, click away to save |
-| A photograph or its caption | `src/page/65-frames.html`; the image goes in `site/img/` |
-| Suggested questions for the model | `src/page/60-machine.html` (the `.chip` buttons) |
+| Any hand-written text, the record in a margin, a photo caption | `src/index.html` |
+| What the model says in a passage | `api/persona.py`, then `python3 bake.py` (see above) |
 | What the model knows / how it talks | `api/persona.py` |
-| Facts for search/answer engines (JSON-LD + /llms.txt) | `src/facts.json` — edit, rebuild; keep in step with `api/persona.py` |
+| Styles, colors, fonts | `site/css/` (`base.css` holds the tokens) |
+| Facts for search/answer engines (JSON-LD + /llms.txt) | `src/facts.json` — keep in step with `api/persona.py` |
 | Link-preview card (og.png) | `logs/shots/og.html` + `og.css`, render with `python3 logs/shots/og.py` (needs Caddy up) |
-| Email address, LinkedIn link | `api/config.py` (CONTACT_TO), `site/js/contact.js`, links in `src/page/70-contact.html`, `api/persona.py` |
-| Colors, fonts | `src/css/00-tokens.css` |
-| Ticker items | `src/page/20-hero.html` (the `.ticker-track` list) |
+| Email address, LinkedIn link | `api/config.py` (CONTACT_TO), `src/index.html`, `api/persona.py` |
 
 Every spot with placeholder content is marked `<!-- EDIT -->`.
-
-### Editing text from the page
-
-Sign in at `/admin/`, then open `https://gabevandevere.com/#edit`. Anything carrying a
-`data-edit` attribute in `src/page/` gets a dashed outline; click it, type, click away. The save
-goes to the **partial**, not to `site/index.html`, then rebuilds, commits and pushes — each edit is its
-own commit, `Edit <key> from the page`. That last part matters: an edit that only sits on disk is one
-careless `scp` away from gone, which is exactly how eight caption edits were lost on 2026-09-18.
-To undo one: `git log --oneline --grep="from the page"`, then `git revert <sha>` and `./deploy.sh`.
-
-To make something else editable, add `data-edit="some-key"` to its tag in `src/page/`. Keys are
-lowercase, digits and hyphens. Do not mark an element that contains a link or another element of
-the same tag as itself — the allowlist would strip the link, and the matcher assumes no nesting.
 
 ### House rules for this repo
 
