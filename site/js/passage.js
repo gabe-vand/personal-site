@@ -1,12 +1,12 @@
 // One folio's manuscript: its versions (the baked original and any forks), the replay at the
 // speed it was first written, and the fork itself — cut at a word, swap in the alternative,
 // and let the machine on the desk carry on from there, live.
-import { tokenNode, declutter } from './tokens.js?v=e7bfc830';
-import { draw } from './seismo.js?v=e7bfc830';
-import { drawTree, siglum } from './tree.js?v=e7bfc830';
-import * as stream from './stream.js?v=e7bfc830';
-import * as meter from './meter.js?v=e7bfc830';
-import { wire } from './interact.js?v=e7bfc830';
+import { tokenNode, declutter } from './tokens.js?v=44c278d2';
+import { draw } from './seismo.js?v=44c278d2';
+import { drawTree, siglum } from './tree.js?v=44c278d2';
+import * as stream from './stream.js?v=44c278d2';
+import * as meter from './meter.js?v=44c278d2';
+import { wire } from './interact.js?v=44c278d2';
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const MAX_PREFIX = 1200;
@@ -112,9 +112,9 @@ export class Passage {
     canFork(i) { return !this.whyNot(i); }
 
     whyNot(i) {
-        if (this.current.status === 'writing') return 'still writing this one — wait for the full stop';
-        if (stream.isBusy()) return 'the machine is mid-sentence elsewhere — one slot, one pen';
-        if (!this.src) return 'this version broke off before the board kept a copy';
+        if (this.current.status === 'writing') return 'still writing — wait for it to finish';
+        if (stream.isBusy()) return 'the model is busy with another answer — try again when it finishes';
+        if (!this.src) return 'this version can’t be forked';
         if (this.tokens.slice(0, i).map((t) => t.t).join('').length > MAX_PREFIX - 40) return 'too deep into the passage to fork from here';
         return '';
     }

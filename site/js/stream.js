@@ -1,7 +1,7 @@
 // POST /api/chat and read the server-sent events: status -> token* -> done | error.
 // Only one rewrite runs at a time: the board has one slot, and so does this page.
 
-import { getIds, track } from './track.js?v=e7bfc830';
+import { getIds, track } from './track.js?v=44c278d2';
 
 let current = null;
 
@@ -13,7 +13,7 @@ export function stop() {
 
 // fork: {src, i, a} -- which text, which word, which alternative; the server rebuilds the words so far.
 export async function ask({ question, fork = null, onGen, onStatus, onToken, onDone, onError }) {
-    if (current) return onError('The machine is already writing. One slot, one pen.');
+    if (current) return onError('The model is busy with another answer. Try again when it finishes.');
     track('chat', fork ? `fork ${fork.src}:${fork.i}` : question.slice(0, 120));
     const ctrl = new AbortController();
     current = ctrl;
@@ -25,14 +25,14 @@ export async function ask({ question, fork = null, onGen, onStatus, onToken, onD
             signal: ctrl.signal,
         });
         if (!res.ok || !res.body) {
-            let msg = `The machine said no (HTTP ${res.status}).`;
+            let msg = `Request failed (HTTP ${res.status}).`;
             try { msg = (await res.json()).error || msg; } catch { /* keep the generic line */ }
             return onError(msg, res.status);
         }
         await read(res.body.getReader(), { onGen, onStatus, onToken, onDone, onError });
     } catch (err) {
         if (err.name === 'AbortError') onError('Stopped.', 0, true);
-        else onError('Lost the line to the board. It may be asleep; try again in a bit.');
+        else onError('Couldn’t reach the model. Try again shortly.');
     } finally {
         if (current === ctrl) current = null;
     }
@@ -69,6 +69,6 @@ function dispatch(block, { onGen, onStatus, onToken, onDone, onError }) {
     else if (event === 'status') onStatus(payload);
     else if (event === 'gen') onGen?.(payload.id);
     else if (event === 'done') { onDone(payload); return true; }
-    else if (event === 'error') { onError(payload.message || 'The model hit a snag.'); return true; }
+    else if (event === 'error') { onError(payload.message || 'Something went wrong.'); return true; }
     return false;
 }

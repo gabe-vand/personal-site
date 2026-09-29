@@ -1,6 +1,6 @@
 // A visitor's own question becomes a new folio, written live with alternatives like the rest.
-import { Passage } from './passage.js?v=e7bfc830';
-import { isBusy } from './stream.js?v=e7bfc830';
+import { Passage } from './passage.js?v=44c278d2';
+import { isBusy } from './stream.js?v=44c278d2';
 
 const ROMAN = [[10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']];
 const roman = (n) => ROMAN.reduce((s, [v, r]) => { while (n >= v) { s += r; n -= v; } return s; }, '');
@@ -16,7 +16,7 @@ export function initAsk(passages, ro) {
         const q = input.value.trim();
         if (!q) return;
         if (isBusy()) {
-            input.setCustomValidity('The machine is mid-sentence. One slot, one pen: try again when it stops.');
+            input.setCustomValidity('The model is busy with another answer. Try again when it finishes.');
             input.reportValidity();
             setTimeout(() => input.setCustomValidity(''), 2500);
             return;

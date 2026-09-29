@@ -1,7 +1,7 @@
 // A one-time note in the margin of the first folio, written from the real numbers: the page's
 // very first word was a long shot, which is the best possible invitation to point at it.
 // It is placed at load (no layout shift mid-read) and folds away after the first reel closes.
-import { runnerUp, show, pct } from './tokens.js?v=e7bfc830';
+import { runnerUp, show, pct } from './tokens.js?v=44c278d2';
 
 export function coach(p) {
     const tok = p.tokens[0];
