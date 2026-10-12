@@ -14,14 +14,14 @@ gabevandevere.com/
 ├── build.py           <- fills src/index.html's placeholders (?v= hash, JSON-LD) into site/index.html
 ├── bake.py            <- regenerates the baked passages in site/data/ from the model (see below)
 ├── src/
-│   ├── index.html     <- THE PAGE.
+│   ├── index.html     <- THE PAGE. Folios, the hand-written record in each margin, the letter.
 │   ├── facts.json     <- JSON-LD + /llms.txt source
 │   └── admin/         <- admin page template
 ├── site/              <- the public web root (Caddy serves this directory as-is)
 │   ├── index.html     <- GENERATED. Do not edit; edit src/index.html and run ./deploy.sh
 │   ├── css/           <- stylesheets, served as-is
 │   ├── js/            <- ES modules, one per feature (hand-written, served as-is)
-│   ├── data/          <- baked passages for the retired "almost" page (unused)
+│   ├── data/          <- baked passages: every token the model wrote, with its alternatives
 │   ├── img/, fonts/   <- photographs and self-hosted fonts
 │   └── 404.html, favicon.*, site.webmanifest, robots.txt, sitemap.xml
 ├── api/               <- the LLM proxy + telemetry (Python stdlib, runs as site-api.service)
@@ -34,15 +34,27 @@ gabevandevere.com/
 └── docs/              <- status page
 ```
 
-## The page
+## The page: "almost"
 
-Since 2026-10-12 the homepage is a plain one-pager: intro, experience, projects, photos, a chat
-box that talks to the model on this board (`site/js/chat.js` -> `/api/chat`), and the contact
-form. Everything on it is hand-written in `src/index.html`; one stylesheet, `site/css/site.css`.
+Since 2026-09-29 the homepage is **almost**: the folio written word by word by the model on this
+board, with the words it almost chose printed above the line. Pointing at a word shows the five
+candidates it weighed; choosing another forks the passage and the model rewrites the rest live.
+The facts that matter (roles, numbers, links) are hand-written in each folio's margin in
+`src/index.html`, never model output.
 
-Earlier designs are in git: the "almost" manuscript page is the commit before this change, and the
-dark-stone site is the tag `classic-site`. `site/data/`, `bake.py` and `api/forks.py` belong to
-"almost" and are unused by the current page.
+The previous site (dark stone, contour hero, edit-in-place) is retired. It lives in git as the
+tag `classic-site`: `git checkout classic-site -- src/page src/css site/js site/style.css` brings
+its sources back. Edit mode (`/#edit`) belonged to that page and does nothing on this one.
+
+**Re-baking the passages** (after changing `api/persona.py`, or to refresh the wording): on a
+machine running `labs/run.sh`, `python3 bake.py` asks the model each folio's question again and
+rewrites `site/data/*.json`. Read what comes back before deploying: it is printed on the homepage.
+
+**Forks are safe by construction.** `/api/chat` takes `fork: {src, i, a}` — a baked passage or a
+recent live answer, a word position, and one of the alternatives the model listed there — and
+`api/forks.py` rebuilds the prefix from its own copy. There is no way to send the model arbitrary
+words to continue from.
+
 
 ## The editing loop
 

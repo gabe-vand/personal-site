@@ -1,0 +1,62 @@
+/* The instrument strip that rises while the machine writes, and the two forms at the end. */
+.meter {
+    position: fixed;
+    left: 50%;
+    bottom: 1rem;
+    z-index: 60;
+    transform: translate(-50%, 140%);
+    transition: transform 0.45s cubic-bezier(0.2, 0.9, 0.3, 1);
+    display: flex;
+    align-items: stretch;
+    max-width: calc(100vw - 1.5rem);
+    overflow-x: auto;
+    background: var(--ink);
+    color: var(--paper-2);
+    font-family: var(--mono);
+    border-radius: 3px;
+    box-shadow: 0 16px 40px -16px rgba(0, 0, 0, 0.6);
+}
+.meter.is-up { transform: translate(-50%, 0); }
+.meter[hidden] { display: none; }
+.m-state, .m-cell { display: flex; flex-direction: column; justify-content: center; padding: 0.55rem 0.9rem; border-right: 1px solid #3a352e; white-space: nowrap; }
+.m-state { flex-direction: row; align-items: center; gap: 0.55rem; font-size: 0.75rem; text-transform: uppercase; color: #ff9a7a; }
+.m-state small { color: #a9a193; text-transform: none; font-size: 0.68rem; }
+.m-dot { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: #ff6a44; animation: nib 1s steps(2) infinite; }
+.meter.is-done .m-dot { animation: none; background: #7fd18b; }
+.m-cell b { font: 400 1.25rem/1 var(--serif); color: var(--paper-2); }
+.m-cell.m-big b { font-size: 1.6rem; color: #ffb49c; }
+.m-cell small { font-size: 0.6rem; color: #a9a193; text-transform: uppercase; margin-top: 0.2rem; }
+.m-note { align-self: center; padding: 0 0.9rem; font: italic 400 1rem var(--serif); color: #cfc7b8; white-space: nowrap; }
+
+.scribe { margin: 0 0 0.6rem; display: grid; gap: 0.55rem; }
+.scribe dt { color: var(--ink-3); text-transform: uppercase; }
+.scribe dd { margin: 0.1rem 0 0; font: 400 1.05rem/1.3 var(--sans); color: var(--ink); letter-spacing: 0; }
+
+.write { display: block; }
+.ask, .letter { margin-left: calc(3.75rem + clamp(1rem, 2.4vw, 2rem)); max-width: 44rem; }
+.ask-label { display: block; color: var(--ink-3); margin-bottom: 0.7rem; line-height: 1.6; }
+.ask-row { display: flex; gap: 0.5rem; }
+.ask input, .letter input, .letter textarea {
+    width: 100%;
+    font: 400 1.35rem/1.35 var(--serif);
+    color: var(--ink);
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--ink);
+    padding: 0.55rem 0.1rem;
+    border-radius: 0;
+}
+.ask input:focus, .letter input:focus, .letter textarea:focus { outline: none; border-bottom-color: var(--rubric); background: var(--paper-2); }
+.ask input::placeholder, .letter ::placeholder { color: #9a9184; font-style: italic; }
+.letter { margin-top: 3.2rem; display: grid; gap: 0.6rem; }
+.letter textarea { resize: vertical; min-height: 8rem; border: 1px solid var(--ink); padding: 0.7rem; background: var(--paper-2); }
+.letter-foot { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin: 0.4rem 0 0; }
+.letter-foot .mono { color: var(--rubric); }
+
+@media (max-width: 640px) {
+    .ask, .letter { margin-left: 0; }
+    .ask-row { flex-direction: column; }
+    .meter { bottom: 0.5rem; }
+    .meter .m-opt { display: none; }
+    .m-state, .m-cell { padding: 0.5rem 0.7rem; }
+}
