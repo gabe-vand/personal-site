@@ -1,13 +1,13 @@
 // Boot: load the baked passages, build a manuscript for each folio, replay each one at its
 // real speed as it scrolls into view, and fill the live readings from the board.
-import { Passage } from './passage.js?v=ac8e6355';
-import { bindReel } from './reel.js?v=ac8e6355';
-import { status } from './meter.js?v=ac8e6355';
-import { stats } from './tokens.js?v=ac8e6355';
-import { initAsk } from './ask.js?v=ac8e6355';
-import { initLetter } from './letter.js?v=ac8e6355';
-import { coach } from './coach.js?v=ac8e6355';
-import { initTrack } from './track.js?v=ac8e6355';
+import { Passage } from './passage.js?v=74fb8903';
+import { bindReel } from './reel.js?v=74fb8903';
+import { status } from './meter.js?v=74fb8903';
+import { stats } from './tokens.js?v=74fb8903';
+import { initAsk } from './ask.js?v=74fb8903';
+import { initLetter } from './letter.js?v=74fb8903';
+import { coach } from './coach.js?v=74fb8903';
+import { initTrack } from './track.js?v=74fb8903';
 
 export const passages = [];
 

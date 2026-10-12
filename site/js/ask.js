@@ -1,6 +1,6 @@
 // A visitor's own question becomes a new folio, written live with alternatives like the rest.
-import { Passage } from './passage.js?v=ac8e6355';
-import { isBusy } from './stream.js?v=ac8e6355';
+import { Passage } from './passage.js?v=74fb8903';
+import { isBusy } from './stream.js?v=74fb8903';
 
 const ROMAN = [[10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']];
 const roman = (n) => ROMAN.reduce((s, [v, r]) => { while (n >= v) { s += r; n -= v; } return s; }, '');

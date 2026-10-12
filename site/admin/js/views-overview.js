@@ -1,5 +1,5 @@
-import { api } from './api.js?v=ac8e6355';
-import { el, stat, num, dur, bars, section, table, when } from './ui.js?v=ac8e6355';
+import { api } from './api.js?v=74fb8903';
+import { el, stat, num, dur, bars, section, table, when } from './ui.js?v=74fb8903';
 
 export async function overview({ days }) {
     const d = await api(`/overview?days=${days}`);

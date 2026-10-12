@@ -1,5 +1,5 @@
 // The letter to Gabe: POST /api/contact. No model involved.
-import { getIds, track } from './track.js?v=ac8e6355';
+import { getIds, track } from './track.js?v=74fb8903';
 export function initLetter() {
     const form = document.getElementById('letter');
     if (!form) return;
