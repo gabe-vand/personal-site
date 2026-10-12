@@ -1,7 +1,7 @@
 // The reel: point at a word and it unrolls into every candidate the model weighed there,
 // the chosen one sitting exactly where the word was, the others rolled out above and below.
 // Choose another and the passage forks from that word.
-import { show, pct } from './tokens.js?v=44c278d2';
+import { show, pct } from './tokens.js?v=ac8e6355';
 
 const reel = document.getElementById('reel');
 const hoverable = matchMedia('(hover: hover) and (pointer: fine)').matches;
@@ -20,12 +20,12 @@ export function openReel(passage, i, el, { focus = false } = {}) {
     el.classList.add('is-open');
     const alts = tok.alts.some((a) => a.t === tok.t) ? tok.alts : [...tok.alts, { t: tok.t, p: tok.p }];
     const head = Object.assign(document.createElement('p'), { className: 'reel-head mono' });
-    head.textContent = `word ${i + 1} · weighed ${alts.length}`;
+    head.textContent = `word ${i + 1} · ${alts.length} options`;
     const seen = alts.map((a) => show(a.t));
     const label = (a, k) => (seen.indexOf(seen[k]) !== seen.lastIndexOf(seen[k]) && !/^\s/.test(a.t) ? `‿${seen[k]}` : seen[k]);
     const rows = alts.map((a, k) => row(a, k, a.t === tok.t, tok, alts[0], label(a, k)));
     const foot = Object.assign(document.createElement('p'), { className: 'reel-foot mono' });
-    foot.textContent = passage.canFork(i) ? 'choose another word — the machine rewrites the rest' : passage.whyNot(i);
+    foot.textContent = passage.canFork(i) ? 'pick another word to rewrite from here' : passage.whyNot(i);
     reel.replaceChildren(head, ...rows, foot);
     reel.hidden = false;
     place(el, rows[alts.findIndex((a) => a.t === tok.t)]);

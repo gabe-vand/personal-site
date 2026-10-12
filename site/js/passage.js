@@ -1,12 +1,12 @@
 // One folio's manuscript: its versions (the baked original and any forks), the replay at the
 // speed it was first written, and the fork itself — cut at a word, swap in the alternative,
 // and let the machine on the desk carry on from there, live.
-import { tokenNode, declutter } from './tokens.js?v=44c278d2';
-import { draw } from './seismo.js?v=44c278d2';
-import { drawTree, siglum } from './tree.js?v=44c278d2';
-import * as stream from './stream.js?v=44c278d2';
-import * as meter from './meter.js?v=44c278d2';
-import { wire } from './interact.js?v=44c278d2';
+import { tokenNode, declutter } from './tokens.js?v=ac8e6355';
+import { draw } from './seismo.js?v=ac8e6355';
+import { drawTree, siglum } from './tree.js?v=ac8e6355';
+import * as stream from './stream.js?v=ac8e6355';
+import * as meter from './meter.js?v=ac8e6355';
+import { wire } from './interact.js?v=ac8e6355';
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const MAX_PREFIX = 1200;
@@ -35,7 +35,7 @@ export class Passage {
         wrap.className = 'ms-wrap';
         wrap.innerHTML = '<svg class="seismo" aria-hidden="true"></svg><div class="ms" tabindex="0" role="group"></div><div class="variants"></div>';
         [this.svg, this.ms, this.vars] = wrap.children;
-        this.ms.setAttribute('aria-label', `The machine's answer to: ${this.q}. Arrow keys move between words; Enter shows the alternatives.`);
+        this.ms.setAttribute('aria-label', `The model's answer to: ${this.q}. Arrow keys move between words; Enter shows the alternatives.`);
         this.section.prepend(head, wrap);
         drawTree(this.vars, this);
         this.setMeta();
@@ -44,7 +44,7 @@ export class Passage {
     setMeta(extra = '') {
         const v = this.current;
         const words = v.tokens.length;
-        const who = v.parent == null ? (this.baked.live ? 'written live' : `written ${this.baked.baked || ''}`) : `variant ${siglum(v.id)}, written live`;
+        const who = v.parent == null ? (this.baked.live ? 'generated live' : `generated ${this.baked.baked || ''}`) : `variant ${siglum(v.id)}, generated live`;
         const tps = v.tps ? ` · ${v.tps} words/s` : '';
         this.meta.textContent = `${words} words${tps} · ${who}${extra}`;
     }
@@ -79,7 +79,7 @@ export class Passage {
         this.shown = 0;
         this.ms.replaceChildren();
         this.section.classList.add('is-replaying');
-        this.setMeta(' · replaying at the speed it was written');
+        this.setMeta(' · replaying at original speed');
         const step = (now) => {
             if (this.current.id !== 0 || this.shown >= toks.length) return this.endReplay();
             const target = Math.min(toks.length, Math.floor((now - t0) / perTok) + 1);
@@ -112,10 +112,10 @@ export class Passage {
     canFork(i) { return !this.whyNot(i); }
 
     whyNot(i) {
-        if (this.current.status === 'writing') return 'still writing — wait for it to finish';
-        if (stream.isBusy()) return 'the model is busy with another answer — try again when it finishes';
+        if (this.current.status === 'writing') return 'still generating, wait for it to finish';
+        if (stream.isBusy()) return 'the model is busy with another answer, try again when it finishes';
         if (!this.src) return 'this version can’t be forked';
-        if (this.tokens.slice(0, i).map((t) => t.t).join('').length > MAX_PREFIX - 40) return 'too deep into the passage to fork from here';
+        if (this.tokens.slice(0, i).map((t) => t.t).join('').length > MAX_PREFIX - 40) return 'too far into the passage to rewrite from here';
         return '';
     }
 
@@ -136,7 +136,7 @@ export class Passage {
         drawTree(this.vars, this);
         setTimeout(() => {
             if (this.current === v) this.render();
-            if (alt.t === '') return this.settle(v, 'stopped where you told it to');
+            if (alt.t === '') return this.settle(v, 'ended here');
             this.write(v, fork);
         }, reduced ? 0 : 520 + Math.min(doomed.length * 12, 500));
     }
@@ -145,13 +145,13 @@ export class Passage {
     write(v, fork) {
         this.section.classList.add('is-writing');
         meter.begin(`folio ${this.no}${v.id ? `, variant ${siglum(v.id)}` : ''}`);
-        this.setMeta(' · waiting for the slot');
+        this.setMeta(' · waiting');
         stream.ask({
             question: this.q,
             fork,
             onGen: (id) => { v.gen = id; },
             onStatus: (s) => {
-                meter.state(s.state === 'queued' ? `queued, ${s.ahead} ahead` : 'reading the prompt');
+                meter.state(s.state === 'queued' ? `queued, ${s.ahead} ahead` : 'starting');
             },
             onToken: (tok) => {
                 tok.branch = v.id % 5;
@@ -161,13 +161,13 @@ export class Passage {
                     this.ms.append(tokenNode(tok, v.tokens.length - 1, { initial: v.tokens.length === 1, fresh: true }));
                     this.shown = v.tokens.length;
                     this.redraw();
-                    this.setMeta(' · writing');
+                    this.setMeta(' · generating');
                 }
             },
             onDone: (d) => { v.tps = d.tps || null; this.settle(v); meter.end(`wrote ${siglum(v.id)} at ${d.tps || '~10'} words/s`); },
             onError: (msg, code, aborted) => {
                 this.settle(v, msg, aborted ? 'stopped' : 'error');
-                meter.end(aborted ? 'stopped' : 'broke off');
+                meter.end(aborted ? 'stopped' : 'error');
             },
         });
     }

@@ -84,7 +84,7 @@ export function end(summary) {
     meter.classList.add('is-done');
     meter.innerHTML = `<span class="m-state"><i class="m-dot"></i>${summary || 'done'}</span>` +
         cell('words', r.count, 'm-opt') + cell('seconds', secs.toFixed(1)) +
-        cell('joules, about', joules ? Math.round(joules) : '—', 'm-big');
+        cell('joules (est.)', joules ? Math.round(joules) : '—', 'm-big');
     meter.__hide = setTimeout(() => {
         meter.classList.remove('is-up');
         setTimeout(() => { if (!run) meter.hidden = true; }, 500);

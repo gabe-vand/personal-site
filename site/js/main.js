@@ -1,13 +1,13 @@
 // Boot: load the baked passages, build a manuscript for each folio, replay each one at its
 // real speed as it scrolls into view, and fill the live readings from the board.
-import { Passage } from './passage.js?v=44c278d2';
-import { bindReel } from './reel.js?v=44c278d2';
-import { status } from './meter.js?v=44c278d2';
-import { stats } from './tokens.js?v=44c278d2';
-import { initAsk } from './ask.js?v=44c278d2';
-import { initLetter } from './letter.js?v=44c278d2';
-import { coach } from './coach.js?v=44c278d2';
-import { initTrack } from './track.js?v=44c278d2';
+import { Passage } from './passage.js?v=ac8e6355';
+import { bindReel } from './reel.js?v=ac8e6355';
+import { status } from './meter.js?v=ac8e6355';
+import { stats } from './tokens.js?v=ac8e6355';
+import { initAsk } from './ask.js?v=ac8e6355';
+import { initLetter } from './letter.js?v=ac8e6355';
+import { coach } from './coach.js?v=ac8e6355';
+import { initTrack } from './track.js?v=ac8e6355';
 
 export const passages = [];
 
@@ -32,7 +32,7 @@ async function live() {
     try {
         const s = await status();
         const mast = document.getElementById('mast-live');
-        if (mast) mast.textContent = `written on the Jetson on his desk · drawing ${s.power_w.total.toFixed(1)} W right now`;
+        if (mast) mast.textContent = `Jetson Orin Nano Super · ${s.power_w.total.toFixed(1)} W`;
         const set = (k, v) => { const el = document.querySelector(`#scribe [data-s="${k}"]`); if (el) el.textContent = v; };
         set('board', s.board);
         set('model', `${s.model.name}, ${s.model.quant} · ${s.model.size_gb} GB`);

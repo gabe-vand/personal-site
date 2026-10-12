@@ -2,7 +2,7 @@
 // critics draw of a manuscript's copies). A is the baked original; B, C... are the visitor's
 // forks, each branching off its parent at the word that was changed. Buttons do the work;
 // the drawing is decoration.
-import { show } from './tokens.js?v=44c278d2';
+import { show } from './tokens.js?v=ac8e6355';
 
 const NS = 'http://www.w3.org/2000/svg';
 const SIGLA = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
@@ -18,7 +18,7 @@ function line(svg, cls, x1, y1, x2, y2) {
 export function drawTree(box, passage) {
     const { versions, current } = passage;
     if (versions.length < 2) {
-        box.innerHTML = '<p class="var-hint mono">One reading so far. Choose a different word anywhere above and the machine writes a variant.</p>';
+        box.innerHTML = '<p class="var-hint mono">No variants yet. Pick a different word above to generate one.</p>';
         return;
     }
     const W = 220, row = 18, H = versions.length * row + 6;
@@ -44,8 +44,8 @@ export function drawTree(box, passage) {
         b.type = 'button';
         b.className = `var-btn b${v.id % 5}` + (v.id === current.id ? ' is-current' : '');
         b.setAttribute('aria-pressed', v.id === current.id ? 'true' : 'false');
-        const what = v.parent == null ? 'as written' : `“${show(v.tokens[v.at].was)}” → “${show(v.tokens[v.at].t)}”`;
-        const tail = v.status === 'writing' ? ' · writing…' : v.status === 'stopped' ? ' · stopped' : v.status === 'error' ? ' · broke off' : '';
+        const what = v.parent == null ? 'original' : `“${show(v.tokens[v.at].was)}” → “${show(v.tokens[v.at].t)}”`;
+        const tail = v.status === 'writing' ? ' · writing…' : v.status === 'stopped' ? ' · stopped' : v.status === 'error' ? ' · error' : '';
         b.innerHTML = `<b>${siglum(v.id)}</b><span></span>`;
         b.querySelector('span').textContent = what + tail;
         b.addEventListener('click', () => passage.switchTo(v.id));

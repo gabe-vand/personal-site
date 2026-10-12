@@ -1,5 +1,5 @@
 // The letter to Gabe: POST /api/contact. No model involved.
-import { getIds, track } from './track.js?v=44c278d2';
+import { getIds, track } from './track.js?v=ac8e6355';
 export function initLetter() {
     const form = document.getElementById('letter');
     if (!form) return;
@@ -17,10 +17,10 @@ export function initLetter() {
                 body: JSON.stringify({ subject: data.subject || '', body: data.body || '', from: data.from || '', vid: getIds().vid }),
             });
             const out = await res.json().catch(() => ({}));
-            if (!res.ok) throw new Error(out.error || 'It did not go through.');
+            if (!res.ok) throw new Error(out.error || 'Couldn’t send.');
             track('contact', 'sent');
             form.reset();
-            note.textContent = 'Sent. Gabe will get back to you.';
+            note.textContent = 'Sent. Thanks.';
             form.classList.add('is-sent');
         } catch (err) {
             note.textContent = `${err.message} Or write to gabe@gabevandevere.com.`;
