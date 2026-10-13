@@ -1,12 +1,12 @@
 // One folio's manuscript: its versions (the baked original and any forks), the replay at the
 // speed it was first written, and the fork itself — cut at a word, swap in the alternative,
 // and let the machine on the desk carry on from there, live.
-import { tokenNode, declutter } from './tokens.js?v=76bf21f9';
-import { draw } from './seismo.js?v=76bf21f9';
-import { drawTree, siglum } from './tree.js?v=76bf21f9';
-import * as stream from './stream.js?v=76bf21f9';
-import * as meter from './meter.js?v=76bf21f9';
-import { wire } from './interact.js?v=76bf21f9';
+import { tokenNode, declutter } from './tokens.js?v=aa2f1113';
+import { draw } from './seismo.js?v=aa2f1113';
+import { drawTree, siglum } from './tree.js?v=aa2f1113';
+import * as stream from './stream.js?v=aa2f1113';
+import * as meter from './meter.js?v=aa2f1113';
+import { wire } from './interact.js?v=aa2f1113';
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const MAX_PREFIX = 1200;

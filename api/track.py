@@ -10,7 +10,7 @@ import config
 import db
 
 _ID = re.compile(r'^[0-9a-f]{16,32}$')
-_SECTIONS = {'base', 'about', 'machine', 'contact'}
+_SECTIONS = {'who', 'rx', 'westpepper', 'savor', 'dog', 'oracle', 'offwall', 'machine', 'write'}  # the homepage's section ids
 
 
 def _s(v, n=200):

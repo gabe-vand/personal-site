@@ -51,7 +51,7 @@ def contact(h, _path):
     if err:
         return h.send_json(400, {'error': err})
     if not limits.contact_allow(h.client_ip()):
-        return h.send_json(429, {'error': 'That is enough messages for now. Email me directly instead.'})
+        return h.send_json(429, {'error': 'Too many messages. Email gabe@gabevandevere.com instead.'})
     vid = payload.get('vid') if isinstance(payload, dict) and isinstance(payload.get('vid'), str) else ''
     err = mail.send(clean, h.client_ip(), vid=vid[:32])
     if err:

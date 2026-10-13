@@ -51,8 +51,8 @@ def _notify(c: dict):
         info.append(f"Visitor: seen {vis['sessions']} session(s) since {time.strftime('%Y-%m-%d', time.localtime(vis['first_ts']))}")
     if sess:
         info.append(f"This visit: {int(sess['seconds'] or 0)} s on page · sections {sess['sections'] or '-'} · referrer {sess['referrer'] or 'direct'}")
-    subject = f"[site] Someone talked to the machine: {(first['content'] if first else '')[:60]}"
-    body = 'A visitor chatted with the machine on gabevandevere.com.\n\n' + '\n'.join(info) + \
+    subject = f"[site] Chat: {(first['content'] if first else '')[:60]}"
+    body = 'A visitor used the chat on gabevandevere.com.\n\n' + '\n'.join(info) + \
         f"\n\nView it (login required): {config.ADMIN_URL}#conversation/{c['id']}\n\n--- Conversation ---\n\n" + _thread_text(c['id'])
     err = mail.send_mail(config.NOTIFY_TO, subject, body, kind='notify', vid=c['vid'])
     db.x('UPDATE conversations SET notified_ts=? WHERE id=?', (db.now(), c['id']))

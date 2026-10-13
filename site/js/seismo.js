@@ -1,7 +1,7 @@
 // The hesitation seismograph in the left margin. One sample per token, placed at the token's
 // own line, sliding down through the line as the word moves right: read top to bottom, the
 // trace is the passage. It swings left where the model was unsure. Real numbers, no smoothing.
-import { hesitation } from './tokens.js?v=76bf21f9';
+import { hesitation } from './tokens.js?v=aa2f1113';
 
 const NS = 'http://www.w3.org/2000/svg';
 

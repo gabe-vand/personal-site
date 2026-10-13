@@ -39,11 +39,11 @@ def validate(payload: dict):
     body = str(payload.get('body') or '').replace('\r\n', '\n').strip()
     reply_to = str(payload.get('from') or '').strip()[:254]
     if not body:
-        return None, 'Say something first.'
+        return None, 'Write a message first.'
     if len(body) > config.CONTACT_MAX_BODY:
         return None, f'Keep it under {config.CONTACT_MAX_BODY} characters.'
     if reply_to and not _EMAIL.match(reply_to):
-        return None, 'That email address does not look right.'
+        return None, 'Check your email address.'
     return {'subject': subject, 'body': body, 'from': reply_to}, None
 
 
@@ -53,7 +53,7 @@ def send_mail(to: str, subject: str, body: str, reply_to: str = '', kind: str = 
     auth = creds()
     err = None
     if not auth:
-        err = 'Mail is not set up on this board yet. Email me directly instead.'
+        err = 'Couldn’t send. Email gabe@gabevandevere.com instead.'
     else:
         user, password = auth
         msg = EmailMessage()
@@ -71,7 +71,7 @@ def send_mail(to: str, subject: str, body: str, reply_to: str = '', kind: str = 
             threading.Thread(target=_tidy_sent, args=(user, password, msg['Message-ID']), daemon=True).start()
         except (smtplib.SMTPException, OSError) as exc:
             print(f'mail FAILED {type(exc).__name__}: {exc}', flush=True)
-            err = 'Sending failed on my end. Email me directly instead.'
+            err = 'Couldn’t send. Email gabe@gabevandevere.com instead.'
     db.x('INSERT INTO emails (ts, kind, to_addr, reply_to, subject, body, ip, vid, ok, error) VALUES (?,?,?,?,?,?,?,?,?,?)',
          (db.now(), kind, to, reply_to, subject, body, ip, vid, 0 if err else 1, err))
     if err is None:
