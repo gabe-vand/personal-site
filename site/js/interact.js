@@ -1,7 +1,7 @@
 // Pointer and keyboard for a passage. Pointing at a word (or tapping it) unrolls its reel;
 // the manuscript is one tab stop, with the arrow keys moving word to word inside it.
-import { openReel, closeReel, closeSoon, hoverable } from './reel.js?v=74fb8903';
-import { linkHover } from './seismo.js?v=74fb8903';
+import { openReel, closeReel, closeSoon, hoverable } from './reel.js?v=1e12842c';
+import { linkHover } from './seismo.js?v=1e12842c';
 
 export function wire(p) {
     let hoverTimer = 0;

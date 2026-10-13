@@ -1,18 +1,21 @@
 // Boot: load the baked passages, build a manuscript for each folio, replay each one at its
 // real speed as it scrolls into view, and fill the live readings from the board.
-import { Passage } from './passage.js?v=74fb8903';
-import { bindReel } from './reel.js?v=74fb8903';
-import { status } from './meter.js?v=74fb8903';
-import { stats } from './tokens.js?v=74fb8903';
-import { initAsk } from './ask.js?v=74fb8903';
-import { initLetter } from './letter.js?v=74fb8903';
-import { coach } from './coach.js?v=74fb8903';
-import { initTrack } from './track.js?v=74fb8903';
+import { Passage } from './passage.js?v=1e12842c';
+import { bindReel } from './reel.js?v=1e12842c';
+import { status } from './meter.js?v=1e12842c';
+import { stats } from './tokens.js?v=1e12842c';
+import { initAsk } from './ask.js?v=1e12842c';
+import { initLetter } from './letter.js?v=1e12842c';
+import { coach } from './coach.js?v=1e12842c';
+import { initTrack } from './track.js?v=1e12842c';
 
 export const passages = [];
+// Same build hash this module was loaded with; build.py folds site/data/ into it, so a re-baked
+// passage is fetched fresh instead of from a cached copy.
+const V = new URL(import.meta.url).searchParams.get('v') || '';
 
 async function load(section) {
-    const res = await fetch(`/data/${section.dataset.passage}.json`);
+    const res = await fetch(`/data/${section.dataset.passage}.json?v=${V}`);
     if (!res.ok) throw new Error(section.dataset.passage);
     return res.json();
 }

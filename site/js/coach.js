@@ -1,7 +1,7 @@
 // A one-time note in the margin of the first folio, written from the real numbers: the page's
 // first word and the runner-up the model weighed against it.
 // It is placed at load (no layout shift mid-read) and folds away after the first reel closes.
-import { runnerUp, isFavourite, show, pct } from './tokens.js?v=74fb8903';
+import { runnerUp, isFavourite, show, pct } from './tokens.js?v=1e12842c';
 
 export function coach(p) {
     const tok = p.tokens[0];

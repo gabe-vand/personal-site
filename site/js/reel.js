@@ -1,7 +1,7 @@
 // The reel: point at a word and it unrolls into every candidate the model weighed there,
 // the chosen one sitting exactly where the word was, the others rolled out above and below.
 // Choose another and the passage forks from that word.
-import { show, pct } from './tokens.js?v=74fb8903';
+import { show, pct } from './tokens.js?v=1e12842c';
 
 const reel = document.getElementById('reel');
 const hoverable = matchMedia('(hover: hover) and (pointer: fine)').matches;

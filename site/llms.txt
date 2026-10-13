@@ -1,6 +1,6 @@
 # Gabe Vandevere
 
-> Gabe Vandevere is a senior computer science student at the University of Delaware (expected spring 2027, GPA 3.87, Dean's List every semester) based in Wayne, Pennsylvania, in the Philadelphia area. He is an AI Product QA / Operations Consultant at The RxAssistant, where he builds and tests AI-powered solutions for pharmaceutical clients, and previously a Quantitative R&D Intern at Westpepper Capital, where he built machine-learning backtesting pipelines and real-time crypto market-data systems. His own projects run from clinical computer vision to systems programming in C. His website is served from a Jetson Orin Nano on his desk, which also runs the language model visitors can talk to.
+> Gabe Vandevere is a senior computer science student at the University of Delaware (expected spring 2027, GPA 3.87, Dean's List six semesters) based in Wayne, Pennsylvania, in the Philadelphia area. He is an AI Product QA / Operations Consultant at The RxAssistant, where he builds and tests AI-powered solutions for pharmaceutical clients, and previously a Quantitative R&D Intern at Westpepper Capital, where he built machine-learning backtesting pipelines and real-time crypto market-data systems. His own projects run from clinical computer vision to systems programming in C. His website is served from a Jetson Orin Nano on his desk, which also runs the language model visitors can talk to.
 
 - Site: https://gabevandevere.com/
 - Email: gabe@gabevandevere.com
@@ -52,7 +52,11 @@ Three that he leads with: Savor, an AI pantry app built at HenHacks 2026 that re
 
 ### Where did Gabe Vandevere go to school?
 
-The University of Delaware in Newark, Delaware, for a Bachelor of Science in Computer Science, expected spring 2027, with a 3.87 GPA and Dean's List every semester.
+The University of Delaware in Newark, Delaware, for a Bachelor of Science in Computer Science, expected spring 2027, with a 3.87 GPA and Dean's List for six semesters.
+
+### Is Gabe Vandevere open to new roles?
+
+Yes. He is open to new roles and opportunities; the best next step is to email him at gabe@gabevandevere.com.
 
 ### How can I contact Gabe Vandevere?
 

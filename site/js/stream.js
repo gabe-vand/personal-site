@@ -1,7 +1,7 @@
 // POST /api/chat and read the server-sent events: status -> token* -> done | error.
 // Only one rewrite runs at a time: the board has one slot, and so does this page.
 
-import { getIds, track } from './track.js?v=74fb8903';
+import { getIds, track } from './track.js?v=1e12842c';
 
 let current = null;
 
