@@ -60,3 +60,18 @@
     .meter .m-opt { display: none; }
     .m-state, .m-cell { padding: 0.5rem 0.7rem; }
 }
+
+/* The Send button folds into a paper plane (js/paperplane.js, a fixed SVG overlay). The button
+   hides the instant the sheet takes its place; facets lighten as the fold turns them (data-shade). */
+.letter .btn { transition: opacity 0.35s; }
+.letter .btn.is-away, .letter .btn.is-away:disabled { opacity: 0; transition: none; }
+.plane-layer { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 70; pointer-events: none; transition: opacity 0.8s; }
+.plane-layer.is-done { opacity: 0; }
+.pp { filter: drop-shadow(0 4px 6px rgba(29, 26, 22, 0.28)); }
+.pp-sheet { fill: var(--ink); }
+.pp polygon { fill: var(--ink); stroke: var(--paper-2); stroke-width: 0.6; stroke-linejoin: round; }
+.pp[data-shade='1'] .pp-rw, .pp[data-shade='2'] .pp-rw { fill: var(--ink-2); }
+.pp[data-shade='2'] .pp-lb, .pp[data-shade='3'] .pp-lb { fill: var(--ink-2); }
+.pp[data-shade='2'] .pp-rb { fill: var(--ink-3); }
+.pp[data-shade='3'] .pp-rb { fill: #8a8174; }
+@media (prefers-reduced-motion: reduce) { .letter .btn { transition: none; } }

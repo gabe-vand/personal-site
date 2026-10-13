@@ -1,13 +1,13 @@
 // Boot: load the baked passages, build a manuscript for each folio, replay each one at its
 // real speed as it scrolls into view, and fill the live readings from the board.
-import { Passage } from './passage.js?v=1e12842c';
-import { bindReel } from './reel.js?v=1e12842c';
-import { status } from './meter.js?v=1e12842c';
-import { stats } from './tokens.js?v=1e12842c';
-import { initAsk } from './ask.js?v=1e12842c';
-import { initLetter } from './letter.js?v=1e12842c';
-import { coach } from './coach.js?v=1e12842c';
-import { initTrack } from './track.js?v=1e12842c';
+import { Passage } from './passage.js?v=76bf21f9';
+import { bindReel } from './reel.js?v=76bf21f9';
+import { status } from './meter.js?v=76bf21f9';
+import { stats } from './tokens.js?v=76bf21f9';
+import { initAsk } from './ask.js?v=76bf21f9';
+import { initLetter } from './letter.js?v=76bf21f9';
+import { coach } from './coach.js?v=76bf21f9';
+import { initTrack } from './track.js?v=76bf21f9';
 
 export const passages = [];
 // Same build hash this module was loaded with; build.py folds site/data/ into it, so a re-baked
